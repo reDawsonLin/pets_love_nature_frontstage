@@ -3,9 +3,10 @@
 </script>
 
 <template>
-  <div>
-    <NuxtWelcome />
-  </div>
+  <h1 class="text-3xl font-bold underline">
+    Hello world!
+  </h1>
+
 </template>
 
 <style lang="scss" scoped></style>

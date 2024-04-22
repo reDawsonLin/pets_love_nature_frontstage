@@ -3,8 +3,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ["@pinia/nuxt", "@nuxtjs/tailwindcss", "@vueuse/nuxt", "nuxt-swiper"],
-  alias: {
-    pinia: "/node_modules/@pinia/nuxt/node_modules/pinia/dist/pinia.mjs",
+  modules: ["@pinia/nuxt", "@vueuse/nuxt", "nuxt-swiper"],
+  css: ["~/assets/main.css"],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
+  pinia: {
+    storesDirs: ["./stores/**"],
   },
 });
