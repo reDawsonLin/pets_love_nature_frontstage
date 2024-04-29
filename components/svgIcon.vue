@@ -1,16 +1,15 @@
 <script setup>
-import { stringify } from "postcss";
-
 defineProps({
   name: {
-    type: stringify,
+    type: String,
+    default: "",
   },
 });
 </script>
 
 <template>
-  <div class="icon_box flex justify-center items-center">
-      <!-- width="60"
+  <div class="icon_box flex items-center justify-center">
+    <!-- width="60"
       height="57" -->
     <svg
       v-if="name === 'logo_light'"
@@ -110,7 +109,7 @@ defineProps({
       </defs>
     </svg>
 
-      <!-- width="120"
+    <!-- width="120"
       height="28" -->
     <svg
       v-else-if="name === 'brand_name'"

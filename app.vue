@@ -6,4 +6,6 @@
   </NuxtLayout>
 </template>
 
-<style lang="scss" scoped></style>
+<style>
+@import "@unocss/reset/tailwind.css";
+</style>
