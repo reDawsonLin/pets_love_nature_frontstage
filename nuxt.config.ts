@@ -1,4 +1,4 @@
-// import { defineNuxtConfig } from 'nuxt' // swiper example/
+// import { defineNuxtConfig } from 'nuxt' // swiper
 
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
