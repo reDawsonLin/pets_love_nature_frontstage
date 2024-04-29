@@ -1,11 +1,10 @@
 <script setup></script>
 
 <template>
-  <div class="flex flex-col border border-red-500 h-dvh">
+  <div class="min-h-100vh flex flex-col">
     <LayoutNavbar />
 
-    
-    <slot/>
+    <slot />
 
     <LayoutFooter />
   </div>

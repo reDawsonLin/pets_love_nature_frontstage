@@ -7,8 +7,8 @@
       class="flex items-center justify-between bg-neutral-800"
     >
       <NuxtLink to="/" class="box flex gap-1rem">
-        <SvgIcon name="" class="aspect-32/30 w-2rem" />
-        <SvgIcon name="" class="aspect-120/27 w-7.5rem" />
+        <SvgIcon name="logo_light" class="aspect-32/30 w-2rem" />
+        <SvgIcon name="brand_name" class="aspect-120/27 w-7.5rem" />
         <!-- <SvgIcon name="logo_light" class="aspect-[32/30] w-[2rem]" />
         <SvgIcon name="brand_name" class="aspect-[120/27] w-[7.5rem]" /> -->
       </NuxtLink>
