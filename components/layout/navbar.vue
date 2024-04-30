@@ -25,7 +25,7 @@
   &,
   &::before,
   &::after {
-    @apply relative flex h-2px w-1.5rem rounded-lg bg-neutral-50;
+    @apply flex h-2px w-1.5rem rounded-lg  relative bg-neutral-50;
   }
 
   &::before {
