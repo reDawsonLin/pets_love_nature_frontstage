@@ -1,12 +1,11 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
-
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
-<style lang="scss" scoped></style>
+<style>
+@import "@unocss/reset/tailwind.css";
+</style>
