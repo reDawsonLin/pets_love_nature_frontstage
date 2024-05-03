@@ -8,4 +8,5 @@
 
 <style>
 @import "@unocss/reset/tailwind.css";
+@import "@/assets/main.css";
 </style>
