@@ -4,13 +4,13 @@ import SvgIcon from "../svgIcon.vue";
 
 <template>
   <footer
-    class="bg-neutral-800 rounded-t-1rem p-1.5rem flex flex-col items-center text-neutral-50"
+    class="flex flex-col items-center rounded-t-1rem bg-neutral-800 p-1.5rem text-neutral-50"
   >
-    <SvgIcon name="logo_light" class="w-4.75rem mb-1.5rem" />
-    <SvgIcon name="brand_name" class="w-12.5rem mb-1.5rem" />
+    <SvgIcon name="logo_light" class="mb-1.5rem w-4.75rem" />
+    <SvgIcon name="brand_name" class="mb-1.5rem w-12.5rem" />
 
     <div class="mb-3rem">
-      <ul class="flex gap-1.5rem mb-0.75rem">
+      <ul class="mb-0.75rem flex gap-1.5rem">
         <li class=""><NuxtLink to="/">關於我們</NuxtLink></li>
         <li class=""><NuxtLink to="/">使用者條款</NuxtLink></li>
       </ul>
@@ -21,26 +21,27 @@ import SvgIcon from "../svgIcon.vue";
       </ul>
     </div>
 
-    <div class="">
-      <ul class="">
+    <div class="w-100% flex flex-col border rounded-1rem bg-neutral-50 p-2rem">
+      <ul class="mb-1.5rem flex gap-1.5rem text-neutral-800">
         <li class="">
-          
           <NuxtLink to="/">
-            <SvgIcon name="facebook" />
+            <SvgIcon name="facebook" class="h-2rem w-2rem" />
           </NuxtLink>
-          
         </li>
         <li class="">
-          
-          <NuxtLink>
-          
-          <SvgIcon name="instagram" /></li>
+          <NuxtLink to="/">
+            <SvgIcon name="instagram" class="h-2rem w-2rem" />
+          </NuxtLink>
+        </li>
         <li class="">
-          
-          <NuxtLink>
-          
-          <SvgIcon name="shopee" /></li>
+          <NuxtLink to="/">
+            <SvgIcon name="shopee" class="h-2rem w-2rem" />
+          </NuxtLink>
+        </li>
       </ul>
+
+      <p class="text-14px text-neutral-600">參考資料來源：德老爺店舖</p>
+      <p class="text-14px text-neutral-600">Hex School 北十一組 專題使用</p>
     </div>
   </footer>
 </template>

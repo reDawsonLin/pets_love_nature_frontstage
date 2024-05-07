@@ -120,24 +120,21 @@ const data_hotProduct = [
 const data_comment = [
   {
     id: 1,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-1.webp",
   },
   {
     id: 2,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-2.webp",
   },
   {
     id: 3,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-3.webp",
@@ -147,10 +144,7 @@ const data_comment = [
 
 <template>
   <main>
-    <section
-      class="banner_list flex-grow-1 bg-second-200"
-      p="x-0.75rem t-1.25rem"
-    >
+    <section class="banner_list flex-grow-1 bg-second-200" p="x-0.75rem t-1.25rem">
       <Swiper
         space-between="12"
         :modules="[SwiperPagination]"
@@ -202,11 +196,7 @@ const data_comment = [
 
     <section class="product_category" p="x-0.75rem t-2rem b-4rem">
       <ul class="flex flex-col gap-1.5rem">
-        <li
-          v-for="category in data_category"
-          :key="category.id"
-          class="flex gap-1.5rem"
-        >
+        <li v-for="category in data_category" :key="category.id" class="flex gap-1.5rem">
           <div
             class="w-3.75rem flex items-center justify-center gap-1rem write-vertical-left"
           >
@@ -235,10 +225,7 @@ const data_comment = [
       </ul>
     </section>
 
-    <section
-      class="product_suggest rounded-2.5rem bg-second-200"
-      p="x-0.75rem y-2.5rem"
-    >
+    <section class="product_suggest rounded-2.5rem bg-second-200" p="x-0.75rem y-2.5rem">
       <h2 class="mb-3rem text-center">熱銷商品</h2>
 
       <ul class="mb-3rem flex flex-col items-center gap-1rem">
@@ -276,53 +263,25 @@ const data_comment = [
         <SwiperSlide
           v-for="comment in data_comment"
           :key="comment.id"
-          class="pb-3rem px-0.75rem flex flex-col"
+          class="flex flex-col px-0.75rem pb-3rem"
         >
           <div
-            class="relative p-1.5rem bg-second-200 rounded-1rem shadow-[-4px_-4px_8px_rgba(210,148,107,0.3)] mb-1rem"
-            after:(content-empty
-            absolute
-            top-100%
-            right-1.25rem
-            flex
-            border-l-2rem
-            border-l-second-200
-            border-b-2rem
-            border-b-transparent
-            w-2rem
-            h-2rem
-            shadow-[-4px_-4px_8px_rgba(210,148,107,0.3)]
-            )
+            class="relative mb-1rem rounded-1rem bg-second-200 p-1.5rem shadow-[-4px_-4px_8px_rgba(210,148,107,0.3)] after:(absolute right-3rem top-100% h-2rem w-2rem flex border-b-2rem border-l-2rem border-b-transparent border-l-second-200 shadow-[-4px_-4px_8px_rgba(210,148,107,0.3)] content-empty)"
           >
-            <p class="text-1.5rem mb-0.75rem">{{ comment.content }}</p>
+            <p class="mb-0.75rem text-1.5rem">{{ comment.content }}</p>
             <p class="text-0.875rem text-neutral-400">
               {{ comment.createdTime }}
             </p>
           </div>
 
-          <div class="flex gap-0.5rem mx-auto">
+          <div class="mx-auto flex gap-0.5rem">
             <img
               :src="comment.avatarUrl"
               alt="avatar"
-              class="w-2.5rem aspect-1/1 object-cover object-center rounded-50%"
+              class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center"
             />
             <p>{{ comment.accountName }}</p>
           </div>
-
-          <!-- <img
-            :src="banner.imgUrl"
-            alt="banner"
-            class="aspect-350/512"
-            rounded="t-80px b-20px"
-            object="cover center"
-          />
-
-          <div
-            class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600"
-          >
-            <h3 class="text-2rem">{{ banner.title }}</h3>
-            <p class="text-balance">{{ banner.subtitle }}</p>
-          </div> -->
         </SwiperSlide>
       </Swiper>
 
