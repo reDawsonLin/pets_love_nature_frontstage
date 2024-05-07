@@ -18,6 +18,8 @@
     "@pinia/nuxt": "^0.5.1",
     "@unocss/reset": "^0.59.4",
     "@vueuse/nuxt": "^10.9.0",
+    "jsdoc": "^4.0.3",
+
     "nuxt": "^3.11.2",
     "nuxt-swiper": "^1.2.2",
     "pinia": "^2.1.7",
