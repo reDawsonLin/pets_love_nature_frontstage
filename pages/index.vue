@@ -120,21 +120,24 @@ const data_hotProduct = [
 const data_comment = [
   {
     id: 1,
-    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content:
+      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-1.webp",
   },
   {
     id: 2,
-    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content:
+      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-2.webp",
   },
   {
     id: 3,
-    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content:
+      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-3.webp",
@@ -144,7 +147,10 @@ const data_comment = [
 
 <template>
   <main>
-    <section class="banner_list flex-grow-1 bg-second-200" p="x-0.75rem t-1.25rem">
+    <section
+      class="banner_list flex-grow-1 bg-second-200"
+      p="x-0.75rem t-1.25rem"
+    >
       <Swiper
         space-between="12"
         :modules="[SwiperPagination]"
@@ -196,7 +202,11 @@ const data_comment = [
 
     <section class="product_category" p="x-0.75rem t-2rem b-4rem">
       <ul class="flex flex-col gap-1.5rem">
-        <li v-for="category in data_category" :key="category.id" class="flex gap-1.5rem">
+        <li
+          v-for="category in data_category"
+          :key="category.id"
+          class="flex gap-1.5rem"
+        >
           <div
             class="w-3.75rem flex items-center justify-center gap-1rem write-vertical-left"
           >
@@ -225,7 +235,10 @@ const data_comment = [
       </ul>
     </section>
 
-    <section class="product_suggest rounded-2.5rem bg-second-200" p="x-0.75rem y-2.5rem">
+    <section
+      class="product_suggest rounded-2.5rem bg-second-200"
+      p="x-0.75rem y-2.5rem"
+    >
       <h2 class="mb-3rem text-center">熱銷商品</h2>
 
       <ul class="mb-3rem flex flex-col items-center gap-1rem">
@@ -255,6 +268,7 @@ const data_comment = [
       <h2 class="mb-3rem text-center">熱烈好評</h2>
 
       <Swiper
+        class="mb-1.5rem"
         space-between="12"
         :modules="[SwiperPagination]"
         :pagination="{ dynamicBullets: false }"
@@ -262,7 +276,7 @@ const data_comment = [
         <SwiperSlide
           v-for="comment in data_comment"
           :key="comment.id"
-          class="pb-4.5rem px-0.75rem flex flex-col"
+          class="pb-3rem px-0.75rem flex flex-col"
         >
           <div
             class="relative p-1.5rem bg-second-200 rounded-1rem shadow-[-4px_-4px_8px_rgba(210,148,107,0.3)] mb-1rem"
@@ -281,7 +295,9 @@ const data_comment = [
             )
           >
             <p class="text-1.5rem mb-0.75rem">{{ comment.content }}</p>
-            <p class="text-0.875rem text-neutral-400">{{ comment.createdTime }}</p>
+            <p class="text-0.875rem text-neutral-400">
+              {{ comment.createdTime }}
+            </p>
           </div>
 
           <div class="flex gap-0.5rem mx-auto">
@@ -316,8 +332,12 @@ const data_comment = [
 </template>
 
 <style scoped>
-:deep(.banner-list.swiper-pagination) {
+.banner_list :deep(.swiper-pagination) {
   @apply bottom-1.5rem;
+}
+
+.banner_list :deep(.swiper-pagination-bullet) {
+  @apply bg-second-400;
 }
 
 :deep(.swiper-pagination) {
@@ -325,7 +345,7 @@ const data_comment = [
 }
 
 :deep(.swiper-pagination-bullet) {
-  @apply bg-second-400 opacity-100 w-0.75rem h-0.75rem !mx-unset;
+  @apply bg-neutral-200  opacity-100 w-0.75rem h-0.75rem !mx-unset;
 }
 
 :deep(.swiper-pagination-bullet-active) {
