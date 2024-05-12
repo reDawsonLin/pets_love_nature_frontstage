@@ -13,10 +13,19 @@
         <SvgIcon name="brand_name" class="aspect-[120/27] w-[7.5rem]" /> -->
       </NuxtLink>
 
-      <div class="h-4 w-1.5rem flex cursor-pointer items-center">
+      <nav class="text-neutral-50 flex gap-3rem">
+        <NuxtLink to="/">所有商品</NuxtLink>
+        <NuxtLink to="/">關於我們</NuxtLink>
+        <NuxtLink to="/">常見問題</NuxtLink>
+      </nav>
+
+      <div class="h-4 w-1.5rem flex cursor-pointer items-center cursor-pointer">
         <p class="hamburger" />
       </div>
     </header>
+
+
+
   </div>
 </template>
 

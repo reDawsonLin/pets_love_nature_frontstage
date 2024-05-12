@@ -4,10 +4,12 @@
   <div class="min-h-100vh flex flex-col">
     <LayoutNavbar />
 
-    <slot />
+    <main class="flex-grow-1">
+      <slot />
+    </main>
 
     <LayoutFooter />
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
