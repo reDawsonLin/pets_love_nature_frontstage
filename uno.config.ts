@@ -26,5 +26,11 @@ export default defineConfig({
       "second-400": "#f5dac8",
       "second-200": "#f9f0ea",
     },
+    extend: {
+      flexGrow: {
+        2: '2'
+      }
+    }
   },
+  
 });
