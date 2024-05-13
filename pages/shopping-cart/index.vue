@@ -72,12 +72,11 @@ const productQuantityChange = (i, num) => {
   const calcQuantity = testArr.value[i].quantity + num;
   if (calcQuantity >= 0 && calcQuantity <= testArr.value[i].inStock)
     testArr.value[i].quantity = calcQuantity;
-  console.log("change!");
 };
 
 const productQuantityInput = (product, e) => {
-  const targetNum = Number(e.data);
-  if (targetNum >= 0 && targetNum <= product.quantity && !isNaN(targetNum)) {
+  const targetNum = Number(e.target.value);
+  if (targetNum >= 0 && targetNum <= product.inStock && !isNaN(targetNum)) {
     product.quantity = targetNum;
   }
 };
