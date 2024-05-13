@@ -120,24 +120,21 @@ const data_hotProduct = [
 const data_comment = [
   {
     id: 1,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-1.webp",
   },
   {
     id: 2,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-2.webp",
   },
   {
     id: 3,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-3.webp",
@@ -154,20 +151,11 @@ const chatCount = ref(10);
 // const { x, y, isScrolling, arrivedState, directions } = useScroll(el);
 //
 
-const {
-  x,
-  y: windowScroll,
-  isScrolling,
-  arrivedState,
-  directions,
-} = useWindowScroll();
+const { x, y: windowScroll, isScrolling, arrivedState, directions } = useWindowScroll();
 </script>
 
 <template>
-  <section
-    class="banner_list flex-grow-1 bg-second-200"
-    p="x-0.75rem t-1.25rem"
-  >
+  <section class="banner_list flex-grow-1 bg-second-200" p="x-0.75rem t-1.25rem">
     <Swiper
       class="md:(w-100% max-w-1760px)"
       space-between="12"
@@ -177,42 +165,45 @@ const {
       <SwiperSlide
         v-for="banner in data_banner"
         :key="banner.id"
-        class="relative pb-5.75rem"
+        class="relative pb-5.75rem md:(pb-9rem )"
       >
         <img
           :src="banner.imgUrl"
           alt="banner"
-          class="aspect-350/512 md:(aspect-1760/662 )"
+          class="aspect-350/512 md:(aspect-1760/662)"
           rounded="t-80px b-20px"
           object="cover center"
+          md:(rounded-5rem)
         />
 
         <div
-          class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600"
+          class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600 md:(w-100% max-w-47rem bottom-10.25rem rounded-1rem bg-second-200/90)"
         >
-          <h3 class="text-2rem">{{ banner.title }}</h3>
-          <p class="text-balance">{{ banner.subtitle }}</p>
+          <h3 class="text-2rem" md:(text-3rem)>{{ banner.title }}</h3>
+          <p class="text-balance" md:(text-1.75rem)>{{ banner.subtitle }}</p>
         </div>
       </SwiperSlide>
     </Swiper>
   </section>
 
-  <section class="brand_info" p="x-0.75rem y-3rem">
-    <header class="mb-1rem flex flex-col items-center">
-      <SvgIcon name="logo_pink" class="w-5rem" />
-      <h3>Brand 特色</h3>
+  <section
+    class="brand_info md:(flex justify-center gap-4.875rem bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)] bg-[position:left_bottom,102%_center,center] bg-[size:556px,_432px] [background-repeat:no-repeat,_no-repeat,_repeat])"
+  >
+    <header class="mb-1rem flex flex-col items-center md:( pt-7.5rem gap-4.5rem)">
+      <SvgIcon name="logo_pink" class="w-5rem md:(w-19.25rem order-2)" />
+      <h3 class="md:(text-3rem order-1)">Brand 特色</h3>
     </header>
 
-    <ul class="box_feature grid grid-cols-2">
+    <ul class="box_feature grid grid-cols-2 md:(gap-x-1.5rem)">
       <template v-for="feature in data_feature" :key="feature.id">
-        <li class="feature px-0.75rem py0.5rem text-center text-neutral-800">
+        <li class="feature px-0.75rem py0.5rem text-center text-neutral-800 md:( p-3rem)">
           <div
-            class="148, 107,0.3)] wrapper_icon shadow-[-0.25rem_0.25rem_0.5rem_rgba(210, mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem"
+            class="wrapper_icon shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148, 107,0.3)] mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem md:(rounded-4.5rem p-5rem)"
           >
-            <SvgIcon :name="feature.iconName" class="w-5rem" />
+            <SvgIcon :name="feature.iconName" class="w-5rem md:(w-10rem)" />
           </div>
-          <p text-1.25rem>{{ feature.content1 }}</p>
-          <p text-1.25rem>{{ feature.content2 }}</p>
+          <p text-1.25rem class="md:(text-2rem)">{{ feature.content1 }}</p>
+          <p text-1.25rem class="md:(text-2rem)">{{ feature.content2 }}</p>
         </li>
       </template>
     </ul>
@@ -220,11 +211,7 @@ const {
 
   <section class="product_category" p="x-0.75rem t-2rem b-4rem">
     <ul class="flex flex-col gap-1.5rem">
-      <li
-        v-for="category in data_category"
-        :key="category.id"
-        class="flex gap-1.5rem"
-      >
+      <li v-for="category in data_category" :key="category.id" class="flex gap-1.5rem">
         <div
           class="w-3.75rem flex items-center justify-center gap-1rem write-vertical-left"
         >
@@ -253,10 +240,7 @@ const {
     </ul>
   </section>
 
-  <section
-    class="product_suggest rounded-2.5rem bg-second-200"
-    p="x-0.75rem y-2.5rem"
-  >
+  <section class="product_suggest rounded-2.5rem bg-second-200" p="x-0.75rem y-2.5rem">
     <h2 class="mb-3rem text-center">熱銷商品</h2>
 
     <ul class="mb-3rem flex flex-col items-center gap-1rem">
@@ -323,7 +307,8 @@ const {
     class="cursor-pointer fixed right-0.75rem bottom-1.5rem z-10 chat_icon rounded-50% bg-rose-500 w-3.5rem h-3.5rem flex justify-center items-center opacity-0 transition-opacity"
     :class="{ 'opacity-100': windowScroll > 600 }"
   >
-    <SvgIcon name="chat" class="w-2rem h-2rem text-white" />
+    <SvgIcon name="chat" class="w-2rem h-2rem text-white hover:text-blue" />
+
     <span
       class="absolute top--0.25rem right--0.25rem text-white text-0.75rem bg-rose-500 border border-2px border-white rounded-50% w-1.25rem h-1.25rem flex justify-center items-center"
       >{{ chatCount > 9 ? "9+" : chatCount }}
@@ -334,6 +319,7 @@ const {
 <style scoped>
 .banner_list :deep(.swiper-pagination) {
   @apply bottom-1.5rem;
+  @apply md:(bottom-5rem);
 }
 
 .banner_list :deep(.swiper-pagination-bullet) {
@@ -346,9 +332,29 @@ const {
 
 :deep(.swiper-pagination-bullet) {
   @apply bg-neutral-200  opacity-100 w-0.75rem h-0.75rem !mx-unset;
+  @apply md:(w-1.5rem h-1.5rem);
 }
 
 :deep(.swiper-pagination-bullet.swiper-pagination-bullet-active) {
   @apply bg-neutral-600;
 }
+
+.brand_info {
+  @apply;
+  /* @apply md:(before:(content-empty)); */
+
+  /* md:( before:(content-empty flex absolute left-0 bottom-0 bg-[url('@/assets/img/home-2-3.webp')] w-556px h-362px border border-red-7 ) after:(content-empty flex w-1rem h-1rem absolute border-red-700 border) )"
+    p="x-0.75rem y-3rem */
+}
+
+/* .brand_info {
+  border: 1px solid red;
+
+  @media screen and (min-width: 768px) {
+    background-image: url("@/assets/img/bg-brand.webp"),url("@/assets/img/home-2-3.webp"), url("@/assets/img/home-2-4.webp");
+    background-position: center, left bottom, right center;
+    background-repeat: repeat, no-repeat, no-repeat;
+    background-size: cover, 556px 362px, 432px 526px;
+  }
+} */
 </style>
