@@ -234,7 +234,9 @@ const { x, y: windowScroll, isScrolling, arrivedState, directions } = useWindowS
             class="absolute inset-0 flex flex-col justify-end rounded-1.5rem from-20% bg-gradient-to-t px-1rem py-0.75rem opacity-0 transition-opacity group-hover:opacity-100 md:(p-2.25rem)"
             :class="[`${category.gradientColor}`]"
           >
-            <p class="text-balance text-1rem md:(text-1.5rem)">{{ category.description }}</p>
+            <p class="text-balance text-1rem md:(text-1.5rem)">
+              {{ category.description }}
+            </p>
             <p v-show="category.remind" class="text-0.75rem">
               {{ category.remind }}
             </p>
@@ -244,13 +246,27 @@ const { x, y: windowScroll, isScrolling, arrivedState, directions } = useWindowS
     </ul>
   </section>
 
-  <section class="product_suggest rounded-2.5rem bg-second-200" p="x-0.75rem y-2.5rem">
-    <h2 class="mb-3rem text-center">熱銷商品</h2>
+  <section
+    class="product_suggest relative md:() rounded-2.5rem bg-second-200"
+    p="x-0.75rem y-2.5rem mb:(y-7.5rem)"
+  >
+    <header class="md:(flex items-center justify-between max-w-1296px mx-auto mb-3rem)">
+      <h2 class="mb-3rem text-center md:(mb-0)">熱銷商品</h2>
 
-    <ul class="mb-3rem flex flex-col items-center gap-1rem">
+      <ButtonMore
+        content="所有商品"
+        route-url="/"
+        class="hidden md:(flex mx-unset)"
+        bg-color="bg-second-200"
+      />
+    </header>
+
+    <ul
+      class="mb-3rem flex flex-col items-center gap-1rem md:(flex-row max-w-1296px mx-auto mb-unset gap-1.5rem)"
+    >
       <template v-for="product in data_hotProduct" :key="product.id">
         <li
-          class="group relative aspect-1/1 w-100% rounded-2rem transition-shadow"
+          class="group relative aspect-1/1 w-100% rounded-2rem transition-shadow md:(aspect-416/580)"
           :class="product.bg_url"
           bg="center cover"
           hover:shadow-md
@@ -267,7 +283,12 @@ const { x, y: windowScroll, isScrolling, arrivedState, directions } = useWindowS
       </template>
     </ul>
 
-    <ButtonMore content="所有商品" route-url="/" bg-color="bg-second-200" />
+    <ButtonMore
+      content="所有商品"
+      route-url="/"
+      class="md:(hidden)"
+      bg-color="bg-second-200"
+    />
   </section>
 
   <section class="comment_list" p=" y-4rem">
