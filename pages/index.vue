@@ -120,24 +120,21 @@ const data_hotProduct = [
 const data_comment = [
   {
     id: 1,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-1.webp",
   },
   {
     id: 2,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-2.webp",
   },
   {
     id: 3,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-3.webp",
@@ -154,20 +151,11 @@ const chatCount = ref(10);
 // const { x, y, isScrolling, arrivedState, directions } = useScroll(el);
 //
 
-const {
-  x,
-  y: windowScroll,
-  isScrolling,
-  arrivedState,
-  directions,
-} = useWindowScroll();
+const { x, y: windowScroll, isScrolling, arrivedState, directions } = useWindowScroll();
 </script>
 
 <template>
-  <section
-    class="banner_list flex-grow-1 bg-second-200"
-    p="x-0.75rem t-1.25rem"
-  >
+  <section class="banner_list flex-grow-1 bg-second-200" p="x-0.75rem t-1.25rem">
     <Swiper
       class="md:(w-100% max-w-1760px)"
       space-between="12"
@@ -199,20 +187,16 @@ const {
   </section>
 
   <section
-    class="brand_info md:(flex justify-center gap-4.875rem bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)] bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px] [background-repeat:no-repeat,_no-repeat,_repeat])"
+    class="brand_info md:(flex justify-center gap-4.875rem bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)] bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] [background-repeat:no-repeat,_no-repeat,_repeat])"
   >
-    <header
-      class="mb-1rem flex flex-col items-center md:( pt-7.5rem gap-4.5rem)"
-    >
+    <header class="mb-1rem flex flex-col items-center md:( pt-7.5rem gap-4.5rem)">
       <SvgIcon name="logo_pink" class="w-5rem md:(w-19.25rem order-2)" />
       <h3 class="md:(text-3rem order-1)">Brand 特色</h3>
     </header>
 
     <ul class="box_feature grid grid-cols-2 md:(gap-x-1.5rem)">
       <template v-for="feature in data_feature" :key="feature.id">
-        <li
-          class="feature px-0.75rem py0.5rem text-center text-neutral-800 md:( p-3rem)"
-        >
+        <li class="feature px-0.75rem py0.5rem text-center text-neutral-800 md:( p-3rem)">
           <div
             class="wrapper_icon shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148, 107,0.3)] mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem md:(rounded-4.5rem p-5rem)"
           >
@@ -226,31 +210,31 @@ const {
   </section>
 
   <section class="product_category" p="x-0.75rem t-2rem b-4rem md:(y-7.5rem)">
-    <ul class="flex flex-col gap-1.5rem md:(flex-row justify-center)">
+    <ul class="flex flex-col gap-1.5rem md:(flex-row justify-center gap-7.5rem)">
       <li
         v-for="category in data_category"
         :key="category.id"
-        class="flex gap-1.5rem"
+        class="flex gap-1.5rem md:( h-32.5rem gap-3rem)"
       >
         <div
-          class="w-3.75rem flex items-center justify-center gap-1rem write-vertical-left"
+          class="w-3.75rem flex items-center justify-center gap-1rem write-vertical-left md:(justify-start)"
         >
-          <p class="text-2.5rem line-height-none tracking-1rem">
+          <p class="text-2.5rem line-height-none tracking-1rem md:(text-3rem)">
             {{ category.title }}
           </p>
-          <p class="text-0.75rem">{{ category.subtitle }}</p>
+          <p class="text-0.75rem md:(text-1.25rem)">{{ category.subtitle }}</p>
         </div>
 
         <div
-          class="group relative aspect-257/358 flex-grow-1 rounded-1.5rem md:(aspect-520/430 flex-grow-0)"
+          class="group relative aspect-257/358 flex-grow-1 rounded-1.5rem md:()"
           :class="[`${category.bgUrl}`]"
           bg="center [length:auto_100%] no-repeat"
         >
           <div
-            class="absolute inset-0 flex flex-col justify-end rounded-1.5rem from-20% bg-gradient-to-t px-1rem py-0.75rem opacity-0 transition-opacity group-hover:opacity-100"
+            class="absolute inset-0 flex flex-col justify-end rounded-1.5rem from-20% bg-gradient-to-t px-1rem py-0.75rem opacity-0 transition-opacity group-hover:opacity-100 md:(p-2.25rem)"
             :class="[`${category.gradientColor}`]"
           >
-            <p class="text-balance text-1rem">{{ category.description }}</p>
+            <p class="text-balance text-1rem md:(text-1.5rem)">{{ category.description }}</p>
             <p v-show="category.remind" class="text-0.75rem">
               {{ category.remind }}
             </p>
@@ -260,10 +244,7 @@ const {
     </ul>
   </section>
 
-  <section
-    class="product_suggest rounded-2.5rem bg-second-200"
-    p="x-0.75rem y-2.5rem"
-  >
+  <section class="product_suggest rounded-2.5rem bg-second-200" p="x-0.75rem y-2.5rem">
     <h2 class="mb-3rem text-center">熱銷商品</h2>
 
     <ul class="mb-3rem flex flex-col items-center gap-1rem">
