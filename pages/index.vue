@@ -246,9 +246,10 @@ const { x, y: windowScroll, isScrolling, arrivedState, directions } = useWindowS
     </ul>
   </section>
 
+
   <section
-    class="product_suggest relative md:() rounded-2.5rem bg-second-200"
-    p="x-0.75rem y-2.5rem mb:(y-7.5rem)"
+    class="product_suggest relative rounded-2.5rem bg-second-200 "
+    p="x-0.75rem y-2.5rem md:(y-7.5rem)"
   >
     <header class="md:(flex items-center justify-between max-w-1296px mx-auto mb-3rem)">
       <h2 class="mb-3rem text-center md:(mb-0)">熱銷商品</h2>
