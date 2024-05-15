@@ -152,6 +152,26 @@ const chatCount = ref(10);
 //
 
 const { x, y: windowScroll, isScrolling, arrivedState, directions } = useWindowScroll();
+const showChat = computed(() => {
+  // console.log("windowScroll :>> ", windowScroll);
+  console.log("window.height :>> ", window?.innerHeight);
+  console.log("document.body.scrollHeight :>> ", document?.body.scrollHeight);
+  console.log("document.body.offsetHeight :>> ", document?.body.offsetHeight);
+  console.log("document.body.clientHeight :>> ", document?.body.clientHeight);
+  const targetPoint = document?.body.scrollHeight - window?.innerHeight - 300;
+  if (windowScroll.value > targetPoint) {
+    return true;
+  } else {
+    false;
+  }
+  // 370px
+});
+
+watchEffect(() => {
+  console.log("windowScroll.value :>> ", windowScroll.value);
+});
+
+const chatClass = ["absolute", "right-6rem", "bottom-29.25rem"];
 </script>
 
 <template>
@@ -246,9 +266,8 @@ const { x, y: windowScroll, isScrolling, arrivedState, directions } = useWindowS
     </ul>
   </section>
 
-
   <section
-    class="product_suggest relative rounded-2.5rem bg-second-200 "
+    class="product_suggest relative rounded-2.5rem bg-second-200"
     p="x-0.75rem y-2.5rem md:(y-7.5rem)"
   >
     <header class="md:(flex items-center justify-between max-w-1296px mx-auto mb-3rem)">
@@ -331,7 +350,12 @@ const { x, y: windowScroll, isScrolling, arrivedState, directions } = useWindowS
 
   <div
     class="cursor-pointer fixed right-0.75rem bottom-1.5rem z-10 chat_icon rounded-50% bg-rose-500 w-3.5rem h-3.5rem flex justify-center items-center opacity-0 transition-opacity"
-    :class="{ 'opacity-100': windowScroll > 600 }"
+    :class="{
+      'opacity-100': windowScroll > 600,
+      'absolute': showChat,
+      'right-3vw': showChat,
+      'bottom-23.5rem': showChat,
+    }"
   >
     <SvgIcon name="chat" class="w-2rem h-2rem text-white hover:text-blue" />
 
@@ -339,6 +363,8 @@ const { x, y: windowScroll, isScrolling, arrivedState, directions } = useWindowS
       class="absolute top--0.25rem right--0.25rem text-white text-0.75rem bg-rose-500 border border-2px border-white rounded-50% w-1.25rem h-1.25rem flex justify-center items-center"
       >{{ chatCount > 9 ? "9+" : chatCount }}
     </span>
+
+    {{ showChat }}
   </div>
 </template>
 
