@@ -1,3 +1,26 @@
+<script setup>
+
+  const meberJson = ref(
+    {
+    "_id": "",
+    "customerName": "王大頭",
+    "recipientName": "王大頭",
+    "phone": "0912345678",
+    "deliveryAddress": {
+      "country": "台灣",
+      "county": "台北市",
+      "district": "信義區",
+      "address": "快樂鎮1234號5樓",
+      "phone": "0987654321",
+    },
+    "email": "test@gmail.com",
+    "image": "",
+    "accountStatus": 0
+  }
+);
+
+</script>
+
 <template>
     <div class="member">
         <div p="t-3.75rem" class="title flex items-center justify-center mb-7.5">
@@ -12,48 +35,48 @@
             <form >
                 <div class="mb-4">
                     <label for="customerName" class="block text-sm font-medium leading-6 text-gray-900">顧客姓名</label>
-                    <input type="text" name="customerName" id="customerName" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="">
+                    <input type="text" name="customerName" id="customerName" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="" :value="meberJson.customerName">
                 </div>
 
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium leading-6 text-gray-900">信箱</label>
-                    <input type="text" name="email" id="email" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="">
+                    <input type="text" name="email" id="email" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="" :value="meberJson.email">
                 </div>
 
                 <div class="mb-4">
                     <label for="phone" class="block text-sm font-medium leading-6 text-gray-900">聯絡電話</label>
-                    <input type="text" name="phone" id="phone" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="">
+                    <input type="text" name="phone" id="phone" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="" :value="meberJson.phone">
                 </div>
 
                 <div class="mb-4">
                     <label for="recipient_name" class="block text-sm font-medium leading-6 text-gray-900">收件人</label>
-                    <input type="text" name="recipient_name" id="recipient_name" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="">
+                    <input type="text" name="recipient_name" id="recipient_name" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="" :value="meberJson.recipientName">
                 </div>
 
                 <div class="mb-4">
                     <label for="recipient_phone" class="block text-sm font-medium leading-6 text-gray-900">收件人聯絡電話</label>
-                    <input type="text" name="recipient_phone" id="recipient_phone" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="">
+                    <input type="text" name="recipient_phone" id="recipient_phone" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="" :value="meberJson.deliveryAddress.phone">
                 </div>
 
                 <div class="mb-4">
                     <label for="recipient_location" class="block text-sm font-medium leading-6 text-gray-900">送貨地點</label>
-                    <input type="text" name="recipient_location" id="recipient_location" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="">
+                    <input type="text" name="recipient_location" id="recipient_location" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="" :value="meberJson.deliveryAddress.country">
                 </div>
 
                 <div class="mb-4">
                     <label for="recipient_city" class="block text-sm font-medium leading-6 text-gray-900">城市/縣</label>
-                    <input type="text" name="recipient_city" id="recipient_city" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="">
+                    <input type="text" name="recipient_city" id="recipient_city" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="" :value="meberJson.deliveryAddress.county">
                 </div>
 
                 <div class="mb-4">
 
                     <label for="recipient_area" class="block text-sm font-medium leading-6 text-gray-900">地區</label>
-                    <input type="text" name="recipient_area" id="recipient_area" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="">
+                    <input type="text" name="recipient_area" id="recipient_area" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="" :value="meberJson.deliveryAddress.district">
                 </div>
 
                 <div class="mb-4">
                     <label for="recipient_address" class="block text-sm font-medium leading-6 text-gray-900">地址</label>
-                    <input type="text" name="recipient_address" id="recipient_address" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="">
+                    <input type="text" name="recipient_address" id="recipient_address" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="" :value="meberJson.deliveryAddress.address">
                 </div>
 
                 <div class="flex mb-4  grid-justify-center grid-items-center">
