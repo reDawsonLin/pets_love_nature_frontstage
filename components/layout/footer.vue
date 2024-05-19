@@ -4,29 +4,29 @@ import SvgIcon from "../svgIcon.vue";
 
 <template>
   <footer
-    class=" rounded-t-1rem bg-neutral-800 p-1.5rem text-neutral-50 md:(pt-5rem pb-6rem)"
+    class="rounded-t-1rem bg-neutral-800 p-1.5rem text-neutral-50 md:(pb-6rem pt-5rem)"
   >
 
-  <div class="flex flex-col items-center mx-auto md:(max-w-1296px flex-row)">
-    <section class="mb-3rem flex flex-col items-center gap-1.5rem md:(items-start flex-grow-1 mb-0)">
+  <div class="mx-auto flex flex-col items-center md:(max-w-1296px flex-row)">
+    <section class="mb-3rem flex flex-col items-center gap-1.5rem md:(mb-0 flex-grow-1 items-start)">
       <div class="flex flex-col items-center gap-1.5rem md:(flex-row gap-2rem)">
         <SvgIcon name="logo_light" class="w-4.5rem" />
         <SvgIcon name="brand_name" class="w-12.5rem" />
       </div>
 
       <div class="text-1.25rem">
-        <ul class="mb-0.75rem flex gap-1.5rem flex-wrap w-207px md:(items-center w-auto)">
+        <ul class="mb-0.75rem w-207px flex flex-wrap gap-1.5rem md:(w-auto items-center)">
           <li class=""><NuxtLink to="/">關於我們</NuxtLink></li>
           <b
-            class="w-36px h-2px border border-neutral-50 border-dashed hidden md:(flex)"
+            class="hidden h-2px w-36px border border-neutral-50 border-dashed md:(flex)"
           />
           <li class=""><NuxtLink to="/">使用者條款</NuxtLink></li>
           <b
-            class="w-36px h-2px border border-neutral-50 border-dashed hidden md:(flex)"
+            class="hidden h-2px w-36px border border-neutral-50 border-dashed md:(flex)"
           />
           <li class=""><NuxtLink to="/">隱私權政策</NuxtLink></li>
           <b
-            class="w-36px h-2px border border-neutral-50 border-dashed hidden md:(flex)"
+            class="hidden h-2px w-36px border border-neutral-50 border-dashed md:(flex)"
           />
           <li class=""><NuxtLink to="/">常見問題</NuxtLink></li>
         </ul>

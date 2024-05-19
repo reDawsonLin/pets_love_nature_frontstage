@@ -120,24 +120,21 @@ const data_hotProduct = [
 const data_comment = [
   {
     id: 1,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-1.webp",
   },
   {
     id: 2,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-2.webp",
   },
   {
     id: 3,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-3.webp",
@@ -157,31 +154,36 @@ const chatCount = ref(10);
 const { y: windowScroll } = useWindowScroll();
 
 const showChat = computed(() => {
-  // console.log("windowScroll :>> ", windowScroll);
-  console.log("window.height :>> ", window?.innerHeight);
-  console.log("document.body.scrollHeight :>> ", document?.body.scrollHeight);
-  console.log("document.body.offsetHeight :>> ", document?.body.offsetHeight);
-  console.log("document.body.clientHeight :>> ", document?.body.clientHeight);
   const targetPoint = document?.body.scrollHeight - window?.innerHeight - 300;
 
   if (windowScroll.value > targetPoint) return true;
   else false;
 });
 
-watchEffect(() => {
-  console.log("windowScroll.value :>> ", windowScroll.value);
+const chatClass = "absolute right-6rem bottom-29.25rem";
+
+const { width: window_width } = useWindowSize();
+
+const comment_swiperPerView = computed(() => {
+  if (window_width.value < 768) return 1;
+  else return 3;
 });
 
-const chatClass = "absolute right-6rem bottom-29.25rem";
+const comment_swiperCenteredSlide = computed(() => {
+  if (window_width.value < 768) return false;
+  else return true;
+});
+
+watchEffect(() => {
+  // console.log("windowScroll.value :>> ", windowScroll.value);
+  console.log("window_width.value :>> ", window_width.value);
+});
 </script>
 
 <template>
-  <section
-    class="banner_list flex-grow-1 bg-second-200"
-    p="x-0.75rem t-1.25rem"
-  >
+  <section class="banner_list flex-grow-1 bg-second-200" p="x-0.75rem t-1.25rem">
     <Swiper
-      class="md:(w-100% max-w-1760px)"
+      class="md:(max-w-1760px w-100%)"
       space-between="12"
       :modules="[SwiperPagination]"
       :pagination="{ dynamicBullets: false }"
@@ -189,7 +191,7 @@ const chatClass = "absolute right-6rem bottom-29.25rem";
       <SwiperSlide
         v-for="banner in data_banner"
         :key="banner.id"
-        class="relative pb-5.75rem md:(pb-9rem )"
+        class="relative pb-5.75rem md:(pb-9rem)"
       >
         <img
           :src="banner.imgUrl"
@@ -198,10 +200,10 @@ const chatClass = "absolute right-6rem bottom-29.25rem";
           rounded="t-80px b-20px"
           object="cover center"
           md:(rounded-5rem)
-        />
+        >
 
         <div
-          class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600 md:(w-100% max-w-47rem bottom-10.25rem rounded-1rem bg-second-200/90)"
+          class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600 md:(bottom-10.25rem max-w-47rem w-100% rounded-1rem bg-second-200/90)"
         >
           <h3 class="text-2rem" md:(text-3rem)>{{ banner.title }}</h3>
           <p class="text-balance" md:(text-1.75rem)>{{ banner.subtitle }}</p>
@@ -211,22 +213,18 @@ const chatClass = "absolute right-6rem bottom-29.25rem";
   </section>
 
   <section
-    class="brand_info md:(flex justify-center gap-4.875rem bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)] bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] [background-repeat:no-repeat,_no-repeat,_repeat])"
+    class="brand_info md:([background-repeat:no-repeat,_no-repeat,_repeat] flex justify-center gap-4.875rem bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)])"
   >
-    <header
-      class="mb-1rem flex flex-col items-center md:( pt-7.5rem gap-4.5rem)"
-    >
-      <SvgIcon name="logo_pink" class="w-5rem md:(w-19.25rem order-2)" />
-      <h3 class="md:(text-3rem order-1)">Brand 特色</h3>
+    <header class="mb-1rem flex flex-col items-center md:(gap-4.5rem pt-7.5rem)">
+      <SvgIcon name="logo_pink" class="w-5rem md:(order-2 w-19.25rem)" />
+      <h3 class="md:(order-1 text-3rem)">Brand 特色</h3>
     </header>
 
     <ul class="box_feature grid grid-cols-2 md:(gap-x-1.5rem)">
       <template v-for="feature in data_feature" :key="feature.id">
-        <li
-          class="feature px-0.75rem py0.5rem text-center text-neutral-800 md:( p-3rem)"
-        >
+        <li class="feature px-0.75rem py0.5rem text-center text-neutral-800 md:(p-3rem)">
           <div
-            class="wrapper_icon shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148, 107,0.3)] mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem md:(rounded-4.5rem p-5rem)"
+            class="107,0.3)] wrapper_icon shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148, mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem md:(rounded-4.5rem p-5rem)"
           >
             <SvgIcon :name="feature.iconName" class="w-5rem md:(w-10rem)" />
           </div>
@@ -238,13 +236,11 @@ const chatClass = "absolute right-6rem bottom-29.25rem";
   </section>
 
   <section class="product_category" p="x-0.75rem t-2rem b-4rem md:(y-7.5rem)">
-    <ul
-      class="flex flex-col gap-1.5rem md:(flex-row justify-center gap-7.5rem)"
-    >
+    <ul class="flex flex-col gap-1.5rem md:(flex-row justify-center gap-7.5rem)">
       <li
         v-for="category in data_category"
         :key="category.id"
-        class="flex gap-1.5rem md:( h-32.5rem gap-3rem)"
+        class="flex gap-1.5rem md:(h-32.5rem gap-3rem)"
       >
         <div
           class="w-3.75rem flex items-center justify-center gap-1rem write-vertical-left md:(justify-start)"
@@ -256,12 +252,12 @@ const chatClass = "absolute right-6rem bottom-29.25rem";
         </div>
 
         <div
-          class="group relative aspect-257/358 flex-grow-1 rounded-1.5rem md:()"
+          class="group md:() relative aspect-257/358 flex-grow-1 rounded-1.5rem"
           :class="[`${category.bgUrl}`]"
           bg="center [length:auto_100%] no-repeat"
         >
           <div
-            class="absolute inset-0 flex flex-col justify-end rounded-1.5rem from-20% bg-gradient-to-t px-1rem py-0.75rem opacity-0 transition-opacity group-hover:opacity-100 md:(p-2.25rem)"
+            class="absolute inset-0 flex flex-col justify-end rounded-1.5rem from-20% bg-gradient-to-t px-1rem py-0.75rem opacity-0 transition-opacity md:(p-2.25rem) group-hover:opacity-100"
             :class="[`${category.gradientColor}`]"
           >
             <p class="text-balance text-1rem md:(text-1.5rem)">
@@ -280,21 +276,20 @@ const chatClass = "absolute right-6rem bottom-29.25rem";
     class="product_suggest relative rounded-2.5rem bg-second-200"
     p="x-0.75rem y-2.5rem md:(y-7.5rem)"
   >
-    <header
-      class="md:(flex items-center justify-between max-w-1296px mx-auto mb-3rem)"
-    >
+    <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
       <h2 class="mb-3rem text-center md:(mb-0)">熱銷商品</h2>
 
       <ButtonMore
+        v-if="window_width >= 768"
         content="所有商品"
         route-url="/"
-        class="hidden md:(flex mx-unset)"
+        class="md:(mx-unset)"
         bg-color="bg-second-200"
       />
     </header>
 
     <ul
-      class="mb-3rem flex flex-col items-center gap-1rem md:(flex-row max-w-1296px mx-auto mb-unset gap-1.5rem)"
+      class="mb-3rem flex flex-col items-center gap-1rem md:(mx-auto mb-unset max-w-1296px flex-row gap-1.5rem)"
     >
       <template v-for="product in data_hotProduct" :key="product.id">
         <li
@@ -323,35 +318,49 @@ const chatClass = "absolute right-6rem bottom-29.25rem";
     />
   </section>
 
-  <section class="comment_list" p=" y-4rem">
-    <h2 class="mb-3rem text-center">熱烈好評</h2>
+  <section class="md:() comment_list" p=" y-4rem">
+    <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
+      <h2 class="mb-3rem text-center md:(mb-0)">熱烈好評</h2>
+
+      <ButtonMore
+        v-if="window_width >= 768"
+        content="所有商品"
+        route-url="/"
+        class="md:(mx-unset bg-neutral-50)"
+      />
+    </header>
 
     <Swiper
-      class="mb-1.5rem"
-      space-between="12"
+      class="md:() mb-1.5rem"
+      space-between="24"
       :modules="[SwiperPagination]"
-      :pagination="{ dynamicBullets: false }"
+      :slides-per-view="comment_swiperPerView"
+      :centered-slides="comment_swiperCenteredSlide"
+      :pagination="true"
     >
+      <!-- :slides-per-view="3" -->
       <SwiperSlide
         v-for="comment in data_comment"
         :key="comment.id"
-        class="flex flex-col px-0.75rem pb-3rem"
+        class="flex flex-col px-0.75rem pb-3rem md:(flex-row gap-1.75rem)"
       >
         <div
-          class="relative mb-1rem rounded-1rem bg-second-200 p-1.5rem shadow-[-4px_-4px_8px_rgba(210,148,107,0.3)] after:(absolute right-3rem top-100% h-2rem w-2rem flex border-b-2rem border-l-2rem border-b-transparent border-l-second-200 shadow-[-4px_-4px_8px_rgba(210,148,107,0.3)] content-empty)"
+          class="relative mb-1rem rounded-1rem bg-second-200 p-1.5rem shadow-[-4px_-4px_8px_rgba(210,148,107,0.3)] after:(absolute right-3rem top-100% h-2rem w-2rem flex border-b-2rem border-l-2rem border-b-transparent border-l-second-200 shadow-[-4px_-4px_8px_rgba(210,148,107,0.3)] content-empty) md:(order-2 mb-0 h-265px w-350px p-3rem)"
         >
-          <p class="mb-0.75rem text-1.5rem">{{ comment.content }}</p>
+          <p class="mb-0.75rem text-1.5rem md:(line-clamp-4)">
+            {{ comment.content }}
+          </p>
           <p class="text-0.875rem text-neutral-400">
             {{ comment.createdTime }}
           </p>
         </div>
 
-        <div class="mx-auto flex gap-0.5rem">
+        <div class="mx-auto flex gap-0.5rem md:(order-1 flex-col)">
           <img
             :src="comment.avatarUrl"
             alt="avatar"
-            class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center"
-          />
+            class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center md:(w-6.25rem)"
+          >
           <p>{{ comment.accountName }}</p>
         </div>
       </SwiperSlide>
@@ -361,7 +370,7 @@ const chatClass = "absolute right-6rem bottom-29.25rem";
   </section>
 
   <div
-    class="cursor-pointer right-0.75rem bottom-5rem z-10 chat_icon rounded-50% bg-rose-500 w-3.5rem h-3.5rem flex justify-center items-center opacity-0 transition-opacity md:(right-3vw)"
+    class="chat_icon bottom-5rem right-0.75rem z-10 h-3.5rem w-3.5rem flex cursor-pointer items-center justify-center rounded-50% bg-rose-500 opacity-0 transition-opacity md:(right-3vw)"
     :class="[
       {
         'opacity-100': windowScroll > 200,
@@ -370,10 +379,10 @@ const chatClass = "absolute right-6rem bottom-29.25rem";
       showChat ? 'absolute' : 'fixed',
     ]"
   >
-    <SvgIcon name="chat" class="w-2rem h-2rem text-white hover:text-blue" />
+    <SvgIcon name="chat" class="h-2rem w-2rem text-white hover:text-blue" />
 
     <span
-      class="absolute top--0.25rem right--0.25rem text-white text-0.75rem bg-rose-500 border border-2px border-white rounded-50% w-1.25rem h-1.25rem flex justify-center items-center"
+      class="absolute right--0.25rem top--0.25rem h-1.25rem w-1.25rem flex items-center justify-center border border-2px border-white rounded-50% bg-rose-500 text-0.75rem text-white"
       >{{ chatCount > 9 ? "9+" : chatCount }}
     </span>
   </div>
@@ -408,6 +417,10 @@ const chatClass = "absolute right-6rem bottom-29.25rem";
 
   /* md:( before:(content-empty flex absolute left-0 bottom-0 bg-[url('@/assets/img/home-2-3.webp')] w-556px h-362px border border-red-7 ) after:(content-empty flex w-1rem h-1rem absolute border-red-700 border) )"
     p="x-0.75rem y-3rem */
+}
+
+.comment_list :deep(.swiper-pagination) {
+  @apply md:(hidden);
 }
 
 /* .brand_info {
