@@ -160,8 +160,6 @@ const showChat = computed(() => {
   else false;
 });
 
-const chatClass = "absolute right-6rem bottom-29.25rem";
-
 const { width: window_width } = useWindowSize();
 
 const comment_swiperPerView = computed(() => {
@@ -176,7 +174,7 @@ const comment_swiperCenteredSlide = computed(() => {
 
 watchEffect(() => {
   // console.log("windowScroll.value :>> ", windowScroll.value);
-  console.log("window_width.value :>> ", window_width.value);
+  // console.log("window_width.value :>> ", window_width.value);
 });
 </script>
 
@@ -200,7 +198,7 @@ watchEffect(() => {
           rounded="t-80px b-20px"
           object="cover center"
           md:(rounded-5rem)
-        >
+        />
 
         <div
           class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600 md:(bottom-10.25rem max-w-47rem w-100% rounded-1rem bg-second-200/90)"
@@ -279,13 +277,15 @@ watchEffect(() => {
     <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
       <h2 class="mb-3rem text-center md:(mb-0)">熱銷商品</h2>
 
-      <ButtonMore
-        v-if="window_width >= 768"
-        content="所有商品"
-        route-url="/"
-        class="md:(mx-unset)"
-        bg-color="bg-second-200"
-      />
+      <ClientOnly>
+        <ButtonMore
+          v-if="window_width >= 768"
+          content="所有商品"
+          route-url="/"
+          class="md:(mx-unset)"
+          bg-color="bg-second-200"
+        />
+      </ClientOnly>
     </header>
 
     <ul
@@ -322,12 +322,14 @@ watchEffect(() => {
     <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
       <h2 class="mb-3rem text-center md:(mb-0)">熱烈好評</h2>
 
-      <ButtonMore
-        v-if="window_width >= 768"
-        content="所有商品"
-        route-url="/"
-        class="md:(mx-unset bg-neutral-50)"
-      />
+      <ClientOnly>
+        <ButtonMore
+          v-if="window_width >= 768"
+          content="所有商品"
+          route-url="/"
+          class="md:(mx-unset bg-neutral-50)"
+        />
+      </ClientOnly>
     </header>
 
     <Swiper
@@ -360,7 +362,7 @@ watchEffect(() => {
             :src="comment.avatarUrl"
             alt="avatar"
             class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center md:(w-6.25rem)"
-          >
+          />
           <p>{{ comment.accountName }}</p>
         </div>
       </SwiperSlide>
@@ -369,23 +371,25 @@ watchEffect(() => {
     <ButtonMore content="所有評論" route-url="/" bg-color="bg-#fff" />
   </section>
 
-  <div
-    class="chat_icon bottom-5rem right-0.75rem z-10 h-3.5rem w-3.5rem flex cursor-pointer items-center justify-center rounded-50% bg-rose-500 opacity-0 transition-opacity md:(right-3vw)"
-    :class="[
-      {
-        'opacity-100': windowScroll > 200,
-        '!bottom-1.5rem': showChat,
-      },
-      showChat ? 'absolute' : 'fixed',
-    ]"
-  >
-    <SvgIcon name="chat" class="h-2rem w-2rem text-white hover:text-blue" />
+  <ClientOnly>
+    <div
+      class="chat_icon bottom-5rem right-0.75rem z-10 h-3.5rem w-3.5rem flex cursor-pointer items-center justify-center rounded-50% bg-rose-500 opacity-0 transition-opacity md:(right-3vw)"
+      :class="[
+        {
+          'opacity-100': windowScroll > 200,
+          '!bottom-1.5rem': showChat,
+        },
+        showChat ? 'absolute' : 'fixed',
+      ]"
+    >
+      <SvgIcon name="chat" class="h-2rem w-2rem text-white hover:text-blue" />
 
-    <span
-      class="absolute right--0.25rem top--0.25rem h-1.25rem w-1.25rem flex items-center justify-center border border-2px border-white rounded-50% bg-rose-500 text-0.75rem text-white"
-      >{{ chatCount > 9 ? "9+" : chatCount }}
-    </span>
-  </div>
+      <span
+        class="absolute right--0.25rem top--0.25rem h-1.25rem w-1.25rem flex items-center justify-center border border-2px border-white rounded-50% bg-rose-500 text-0.75rem text-white"
+        >{{ chatCount > 9 ? "9+" : chatCount }}
+      </span>
+    </div>
+  </ClientOnly>
 </template>
 
 <style scoped>

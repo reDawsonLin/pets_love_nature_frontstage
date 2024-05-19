@@ -16,7 +16,8 @@ export default defineNuxtConfig({
     storesDirs: ["./stores/**"],
   },
   devServer: {
-    host: "127.0.0.1",
+    host: "localhost",
+    // host: "127.0.0.1",
     port: 5173,
   },
 });
