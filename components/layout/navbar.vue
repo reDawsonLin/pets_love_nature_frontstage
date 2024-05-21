@@ -1,10 +1,10 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { useStorage } from "@vueuse/core";
-import { useLocalStorage } from "@vueuse/core";
+import { useLocalStorage,useStorageAsync } from "@vueuse/core";
 
 const store_login = useStoreLogin();
-// const { token } = storeToRefs(store_login);
+const { token } = storeToRefs(store_login);
 const {} = store_login;
 
 // const token = ref();
@@ -39,7 +39,8 @@ watchEffect(() => {
 //   set: (v) => localStorage.setItem("pets-token", v),
 // });
 
-const token = useStorage("pets-token");
+// const token = useStorage("pets-token",null);
+// const token = useStorageAsync("pets-token", null);
 </script>
 
 <template>

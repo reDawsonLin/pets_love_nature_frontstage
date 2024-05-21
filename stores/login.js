@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useLocalStorage, useStorage } from "@vueuse/core";
+import { useLocalStorage, useStorage, useStorageAsync } from "@vueuse/core";
 
 export const useStoreLogin = defineStore("useStoreLogin", () => {
   const login = async (code) => {
@@ -14,19 +14,26 @@ export const useStoreLogin = defineStore("useStoreLogin", () => {
     // localStorage.setItem("pets-token", res.data.token);
     // token.value = useLocalStorage("pets-token");
 
-    // localStorage.setItem("pets-token", "res.data.token");
+    localStorage.setItem("pets-token", res.data.token);
+    // const test = useStorage("pets-token", res.data.token);
+    // const test = useStorage("pets-token", res.data.token);
 
-    const test = useStorage(
-      "pets-token",
-      res.data.token,
-      localStorage,
-      { mergeDefaults: true } // <--
-    );
-    console.log("test :>> ", test);
+    // console.log("test :>> ", test.value);
+
+    // token.value = test.value;
   };
 
-  // const token = useLocalStorage("pets-token");
-  const token = ref();
+  // const token = computed(() => {
+  //   // const store = useStorage("pets-token");
+  //   // console.log('store :>> ', store.value);
+  // });
+  // const token = ref();
+  // const token = useStorage('pets-token');
+  const token = computed(() => {
+    // const store = useStorage("pets-token");
+    // console.log("store :>> ", store.value);
+    // return store.value;
+  });
 
   return { token, login };
 });

@@ -349,7 +349,7 @@ const data_comment = [
           v-if="window_width >= 768"
           content="所有商品"
           route-url="/"
-          class="md:(mx-unset bg-neutral-50)"
+          class="md:(mx-unset)"
         />
       </ClientOnly>
     </header>
@@ -390,7 +390,12 @@ const data_comment = [
       </SwiperSlide>
     </Swiper>
 
-    <ButtonMore content="所有評論" route-url="/" bg-color="bg-#fff" />
+    <ButtonMore
+      content="所有評論"
+      route-url="/"
+      bg-color="bg-#fff"
+      class="md:(hidden)"
+    />
   </section>
 
   <ClientOnly>
