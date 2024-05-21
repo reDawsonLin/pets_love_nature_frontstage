@@ -1,52 +1,16 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { useStorage } from "@vueuse/core";
-import { useLocalStorage,useStorageAsync } from "@vueuse/core";
+import { useLocalStorage, useStorageAsync } from "@vueuse/core";
 
 const store_login = useStoreLogin();
 const { token } = storeToRefs(store_login);
 const {} = store_login;
 
-// const token = ref();
-// if (process.client) {
-//   token.value = useStorage("pets-token", null, sessionStorage);
-// }
-
-// const test = computed(() => {
-//   if (process.client) return JSON.parse(localStorage.getItem("pets-token"));
-// });
-
-watchEffect(() => {
-  // console.log("token.value :>> ", token.value);
-  // if (process.client && localStorage.getItem("pets-token")) {
-  //   console.log("in");
-  //   // token.value = useStorage("pets-token", null, localStorage);
-  //   // token.value = useLocalStorage("pets-token");
-  // }
-});
-
-// onMounted(() => {
-//   console.log(
-//     'useLocalStorage("pets-token") :>> ',
-//     useLocalStorage("pets-token").value
-//   );
-//   if (useLocalStorage("pets-token"))
-//     token.value = useLocalStorage("pets-token").value;
-// });
-
-// const test = computed({
-//   get: () => localStorage.getItem("pets-token") === "true",
-//   set: (v) => localStorage.setItem("pets-token", v),
-// });
-
-// const token = useStorage("pets-token",null);
-// const token = useStorageAsync("pets-token", null);
+watchEffect(() => {});
 </script>
 
 <template>
-  <!-- <ClientOnly>test: {{ test }} </ClientOnly> -->
-  <ClientOnly> token: {{ token }} </ClientOnly>
-
   <div class="nav_wrapper bg-neutral-800">
     <header
       p="b-1.125rem l-0.75rem r-1rem t-1.75rem"

@@ -4,7 +4,7 @@ import SvgIcon from "../svgIcon.vue";
 
 <template>
   <footer
-    class="rounded-t-1rem bg-neutral-800 p-1.5rem text-neutral-50 md:(pb-6rem pt-5rem)"
+    class="rounded-t-1rem bg-neutral-800 p-1.5rem text-neutral-50 md:(py-2.5rem px-3.5rem)"
   >
 
   <div class="mx-auto flex flex-col items-center md:(max-w-1296px flex-row)">

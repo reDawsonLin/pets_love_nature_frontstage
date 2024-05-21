@@ -4,10 +4,8 @@
 onMounted(() => {
   // const urlParams = new URLSearchParams(window.location.search);
   // console.log("urlParams :>> ", urlParams);
-
   // const code = urlParams.get("code");
   // console.log("code :>> ", code);
-
   // if (code) {
   //   fetchToken(code);
   // }
@@ -31,27 +29,26 @@ async function fetchToken(code) {
   <section
     class="flex-grow-1 flex flex-col justify-center items-center border border-red-7"
   >
-    <h3 class="mb-1.5rem">會員登入</h3>
+    <h4 class="mb-1.5rem">會員登入</h4>
 
     <ul class="box_login flex flex-col gap-1.25rem">
-      <li
-        class="flex gap-1rem py-0.75rem px-1.5rem border rounded-0.5rem hover:(shadow-md) active:(shadow-none) transition-shadow"
-      >
-        <SvgIcon name="google" class="w-1.5rem h-1.5rem" />
-
+      <li class="">
         <NuxtLink
+          class="flex gap-1rem py-0.75rem px-1.5rem border rounded-0.5rem hover:(shadow-md) active:(shadow-none) transition-shadow"
           to="http://pets-love-nature-backend-n.onrender.com/api/v1/customer/google"
         >
-          Google 登入
+          <SvgIcon name="google" class="w-1.5rem h-1.5rem" />
+          <p class="">Google 登入</p>
         </NuxtLink>
       </li>
 
-      <li
-        class="flex gap-1rem py-0.75rem px-1.5rem border rounded-0.5rem opacity-60"
-      >
-        <SvgIcon name="github" class="w-1.5rem h-1.5rem" />
-
-        <NuxtLink> GitHub 登入 </NuxtLink>
+      <li class="">
+        <NuxtLink
+          class="flex gap-1rem py-0.75rem px-1.5rem border rounded-0.5rem opacity-60"
+        >
+          <SvgIcon name="github" class="w-1.5rem h-1.5rem" />
+          <p class="">GitHub 登入</p>
+        </NuxtLink>
       </li>
     </ul>
   </section>
