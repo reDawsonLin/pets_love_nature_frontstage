@@ -1,4 +1,46 @@
 <script setup>
+import { useStoreLogin } from "~/stores/login";
+
+const route = useRoute();
+
+const store_login = useStoreLogin();
+const {} = storeToRefs(store_login);
+const { login } = store_login;
+
+const chatCount = ref(10);
+const { y: windowScroll } = useWindowScroll();
+const showChat = computed(() => {
+  const targetPoint = document?.body.scrollHeight - window?.innerHeight - 300;
+
+  if (windowScroll.value > targetPoint) return true;
+  else false;
+});
+
+const { width: window_width } = useWindowSize();
+const comment_swiperPerView = computed(() => {
+  if (window_width.value < 768) return 1;
+  else return 3;
+});
+const comment_swiperCenteredSlide = computed(() => {
+  if (window_width.value < 768) return false;
+  else return true;
+});
+
+onMounted(async () => {
+  if (route?.query?.code) {
+    const code = route.query.code;
+    await login(code);
+  }
+});
+
+// -------
+// const token = useSessionStorage("pets-token");
+
+watchEffect(() => {
+  // console.log("test.value :>> ", test.value);
+});
+
+// -------
 const data_banner = [
   {
     id: 1,
@@ -120,66 +162,36 @@ const data_hotProduct = [
 const data_comment = [
   {
     id: 1,
-    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content:
+      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-1.webp",
   },
   {
     id: 2,
-    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content:
+      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-2.webp",
   },
   {
     id: 3,
-    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content:
+      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-3.webp",
   },
 ];
-
-const chatCount = ref(10);
-
-// const scrollY = computed(() => {
-//   const { x, y, isScrolling, arrivedState, directions } = useScroll(el);
-//   console.log("y :>> ", y);
-//   return y.value;
-// });
-// const { x, y, isScrolling, arrivedState, directions } = useScroll(el);
-//
-
-const { y: windowScroll } = useWindowScroll();
-
-const showChat = computed(() => {
-  const targetPoint = document?.body.scrollHeight - window?.innerHeight - 300;
-
-  if (windowScroll.value > targetPoint) return true;
-  else false;
-});
-
-const { width: window_width } = useWindowSize();
-
-const comment_swiperPerView = computed(() => {
-  if (window_width.value < 768) return 1;
-  else return 3;
-});
-
-const comment_swiperCenteredSlide = computed(() => {
-  if (window_width.value < 768) return false;
-  else return true;
-});
-
-watchEffect(() => {
-  // console.log("windowScroll.value :>> ", windowScroll.value);
-  // console.log("window_width.value :>> ", window_width.value);
-});
 </script>
 
 <template>
-  <section class="banner_list flex-grow-1 bg-second-200" p="x-0.75rem t-1.25rem">
+  <section
+    class="banner_list flex-grow-1 bg-second-200"
+    p="x-0.75rem t-1.25rem"
+  >
     <Swiper
       class="md:(max-w-1760px w-100%)"
       space-between="12"
@@ -213,14 +225,18 @@ watchEffect(() => {
   <section
     class="brand_info md:([background-repeat:no-repeat,_no-repeat,_repeat] flex justify-center gap-4.875rem bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)])"
   >
-    <header class="mb-1rem flex flex-col items-center md:(gap-4.5rem pt-7.5rem)">
+    <header
+      class="mb-1rem flex flex-col items-center md:(gap-4.5rem pt-7.5rem)"
+    >
       <SvgIcon name="logo_pink" class="w-5rem md:(order-2 w-19.25rem)" />
       <h3 class="md:(order-1 text-3rem)">Brand 特色</h3>
     </header>
 
     <ul class="box_feature grid grid-cols-2 md:(gap-x-1.5rem)">
       <template v-for="feature in data_feature" :key="feature.id">
-        <li class="feature px-0.75rem py0.5rem text-center text-neutral-800 md:(p-3rem)">
+        <li
+          class="feature px-0.75rem py0.5rem text-center text-neutral-800 md:(p-3rem)"
+        >
           <div
             class="107,0.3)] wrapper_icon shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148, mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem md:(rounded-4.5rem p-5rem)"
           >
@@ -234,7 +250,9 @@ watchEffect(() => {
   </section>
 
   <section class="product_category" p="x-0.75rem t-2rem b-4rem md:(y-7.5rem)">
-    <ul class="flex flex-col gap-1.5rem md:(flex-row justify-center gap-7.5rem)">
+    <ul
+      class="flex flex-col gap-1.5rem md:(flex-row justify-center gap-7.5rem)"
+    >
       <li
         v-for="category in data_category"
         :key="category.id"
@@ -274,7 +292,9 @@ watchEffect(() => {
     class="product_suggest relative rounded-2.5rem bg-second-200"
     p="x-0.75rem y-2.5rem md:(y-7.5rem)"
   >
-    <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
+    <header
+      class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)"
+    >
       <h2 class="mb-3rem text-center md:(mb-0)">熱銷商品</h2>
 
       <ClientOnly>
@@ -319,7 +339,9 @@ watchEffect(() => {
   </section>
 
   <section class="md:() comment_list" p=" y-4rem">
-    <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
+    <header
+      class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)"
+    >
       <h2 class="mb-3rem text-center md:(mb-0)">熱烈好評</h2>
 
       <ClientOnly>

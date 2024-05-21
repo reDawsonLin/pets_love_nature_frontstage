@@ -2,15 +2,15 @@
 // import { useRouter } from 'vue-router'
 
 onMounted(() => {
-  const urlParams = new URLSearchParams(window.location.search);
-  console.log("urlParams :>> ", urlParams);
+  // const urlParams = new URLSearchParams(window.location.search);
+  // console.log("urlParams :>> ", urlParams);
 
-  const code = urlParams.get("code");
-  console.log("code :>> ", code);
+  // const code = urlParams.get("code");
+  // console.log("code :>> ", code);
 
-  if (code) {
-    fetchToken(code);
-  }
+  // if (code) {
+  //   fetchToken(code);
+  // }
 });
 
 async function fetchToken(code) {
@@ -28,13 +28,33 @@ async function fetchToken(code) {
 </script>
 
 <template>
-  <!-- <a href="https://pets-love-nature-backend-n.onrender.com/api/v1/user/google">google</a> -->
-
-  <a href="http://pets-love-nature-backend-n.onrender.com/api/v1/customer/google"
-    >google new</a
+  <section
+    class="flex-grow-1 flex flex-col justify-center items-center border border-red-7"
   >
+    <h3 class="mb-1.5rem">會員登入</h3>
 
-  <!-- <button @click="cli">google登入</button> -->
+    <ul class="box_login flex flex-col gap-1.25rem">
+      <li
+        class="flex gap-1rem py-0.75rem px-1.5rem border rounded-0.5rem hover:(shadow-md) active:(shadow-none) transition-shadow"
+      >
+        <SvgIcon name="google" class="w-1.5rem h-1.5rem" />
+
+        <NuxtLink
+          to="http://pets-love-nature-backend-n.onrender.com/api/v1/customer/google"
+        >
+          Google 登入
+        </NuxtLink>
+      </li>
+
+      <li
+        class="flex gap-1rem py-0.75rem px-1.5rem border rounded-0.5rem opacity-60"
+      >
+        <SvgIcon name="github" class="w-1.5rem h-1.5rem" />
+
+        <NuxtLink> GitHub 登入 </NuxtLink>
+      </li>
+    </ul>
+  </section>
 </template>
 
 <style scoped></style>

@@ -1,60 +1,51 @@
 <script setup>
-const isLogin = ref(false);
+import { storeToRefs } from "pinia";
+import { useStorage } from "@vueuse/core";
+import { useLocalStorage } from "@vueuse/core";
 
-const route = useRoute();
+const store_login = useStoreLogin();
+// const { token } = storeToRefs(store_login);
+const {} = store_login;
 
-const login = async (code) => {
-  try {
-    // const res = await useFetch(
-    //   "https://pets-love-nature-backend-n.onrender.com/api/v1/customer/googleSignIn",
-    //   {
-    //     method: "POST",
-    //     params: { code },
-    //   }
-    // );
-    // console.log("res :>> ", res);
+// const token = ref();
+// if (process.client) {
+//   token.value = useStorage("pets-token", null, sessionStorage);
+// }
 
-    // console.log("useApiFetch :>> ", useApiFetch);
-
-    const res2 = await $fetch(
-      "https://pets-love-nature-backend-n.onrender.com/api/v1/customer/googleSignIn",
-      {
-        method: "POST",
-        body: { code },
-      }
-    );
-
-    console.log("res2 :>> ", res2);
-
-
-    
-
-
-
-  } catch (error) {
-    console.log("error :>>", error);
-  }
-};
-
-onMounted(async () => {
-  console.log("route :>> ", route);
-
-  if (route?.query?.code) {
-    console.log("in");
-    const code = route.query.code;
-    await login(code);
-  }
-});
+// const test = computed(() => {
+//   if (process.client) return JSON.parse(localStorage.getItem("pets-token"));
+// });
 
 watchEffect(() => {
-  // const urlParams = new URLSearchParams(window?.location.search);
-  // console.log("urlParams :>> ", urlParams);
-  // const code = urlParams.get("code");
-  // console.log("code :>> ", code);
+  // console.log("token.value :>> ", token.value);
+  // if (process.client && localStorage.getItem("pets-token")) {
+  //   console.log("in");
+  //   // token.value = useStorage("pets-token", null, localStorage);
+  //   // token.value = useLocalStorage("pets-token");
+  // }
 });
+
+// onMounted(() => {
+//   console.log(
+//     'useLocalStorage("pets-token") :>> ',
+//     useLocalStorage("pets-token").value
+//   );
+//   if (useLocalStorage("pets-token"))
+//     token.value = useLocalStorage("pets-token").value;
+// });
+
+// const test = computed({
+//   get: () => localStorage.getItem("pets-token") === "true",
+//   set: (v) => localStorage.setItem("pets-token", v),
+// });
+
+const token = useStorage("pets-token");
 </script>
 
 <template>
+  <!-- <ClientOnly>test: {{ test }} </ClientOnly> -->
+  <ClientOnly> token: {{ token }} </ClientOnly>
+
   <div class="nav_wrapper bg-neutral-800">
     <header
       p="b-1.125rem l-0.75rem r-1rem t-1.75rem"
@@ -72,8 +63,14 @@ watchEffect(() => {
       </nav>
 
       <div class="hidden md:(flex gap-1.25rem )">
-        <SvgIcon class="w-1.5rem h-1.5rem text-neutral-50 cursor-pointer" name="search" />
-        <SvgIcon class="w-1.5rem h-1.5rem text-neutral-50 cursor-pointer" name="cart" />
+        <SvgIcon
+          class="w-1.5rem h-1.5rem text-neutral-50 cursor-pointer"
+          name="search"
+        />
+        <SvgIcon
+          class="w-1.5rem h-1.5rem text-neutral-50 cursor-pointer"
+          name="cart"
+        />
         <div class="box_account relative">
           <SvgIcon
             class="w-1.5rem h-1.5rem text-neutral-50 cursor-pointer"
@@ -84,12 +81,13 @@ watchEffect(() => {
             class="list_account opacity-0 pointer-events-none z-5 absolute right--0.5rem flex flex-col items-center gap-1rem py-1rem px-1rem text-neutral-600 bg-neutral-50 rounded-0.5rem"
           >
             <!-- after:(content-empty absolute flex border-x-10px border-x-transparent border-b-18px border-b-neutral-50 bottom-100% left-50% translate-x--50%) -->
-            <li v-if="!isLogin" class="whitespace-nowrap cursor-pointer">
-              <NuxtLink
+            <li v-if="!token" class="whitespace-nowrap cursor-pointer">
+              <!-- <NuxtLink
                 to="http://pets-love-nature-backend-n.onrender.com/api/v1/customer/google"
               >
                 登入
-              </NuxtLink>
+              </NuxtLink> -->
+              <NuxtLink to="/Login"> 登入 </NuxtLink>
             </li>
             <template v-else>
               <li class="whitespace-nowrap cursor-pointer">個人資訊</li>
