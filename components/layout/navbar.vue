@@ -4,7 +4,7 @@ import { useStoreLogin } from "~/stores/storeLogin";
 
 const store_login = useStoreLogin();
 const { token } = storeToRefs(store_login);
-const {} = store_login;
+const { setToken } = store_login;
 </script>
 
 <template>
@@ -19,20 +19,18 @@ const {} = store_login;
       </NuxtLink>
 
       <nav class="flex gap-3rem text-neutral-50">
-        <NuxtLink to="/">所有商品</NuxtLink>
-        <NuxtLink to="/">關於我們</NuxtLink>
-        <NuxtLink to="/">常見問題</NuxtLink>
+        <NuxtLink :to="{ name: 'product' }">所有商品</NuxtLink>
+        <NuxtLink :to="{ name: 'about' }">關於我們</NuxtLink>
+        <NuxtLink :to="{ name: 'frequently-questions' }">常見問題</NuxtLink>
       </nav>
 
       <div class="hidden md:(flex gap-1.25rem )">
-        <SvgIcon
-          class="w-1.5rem h-1.5rem text-neutral-50 cursor-pointer"
-          name="search"
-        />
-        <SvgIcon
-          class="w-1.5rem h-1.5rem text-neutral-50 cursor-pointer"
-          name="cart"
-        />
+        <SvgIcon class="w-1.5rem h-1.5rem text-neutral-50 cursor-pointer" name="search" />
+
+        <NuxtLink :to="token ? { name: 'shopping-cart' } : null">
+          <SvgIcon class="w-1.5rem h-1.5rem text-neutral-50 cursor-pointer" name="cart" />
+        </NuxtLink>
+
         <div class="box_account relative">
           <SvgIcon
             class="w-1.5rem h-1.5rem text-neutral-50 cursor-pointer"
@@ -52,14 +50,13 @@ const {} = store_login;
               <NuxtLink to="/Login"> 登入 </NuxtLink>
             </li>
             <template v-else>
-              <li class="whitespace-nowrap cursor-pointer">個人資訊</li>
+              <li class="whitespace-nowrap cursor-pointer">
+                <NuxtLink :to="{name: 'member'}"> 個人資訊 </NuxtLink>
+              </li>
               <li class="whitespace-nowrap cursor-pointer">訂單記錄</li>
               <li class="whitespace-nowrap cursor-pointer">收藏商品</li>
               <li class="whitespace-nowrap cursor-pointer">聊聊紀錄</li>
-              <li
-                class="whitespace-nowrap cursor-pointer"
-                @click="token = null"
-              >
+              <li class="whitespace-nowrap cursor-pointer" @click="setToken(null)">
                 登出
               </li>
             </template>
