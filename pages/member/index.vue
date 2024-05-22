@@ -31,7 +31,12 @@ const data = ref({
 const fetchData = async() => {
     try {
         
-        const response = await fetch(`https://pets-love-nature-backend-n.onrender.com/api/v1/customer/${id_customer.value}`);
+        const response = await fetch(`https://pets-love-nature-backend-n.onrender.com/api/v1/customer/${id_customer.value}`,{
+            method: 'GET',
+            headers:{
+                'Authorization': `Bearer ${token.value}`,
+            }
+        });
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -61,6 +66,7 @@ const postFetchData = async(data) =>{
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token.value}`
             },
             body: JSON.stringify(
                     data.value
