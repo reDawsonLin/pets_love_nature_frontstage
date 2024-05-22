@@ -1,6 +1,15 @@
 <script setup>
 import { ref, onMounted  } from 'vue';
 
+import { storeToRefs } from 'pinia';
+import { useStoreLogin } from '~/stores/storeLogin';
+
+// 使用 storeLogin
+const store_login = useStoreLogin();
+const { token , id_customer } = storeToRefs(store_login);
+const { setToken } = store_login;
+
+
 const data = ref({
     customerName: '',
     "recipientName": "",
@@ -17,11 +26,17 @@ const data = ref({
     "accountStatus": 0
 })
 
-const id = reactive('123');
+// const id = reactive('123');
 
 const fetchData = async() => {
     try {
-        const response = await fetch(`https://pets-love-nature-backend-n.onrender.com/api/v1/customer/${id}`);
+        
+        const response = await fetch(`https://pets-love-nature-backend-n.onrender.com/api/v1/customer/${id_customer.value}`,{
+            method: 'GET',
+            headers:{
+                'Authorization': `Bearer ${token.value}`,
+            }
+        });
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -46,11 +61,12 @@ const saveMember = async() =>{
 
 const postFetchData = async(data) =>{
     try{
-        debugger
-        const response = await fetch(`https://pets-love-nature-backend-n.onrender.com/api/v1/customer/${id}`,{
+        
+        const response = await fetch(`https://pets-love-nature-backend-n.onrender.com/api/v1/customer/${id_customer.value}`,{
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token.value}`
             },
             body: JSON.stringify(
                     data.value
