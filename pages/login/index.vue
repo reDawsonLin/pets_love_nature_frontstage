@@ -35,7 +35,7 @@ async function fetchToken(code) {
       <li class="">
         <NuxtLink
           class="flex gap-1rem py-0.75rem px-1.5rem border rounded-0.5rem hover:(shadow-md) active:(shadow-none) transition-shadow"
-          to="http://pets-love-nature-backend-n.onrender.com/api/v1/customer/google"
+          to="https://pets-love-nature-backend-n.onrender.com/api/v1/customer/google"
         >
           <SvgIcon name="google" class="w-1.5rem h-1.5rem" />
           <p class="">Google 登入</p>
