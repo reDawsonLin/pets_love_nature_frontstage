@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     "@pinia/nuxt",
+    "@pinia-plugin-persistedstate/nuxt",
     "@vueuse/nuxt",
     "nuxt-swiper",
     "@unocss/nuxt",
@@ -14,5 +15,10 @@ export default defineNuxtConfig({
   // css: ["~/assets/main.css"],
   pinia: {
     storesDirs: ["./stores/**"],
+  },
+  devServer: {
+    host: "localhost",
+    // host: "127.0.0.1",
+    port: 5173,
   },
 });

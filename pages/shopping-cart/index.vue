@@ -12,9 +12,9 @@ const testArr = ref([
       id: 0,
       imgUrl:
         "https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png",
-      altText: ""
+      altText: "",
     },
-    isSelected: false
+    isSelected: false,
   },
   {
     productId: "A00001",
@@ -27,10 +27,10 @@ const testArr = ref([
       id: 0,
       imgUrl:
         "https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png",
-      altText: ""
+      altText: "",
     },
-    isSelected: false
-  }
+    isSelected: false,
+  },
 ]);
 
 const isSelectedProductArr = computed(() =>
@@ -38,10 +38,7 @@ const isSelectedProductArr = computed(() =>
 );
 
 const totalPrice = computed(() =>
-  isSelectedProductArr.value.reduce(
-    (acc, cur) => acc + cur.quantity * cur.price,
-    0
-  )
+  isSelectedProductArr.value.reduce((acc, cur) => acc + cur.quantity * cur.price, 0)
 );
 
 const allSelected = computed(
@@ -83,64 +80,38 @@ const productQuantityInput = (product, e) => {
 </script>
 
 <template>
-  <div class="shopping_cart" v-if="testArr.length > 0">
-    <div p="t-3.75rem" class="title flex items-center justify-center mb-7.5">
+  <div class="shopping_cart">
+    <div p="t-3.75rem" class="title mb-7.5 flex items-center justify-center">
       <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" />
       <h1 class="text-4xl">購物車</h1>
     </div>
-    <div
-      class="white_space w-11/12 bg-white m-auto rounded pt-6 pl-4 pr-4 pb-6 mb-5 lg:px-9"
-    >
+    <div class="white_space m-auto mb-5 w-11/12 rounded bg-white pb-6 pl-4 pr-4 pt-6">
       <div class="out_block w-full">
-        <div
-          class="top_bar w-full h-14 rounded lg:flex items-center hidden py-1"
-        >
-          <div class="top_check_box flex basis-0 grow justify-center">
-            <div
-              class="check_box_out_div p-3 cursor-pointer"
-              @click="allSelectedClick"
-            >
-              <div
-                class="checkbox_div min-w-5 min-h-5 max-w-5 max-h-5 rounded-sm border-2 box-border flex items-center justify-center"
-              >
-                <font-awesome-icon
-                  v-show="allSelected"
-                  :icon="['fas', 'check']"
-                  class="fa-solid fa-check w-3"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="top_product flex basis-0 grow-2 justify-center">商品</div>
-          <div class="top_single_price flex basis-0 grow justify-center">
-            單價
-          </div>
-          <div class="top_quantity flex basis-0 grow justify-center">數量</div>
-          <div class="top_total_price flex basis-0 grow justify-center">
-            總計
-          </div>
-          <div class="top_operate flex basis-0 grow justify-center">操作</div>
+        <div class="top_bar">
+          <div class="top_check_box" />
+          <div class="top_product" />
+          <div class="top_single_price" />
+          <div class="top_quantity" />
+          <div class="top_total_price" />
+          <div class="top_operate" />
         </div>
         <!-- mobile -->
-        <div class="shopping_cart_list lg:hidden">
+        <div class="shopping_cart_list">
           <div
             v-for="(eachProduct, i) in testArr"
             :key="eachProduct.productId"
-            :class="{ is_selected_product: eachProduct.isSelected }"
-            class="each_product pb-2 rounded-md mb-7"
+            :class="{ choosed_product: eachProduct.choosed }"
+            class="each_product mb-7 rounded-md pb-2"
           >
             <div
-              class="product_checkbox flex pl-2 pr-2 items-center h-12 w-full rounded-md"
+              class="product_checkbox h-12 w-full flex items-center rounded-md pl-2 pr-2"
             >
-              <div
-                class="cursor-pointer flex items-center"
-                @click="selectProduct(i)"
-              >
+              <div class="flex cursor-pointer items-center" @click="chooseProduct(i)">
                 <div
-                  class="checkbox_div min-w-5 min-h-5 max-w-5 max-h-5 rounded-sm border-2 box-border flex items-center justify-center mr-2.5"
+                  class="checkbox_div mr-2.5 box-border max-h-5 max-w-5 min-h-5 min-w-5 flex items-center justify-center border-2 rounded-sm"
                 >
                   <font-awesome-icon
-                    v-show="eachProduct.isSelected"
+                    v-show="eachProduct.choosed"
                     :icon="['fas', 'check']"
                     class="fa-solid fa-check w-3"
                   />
@@ -149,26 +120,26 @@ const productQuantityInput = (product, e) => {
                 <div class="product_text text-xl">商品</div>
               </div>
               <div
-                class="operate_div ml-auto w-10 h-8 flex items-center justify-center rounded-sm cursor-pointer"
+                class="operate_div ml-auto h-8 w-10 flex cursor-pointer items-center justify-center rounded-sm"
                 @click="deleteProduct(i)"
               >
                 <img src="/assets/img/garbage_can.png" alt="" />
               </div>
             </div>
-            <div class="product flex items-center pl-2 pt-3 mb-6">
+            <div class="product mb-6 flex items-center pl-2 pt-3">
               <div
-                class="product_img w-14 h-14 bg-contain bg-center bg-no-repeat"
+                class="product_img h-14 w-14 bg-contain bg-center bg-no-repeat"
                 style="
-                  background-image: url(&quot;https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png&quot;);
+                  background-image: url('https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png');
                 "
-              ></div>
+              />
               <div class="name_price_div w-full px-2.5">
                 <div class="product_name text-center">
                   {{ eachProduct.title }}
                 </div>
                 <div class="product_single_price ml-5.5">
                   <span>NT$</span>
-                  <span class="single_price font-black text-2xl">{{
+                  <span class="single_price text-2xl font-black">{{
                     eachProduct.price
                   }}</span>
                 </div>
@@ -176,11 +147,162 @@ const productQuantityInput = (product, e) => {
             </div>
             <!-- <div class="product_single_price"><span>NT$</span> <span class="single_price">450</span></div> -->
 
-            <div
-              class="quantity_price_div flex items-center justify-between pl-2 pr-3"
-            >
+            <div class="quantity_price_div flex items-center justify-between pl-2 pr-3">
               <div class="product_quantity">
-                <!-- <select
+                <select
+                  v-model="eachProduct.quantity"
+                  name="quantity"
+                  class="w-28 border border-slate-400 rounded-sm px-1 py-1"
+                >
+                  <option
+                    v-for="index in eachProduct.inStock"
+                    :key="index"
+                    :value="index"
+                  >
+                    {{ index }}
+                  </option>
+                </select>
+              </div>
+              <div class="product_total_price">
+                總計<span class="total_price ml-1">NT$</span>
+                <span class="total_price text-2xl">{{
+                  eachProduct.quantity * eachProduct.price
+                }}</span>
+              </div>
+            </div>
+            <div class="product_operate" />
+          </div>
+        </div>
+
+        <!-- pc -->
+        <!-- <div class="shopping_cart_list">
+                    <div class="each_product">
+                        <div class="product_checkbox flex pl-2 pr-2 items-center h-12 w-full">
+                            <div
+                                class="checkbox_div min-w-5 min-h-5 max-w-5 max-h-5 rounded-sm border-2 box-border flex items-center justify-center mr-2.5"
+                            >
+                                <font-awesome-icon :icon="['fas', 'check']" class="fa-solid fa-check w-3" />
+                            </div>
+
+                            <div class="product_text text-xl">商品</div>
+                            <div class="operate_div ml-auto w-10 h-8 flex items-center justify-center">
+                                <img src="/assets/img/garbage_can.png" alt="" />
+                            </div>
+                        </div>
+                        <div class="product">
+                            <div class="product_img w-14 h-14 bg-yellow w-1/12 inline-block"></div>
+                            <div class="product_name w-11/12 inline-block">
+                                控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃
+                            </div>
+                        </div>
+                        <div class="product_single_price"><span>NT$</span> <span class="single_price">450</span></div>
+                        <div class="product_quantity">
+                            <select name="quantity" id="" class="border border-slate-400 rounded-sm w-28 py-1 px-1">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                        </div>
+                        <div class="product_total_price">總計<span>NT$</span> <span class="total_price">450</span></div>
+                        <div class="product_operate"></div>
+                    </div>
+                </div> -->
+        <div class="bottom_block h-36 rounded pt-6 text-center">
+          <div class="total_price_all mb-4">
+            總金額
+            <span class="total_price ml-5">NT$</span>
+            <span class="total_price text-2xl font-black">{{ totalPrice }}</span>
+          </div>
+          <div
+            class="go_shop mx-auto h-15 w-11/12 flex cursor-pointer items-center justify-center rounded"
+          >
+            <img class="mr-3" src="/assets/img/card.png" alt="" />
+            <span class="text-xl color-white">去買單</span>
+          </div>
+        </div>
+        <div class="check_btn" @click="checkValue">檢查</div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="white_space w-11/12 bg-white m-auto rounded pt-6 pl-4 pr-4 pb-6 mb-5 lg:px-9"
+  >
+    <div class="out_block w-full">
+      <div class="top_bar w-full h-14 rounded lg:flex items-center hidden py-1">
+        <div class="top_check_box flex basis-0 grow justify-center">
+          <div class="check_box_out_div p-3 cursor-pointer" @click="allSelectedClick">
+            <div
+              class="checkbox_div min-w-5 min-h-5 max-w-5 max-h-5 rounded-sm border-2 box-border flex items-center justify-center"
+            >
+              <font-awesome-icon
+                v-show="allSelected"
+                :icon="['fas', 'check']"
+                class="fa-solid fa-check w-3"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="top_product flex basis-0 grow-2 justify-center">商品</div>
+        <div class="top_single_price flex basis-0 grow justify-center">單價</div>
+        <div class="top_quantity flex basis-0 grow justify-center">數量</div>
+        <div class="top_total_price flex basis-0 grow justify-center">總計</div>
+        <div class="top_operate flex basis-0 grow justify-center">操作</div>
+      </div>
+      <!-- mobile -->
+      <div class="shopping_cart_list lg:hidden">
+        <div
+          v-for="(eachProduct, i) in testArr"
+          :key="eachProduct.productId"
+          :class="{ is_selected_product: eachProduct.isSelected }"
+          class="each_product pb-2 rounded-md mb-7"
+        >
+          <div
+            class="product_checkbox flex pl-2 pr-2 items-center h-12 w-full rounded-md"
+          >
+            <div class="cursor-pointer flex items-center" @click="selectProduct(i)">
+              <div
+                class="checkbox_div min-w-5 min-h-5 max-w-5 max-h-5 rounded-sm border-2 box-border flex items-center justify-center mr-2.5"
+              >
+                <font-awesome-icon
+                  v-show="eachProduct.isSelected"
+                  :icon="['fas', 'check']"
+                  class="fa-solid fa-check w-3"
+                />
+              </div>
+
+              <div class="product_text text-xl">商品</div>
+            </div>
+            <div
+              class="operate_div ml-auto w-10 h-8 flex items-center justify-center rounded-sm cursor-pointer"
+              @click="deleteProduct(i)"
+            >
+              <img src="/assets/img/garbage_can.png" alt="" />
+            </div>
+          </div>
+          <div class="product flex items-center pl-2 pt-3 mb-6">
+            <div
+              class="product_img w-14 h-14 bg-contain bg-center bg-no-repeat"
+              style="
+                background-image: url('https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png');
+              "
+            ></div>
+            <div class="name_price_div w-full px-2.5">
+              <div class="product_name text-center">
+                {{ eachProduct.title }}
+              </div>
+              <div class="product_single_price ml-5.5">
+                <span>NT$</span>
+                <span class="single_price font-black text-2xl">{{
+                  eachProduct.price
+                }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="product_single_price"><span>NT$</span> <span class="single_price">450</span></div> -->
+
+          <div class="quantity_price_div flex items-center justify-between pl-2 pr-3">
+            <div class="product_quantity">
+              <!-- <select
                   v-model="eachProduct.quantity"
                   name="quantity"
                   class="border border-slate-400 rounded-sm w-28 py-1 px-1"
@@ -194,89 +316,6 @@ const productQuantityInput = (product, e) => {
                   </option>
                 </select> -->
 
-                <div
-                  class="quantity_out_div w-36 h-10 rounded flex items-center justify-around px-2 bg-white"
-                >
-                  <div
-                    class="icon_div min-w-6 min-h-6 flex justify-center items-center cursor-pointer"
-                    @click="productQuantityChange(i, -1)"
-                  >
-                    <img class="minus" src="/assets/img/minus.png" alt="" />
-                  </div>
-
-                  <input
-                    class="quantity_input w-full text-center"
-                    type="number"
-                    @input="productQuantityInput(eachProduct, $event)"
-                    :value="eachProduct.quantity"
-                  />
-                  <div
-                    class="icon_div min-w-6 min-h-6 flex justify-center items-center cursor-pointer"
-                    @click="productQuantityChange(i, 1)"
-                  >
-                    <img class="plus" src="/assets/img/plus.png" alt="" />
-                  </div>
-                </div>
-              </div>
-              <div class="product_total_price">
-                總計<span class="total_price ml-1">NT$</span>
-                <span class="total_price text-2xl">{{
-                  eachProduct.quantity * eachProduct.price
-                }}</span>
-              </div>
-            </div>
-            <div class="product_operate"></div>
-          </div>
-        </div>
-
-        <!-- pc -->
-        <div class="shopping_cart_list hidden lg:block">
-          <div
-            class="each_product flex h-44"
-            v-for="(eachProduct, i) in testArr"
-            :class="{ is_selected_product: eachProduct.isSelected }"
-            :key="eachProduct.productId"
-          >
-            <div
-              class="product_checkbox_pc flex basis-0 grow items-center justify-center"
-            >
-              <div
-                class="check_box_out_div p-3 cursor-pointer"
-                @click="selectProduct(i)"
-              >
-                <div
-                  class="checkbox_div min-w-5 min-h-5 max-w-5 max-h-5 rounded-sm border-2 box-border flex items-center justify-center"
-                >
-                  <font-awesome-icon
-                    v-show="eachProduct.isSelected"
-                    :icon="['fas', 'check']"
-                    class="fa-solid fa-check w-3"
-                  />
-                </div>
-              </div>
-            </div>
-            <div
-              class="product flex basis-0 grow-2 justify-center items-center"
-            >
-              <div
-                class="product_img min-w-14 min-h-14 bg-contain bg-center bg-no-repeat mr-2.5"
-                style="
-                  background-image: url(&quot;https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png&quot;);
-                "
-              ></div>
-              <div class="product_name w-11/12 inline-block">
-                {{ eachProduct.title }}
-              </div>
-            </div>
-            <div
-              class="product_single_price basis-0 flex grow justify-center items-center"
-            >
-              <span>NT$</span>
-              <span class="single_price">{{ eachProduct.price }}</span>
-            </div>
-            <div
-              class="product_quantity flex basis-0 grow items-center justify-center"
-            >
               <div
                 class="quantity_out_div w-36 h-10 rounded flex items-center justify-around px-2 bg-white"
               >
@@ -301,47 +340,112 @@ const productQuantityInput = (product, e) => {
                 </div>
               </div>
             </div>
-            <div
-              class="product_total_price flex basis-0 grow justify-center items-center"
-            >
-              <span class="total_price">NT$</span>
-              <span class="total_price">{{
+            <div class="product_total_price">
+              總計<span class="total_price ml-1">NT$</span>
+              <span class="total_price text-2xl">{{
                 eachProduct.quantity * eachProduct.price
               }}</span>
             </div>
-            <div
-              class="product_operate flex basis-0 grow items-center justify-center"
-            >
+          </div>
+          <div class="product_operate"></div>
+        </div>
+      </div>
+
+      <!-- pc -->
+      <div class="shopping_cart_list hidden lg:block">
+        <div
+          class="each_product flex h-44"
+          v-for="(eachProduct, i) in testArr"
+          :class="{ is_selected_product: eachProduct.isSelected }"
+          :key="eachProduct.productId"
+        >
+          <div class="product_checkbox_pc flex basis-0 grow items-center justify-center">
+            <div class="check_box_out_div p-3 cursor-pointer" @click="selectProduct(i)">
               <div
-                class="operate_div_pc w-10 h-8 flex items-center justify-center cursor-pointer"
-                @click="deleteProduct(i)"
+                class="checkbox_div min-w-5 min-h-5 max-w-5 max-h-5 rounded-sm border-2 box-border flex items-center justify-center"
               >
-                <img src="/assets/img/garbage_can.png" alt="" />
+                <font-awesome-icon
+                  v-show="eachProduct.isSelected"
+                  :icon="['fas', 'check']"
+                  class="fa-solid fa-check w-3"
+                />
               </div>
             </div>
           </div>
-        </div>
-        <div
-          class="bottom_block h-36 rounded text-center pt-6 lg:pt-0 lg:h-24 lg:flex lg:items-center lg:justify-end lg:bg-gray-300"
-        >
-          <div
-            class="total_price_all mb-4 lg:bg-slate-100 rounded lg:h-16 lg:w-56 lg:flex lg:items-center lg:justify-center lg:mb-0 lg:mr-4"
-          >
-            總金額
-            <span class="total_price ml-5">NT$</span>
-            <span class="total_price font-black text-2xl">{{
-              totalPrice
+          <div class="product flex basis-0 grow-2 justify-center items-center">
+            <div
+              class="product_img min-w-14 min-h-14 bg-contain bg-center bg-no-repeat mr-2.5"
+              style="
+                background-image: url('https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png');
+              "
+            ></div>
+            <div class="product_name w-11/12 inline-block">
+              {{ eachProduct.title }}
+            </div>
+          </div>
+          <div class="product_single_price basis-0 flex grow justify-center items-center">
+            <span>NT$</span>
+            <span class="single_price">{{ eachProduct.price }}</span>
+          </div>
+          <div class="product_quantity flex basis-0 grow items-center justify-center">
+            <div
+              class="quantity_out_div w-36 h-10 rounded flex items-center justify-around px-2 bg-white"
+            >
+              <div
+                class="icon_div min-w-6 min-h-6 flex justify-center items-center cursor-pointer"
+                @click="productQuantityChange(i, -1)"
+              >
+                <img class="minus" src="/assets/img/minus.png" alt="" />
+              </div>
+
+              <input
+                class="quantity_input w-full text-center"
+                type="number"
+                @input="productQuantityInput(eachProduct, $event)"
+                :value="eachProduct.quantity"
+              />
+              <div
+                class="icon_div min-w-6 min-h-6 flex justify-center items-center cursor-pointer"
+                @click="productQuantityChange(i, 1)"
+              >
+                <img class="plus" src="/assets/img/plus.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="product_total_price flex basis-0 grow justify-center items-center">
+            <span class="total_price">NT$</span>
+            <span class="total_price">{{
+              eachProduct.quantity * eachProduct.price
             }}</span>
           </div>
-          <div
-            class="go_shop h-15 w-11/12 rounded mx-auto flex items-center justify-center cursor-pointer lg:h-16 lg:w-64 lg:mx-0 lg:mr-4"
-          >
-            <img class="mr-3" src="/assets/img/card.png" alt="" />
-            <span class="text-xl color-white">去買單</span>
+          <div class="product_operate flex basis-0 grow items-center justify-center">
+            <div
+              class="operate_div_pc w-10 h-8 flex items-center justify-center cursor-pointer"
+              @click="deleteProduct(i)"
+            >
+              <img src="/assets/img/garbage_can.png" alt="" />
+            </div>
           </div>
         </div>
-        <div class="check_btn" @click="checkValue">檢查</div>
       </div>
+      <div
+        class="bottom_block h-36 rounded text-center pt-6 lg:pt-0 lg:h-24 lg:flex lg:items-center lg:justify-end lg:bg-gray-300"
+      >
+        <div
+          class="total_price_all mb-4 lg:bg-slate-100 rounded lg:h-16 lg:w-56 lg:flex lg:items-center lg:justify-center lg:mb-0 lg:mr-4"
+        >
+          總金額
+          <span class="total_price ml-5">NT$</span>
+          <span class="total_price font-black text-2xl">{{ totalPrice }}</span>
+        </div>
+        <div
+          class="go_shop h-15 w-11/12 rounded mx-auto flex items-center justify-center cursor-pointer lg:h-16 lg:w-64 lg:mx-0 lg:mr-4"
+        >
+          <img class="mr-3" src="/assets/img/card.png" alt="" />
+          <span class="text-xl color-white">去買單</span>
+        </div>
+      </div>
+      <div class="check_btn" @click="checkValue">檢查</div>
     </div>
   </div>
 </template>
