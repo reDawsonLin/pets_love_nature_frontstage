@@ -1,13 +1,10 @@
 <script setup>
 import { storeToRefs } from "pinia";
-import { useStorage } from "@vueuse/core";
-import { useLocalStorage, useStorageAsync } from "@vueuse/core";
+import { useStoreLogin } from "~/stores/storeLogin";
 
 const store_login = useStoreLogin();
 const { token } = storeToRefs(store_login);
 const {} = store_login;
-
-watchEffect(() => {});
 </script>
 
 <template>
@@ -59,7 +56,12 @@ watchEffect(() => {});
               <li class="whitespace-nowrap cursor-pointer">訂單記錄</li>
               <li class="whitespace-nowrap cursor-pointer">收藏商品</li>
               <li class="whitespace-nowrap cursor-pointer">聊聊紀錄</li>
-              <li class="whitespace-nowrap cursor-pointer">登出</li>
+              <li
+                class="whitespace-nowrap cursor-pointer"
+                @click="token = null"
+              >
+                登出
+              </li>
             </template>
           </ul>
         </div>

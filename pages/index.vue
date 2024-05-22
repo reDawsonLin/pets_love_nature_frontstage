@@ -1,10 +1,10 @@
 <script setup>
-import { useStoreLogin } from "~/stores/login";
+import { useStoreLogin } from "~/stores/storeLogin";
 
 const route = useRoute();
 
 const store_login = useStoreLogin();
-const {} = storeToRefs(store_login);
+const { id_customer, token } = storeToRefs(store_login);
 const { login } = store_login;
 
 const chatCount = ref(10);
@@ -30,8 +30,35 @@ onMounted(async () => {
   if (route?.query?.code) {
     const code = route.query.code;
     await login(code);
+
+    // const res = await useTokenFetch(`/orders/${id_customer.value}`, );
+    // const res = await useTokenFetch("/orders", {
+    //   params: { userId: id_customer.value },
+    // });
+
+    // console.log("res :>> ", res);
   }
 });
+
+const fetchOrder = async () => {
+  const res = await $fetch(
+    `https://pets-love-nature-backend-n.onrender.com/api/v1/orders/664a9f62a9409ee957d3a646`,
+    {
+      headers: { Authorization: `Bearer ${token.value}` },
+    }
+  );
+  // console.log("res :>> ", res);
+
+  // const res = await $fetch(
+  //   "https://pets-love-nature-backend-n.onrender.com/api/v1/product"
+  // );
+
+  // $fetch("/api/contact", {
+  //   method: "POST",
+  //   body: { hello: "world " },
+  // });
+  console.log("res :>> ", res);
+};
 
 // -------
 // const token = useSessionStorage("pets-token");
@@ -188,6 +215,8 @@ const data_comment = [
 </script>
 
 <template>
+  <!-- <button type="button" @click="fetchOrder">fetch order</button> -->
+
   <section
     class="banner_list flex-grow-1 bg-second-200"
     p="x-0.75rem t-1.25rem"
