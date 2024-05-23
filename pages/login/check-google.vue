@@ -4,7 +4,7 @@ import { useStoreLogin } from "~/stores/storeLogin";
 const route = useRoute();
 
 const store_login = useStoreLogin();
-const { id_customer, token } = storeToRefs(store_login);
+// const { id_customer, token } = storeToRefs(store_login);
 const { login } = store_login;
 
 onMounted(async () => {

@@ -4,7 +4,7 @@
   <div class="min-h-100vh flex flex-col">
     <LayoutNavbar />
 
-    <main class="relative flex-grow-1 flex flex-col">
+    <main class="relative flex flex-grow-1 flex-col">
       <slot />
     </main>
 

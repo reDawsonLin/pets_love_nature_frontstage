@@ -5,7 +5,7 @@ const showChat = computed(() => {
   const targetPoint = document?.body.scrollHeight - window?.innerHeight - 300;
 
   if (windowScroll.value > targetPoint) return true;
-  else false;
+  else return false;
 });
 
 const { width: window_width } = useWindowSize();
@@ -182,17 +182,17 @@ const data_comment = [
         <img
           :src="banner.imgUrl"
           alt="banner"
-          class="aspect-350/512 md:(aspect-1760/662)"
+          class="aspect-350/512 md:(aspect-1760/662 rounded-5rem)"
           rounded="t-80px b-20px"
           object="cover center"
-          md:(rounded-5rem)
-        />
+
+        >
 
         <div
           class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600 md:(bottom-10.25rem max-w-47rem w-100% rounded-1rem bg-second-200/90)"
         >
-          <h3 class="text-2rem" md:(text-3rem)>{{ banner.title }}</h3>
-          <p class="text-balance" md:(text-1.75rem)>{{ banner.subtitle }}</p>
+          <h3 class="text-2rem md:(text-3rem)" >{{ banner.title }}</h3>
+          <p class="text-balance md:(text-1.75rem)" >{{ banner.subtitle }}</p>
         </div>
       </SwiperSlide>
     </Swiper>
@@ -238,7 +238,7 @@ const data_comment = [
         </div>
 
         <div
-          class="group md:() relative aspect-257/358 flex-grow-1 rounded-1.5rem"
+          class="group relative aspect-257/358 flex-grow-1 rounded-1.5rem"
           :class="[`${category.bgUrl}`]"
           bg="center [length:auto_100%] no-repeat"
         >
@@ -306,7 +306,7 @@ const data_comment = [
     />
   </section>
 
-  <section class="md:() comment_list" p=" y-4rem">
+  <section class="comment_list" p=" y-4rem">
     <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
       <h2 class="mb-3rem text-center md:(mb-0)">熱烈好評</h2>
 
@@ -321,7 +321,7 @@ const data_comment = [
     </header>
 
     <Swiper
-      class="md:() mb-1.5rem"
+      class="mb-1.5rem"
       space-between="24"
       :modules="[SwiperPagination]"
       :slides-per-view="comment_swiperPerView"
@@ -350,7 +350,7 @@ const data_comment = [
             :src="comment.avatarUrl"
             alt="avatar"
             class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center md:(w-6.25rem)"
-          />
+          >
           <p>{{ comment.accountName }}</p>
         </div>
       </SwiperSlide>
