@@ -4,6 +4,8 @@ import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useStoreLogin } from "~/stores/storeLogin";
 
+import { useRouter } from 'vue-router'
+const router = useRouter()
 // 使用 storeLogin
 const store_login = useStoreLogin();
 const { token, id_customer } = storeToRefs(store_login);
@@ -39,13 +41,23 @@ const fetchData = async () => {
       }
     );
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      // throw new Error("Network response was not ok");
+      const e = new Error("請重新登入"); 
+      e.name = response.status;
+      throw e;
+
     }
     const result = await response.json();
     data.value = result.data;
     console.log("成功得到會員資訊");
   } catch (e) {
+    console.log(e.message)
     console.log("err", e);
+    if(e.name=="403"){
+      alert("請重新登入")
+      router.push('/')
+    }
+
   }
 };
 
