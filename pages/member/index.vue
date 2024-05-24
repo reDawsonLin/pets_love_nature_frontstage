@@ -1,11 +1,14 @@
 <script setup>
 import { ref, onMounted } from "vue";
-
 import { storeToRefs } from "pinia";
+import { useRouter } from 'vue-router'
 import { useStoreLogin } from "~/stores/storeLogin";
 
-import { useRouter } from 'vue-router'
+// route middleware -------
+definePageMeta({ middleware: "need-login" });
+
 const router = useRouter()
+
 // 使用 storeLogin
 const store_login = useStoreLogin();
 const { token, id_customer } = storeToRefs(store_login);
@@ -103,7 +106,7 @@ onMounted(() => {
       <h1 class="text-4xl">編輯個人資訊</h1>
     </div>
     <div class="mb-7.5 flex grid-justify-center grid-items-center">
-      <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="" >
+      <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="" />
     </div>
     <div class="flex flex-col grid-justify-center grid-items-center">
       <form>
@@ -120,11 +123,13 @@ onMounted(() => {
             name="customerName"
             class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
             placeholder=""
-          >
+          />
         </div>
 
         <div class="mb-4">
-          <label for="email" class="block text-sm text-gray-900 font-medium leading-6"
+          <label
+            for="email"
+            class="block text-sm text-gray-900 font-medium leading-6"
             >信箱</label
           >
           <input
@@ -134,11 +139,13 @@ onMounted(() => {
             name="email"
             class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
             placeholder=""
-          >
+          />
         </div>
 
         <div class="mb-4">
-          <label for="phone" class="block text-sm text-gray-900 font-medium leading-6"
+          <label
+            for="phone"
+            class="block text-sm text-gray-900 font-medium leading-6"
             >聯絡電話</label
           >
           <input
@@ -148,7 +155,7 @@ onMounted(() => {
             name="phone"
             class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
             placeholder=""
-          >
+          />
         </div>
 
         <div class="mb-4">
@@ -164,7 +171,7 @@ onMounted(() => {
             name="recipient_name"
             class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
             placeholder=""
-          >
+          />
         </div>
 
         <div class="mb-4">
@@ -180,7 +187,7 @@ onMounted(() => {
             name="recipient_phone"
             class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
             placeholder=""
-          >
+          />
         </div>
 
         <div class="mb-4">
@@ -196,7 +203,7 @@ onMounted(() => {
             name="recipient_location"
             class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
             placeholder=""
-          >
+          />
         </div>
 
         <div class="mb-4">
@@ -212,7 +219,7 @@ onMounted(() => {
             name="recipient_city"
             class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
             placeholder=""
-          >
+          />
         </div>
 
         <div class="mb-4">
@@ -228,7 +235,7 @@ onMounted(() => {
             name="recipient_area"
             class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
             placeholder=""
-          >
+          />
         </div>
 
         <div class="mb-4">
@@ -244,7 +251,7 @@ onMounted(() => {
             name="recipient_address"
             class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
             placeholder=""
-          >
+          />
         </div>
 
         <div class="mb-4 flex grid-justify-center grid-items-center">
