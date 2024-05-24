@@ -26,9 +26,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section
-    class="flex flex-grow-1 flex-col items-center justify-center border border-red-7"
-  >
+  <section class="flex flex-grow-1 flex-col items-center justify-center">
     <h4 class="mb-1.5rem">會員登入</h4>
 
     <ul class="box_login flex flex-col gap-1.25rem">
