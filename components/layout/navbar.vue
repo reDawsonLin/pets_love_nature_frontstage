@@ -1,19 +1,72 @@
-<script setup></script>
+<script setup>
+import { storeToRefs } from "pinia";
+import { useStoreLogin } from "~/stores/storeLogin";
+
+const store_login = useStoreLogin();
+const { token } = storeToRefs(store_login);
+const { setToken } = store_login;
+</script>
 
 <template>
-  <div class="nav_wrapper">
+  <div class="nav_wrapper bg-neutral-800">
     <header
       p="b-1.125rem l-0.75rem r-1rem t-1.75rem"
-      class="flex items-center justify-between bg-neutral-800"
+      class="flex items-center justify-between md:(mx-auto max-w-1296px)"
     >
       <NuxtLink to="/" class="box flex gap-1rem">
         <SvgIcon name="logo_light" class="aspect-32/30 w-2rem" />
         <SvgIcon name="brand_name" class="aspect-120/27 w-7.5rem" />
-        <!-- <SvgIcon name="logo_light" class="aspect-[32/30] w-[2rem]" />
-        <SvgIcon name="brand_name" class="aspect-[120/27] w-[7.5rem]" /> -->
       </NuxtLink>
 
-      <div class="h-4 w-1.5rem flex cursor-pointer items-center">
+      <nav class="flex gap-3rem text-neutral-50">
+        <NuxtLink :to="{ name: 'product' }">所有商品</NuxtLink>
+        <NuxtLink :to="{ name: 'about' }">關於我們</NuxtLink>
+        <NuxtLink :to="{ name: 'frequently-questions' }">常見問題</NuxtLink>
+      </nav>
+
+      <div class="hidden md:(flex gap-1.25rem)">
+        <SvgIcon class="h-1.5rem w-1.5rem cursor-pointer text-neutral-50" name="search" />
+
+        <NuxtLink :to="token ? { name: 'shopping-cart' } : null">
+          <SvgIcon class="h-1.5rem w-1.5rem cursor-pointer text-neutral-50" name="cart" />
+        </NuxtLink>
+
+        <div class="box_account relative">
+          <SvgIcon
+            class="h-1.5rem w-1.5rem cursor-pointer text-neutral-50"
+            name="account"
+          />
+
+          <ul
+            class="list_account pointer-events-none absolute right--0.5rem z-5 flex flex-col items-center gap-1rem rounded-0.5rem bg-neutral-50 px-1rem py-1rem text-neutral-600 opacity-0"
+          >
+            <!-- after:(content-empty absolute flex border-x-10px border-x-transparent border-b-18px border-b-neutral-50 bottom-100% left-50% translate-x--50%) -->
+            <li v-if="!token" class="cursor-pointer whitespace-nowrap">
+              <!-- <NuxtLink
+                to="http://pets-love-nature-backend-n.onrender.com/api/v1/customer/google"
+              >
+                登入
+              </NuxtLink> -->
+              <NuxtLink to="/Login"> 登入 </NuxtLink>
+            </li>
+            <template v-else>
+              <li class="cursor-pointer whitespace-nowrap">
+                <NuxtLink :to="{name: 'member'}"> 個人資訊 </NuxtLink>
+              </li>
+              <li class="cursor-pointer whitespace-nowrap">訂單記錄</li>
+              <li class="cursor-pointer whitespace-nowrap">收藏商品</li>
+              <li class="cursor-pointer whitespace-nowrap">聊聊紀錄</li>
+              <li class="cursor-pointer whitespace-nowrap" @click="setToken(null)">
+                登出
+              </li>
+            </template>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        class="h-4 w-1.5rem flex cursor-pointer cursor-pointer items-center md:(hidden)"
+      >
         <p class="hamburger" />
       </div>
     </header>
@@ -34,6 +87,15 @@
 
   &::after {
     @apply bottom-2 content-['']  absolute;
+  }
+}
+
+.box_account {
+  &:hover {
+    .list_account {
+      opacity: 1;
+      pointer-events: all;
+    }
   }
 }
 </style>

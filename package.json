@@ -21,9 +21,9 @@
     "@nuxt/eslint": "^0.3.10",
     "@pinia/nuxt": "^0.5.1",
     "@unocss/reset": "^0.59.4",
+    "@vueuse/core": "^10.9.0",
     "@vueuse/nuxt": "^10.9.0",
     "jsdoc": "^4.0.3",
-
     "nuxt": "^3.11.2",
     "nuxt-swiper": "^1.2.2",
     "pinia": "^2.1.7",
@@ -31,17 +31,10 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config": "^12.0.0",
+    "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
     "@unocss/eslint-config": "^0.59.4",
     "@unocss/nuxt": "^0.59.4",
     "@unocss/preset-web-fonts": "^0.59.4",
-    "autoprefixer": "^10.4.19",
-    "eslint": "^8.57.0",
-    "eslint-plugin-vue": "^9.25.0",
-    "postcss": "^8.4.38",
-    "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.14",
-    "sass": "^1.76.0",
-    "tailwindcss": "^3.4.3"
+    "eslint": "^8.57.0"
   }
 }
