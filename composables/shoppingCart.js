@@ -15,17 +15,19 @@ export const useShoppingCart = async () => {
     transformArray.length = 0;
 
     // 整理開始
-    tempCartArray.push(...getCartById?.data?.shoppingCart);
-    // transformArray.push(...tempCartArray);
+    tempCartArray = getCartById?.data?.shoppingCart;
 
     transformArray = tempCartArray.map(eachProduct => {
 
         const product = eachProduct.productSpec.productId;
+        const productSpec = eachProduct.productSpec;
 
-        console.log('eachProduct', eachProduct);
         delete eachProduct.productSpec.productId;
+        delete eachProduct.productSpec;
+
         const obj = {
-            product,
+            ...productSpec,
+            ...product,
             ...eachProduct
         }
         return obj

@@ -1,46 +1,52 @@
 <script setup>
-const { count, add, getTransformCartArray } = await useShoppingCart();
+const { getTransformCartArray } = await useShoppingCart();
 
-const testArr = ref([
-  {
-    productId: "A00001",
-    quantity: 3,
-    title:
-      "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
-    weight: 15,
-    price: 100,
-    inStock: 10,
-    image: {
-      id: 0,
-      imgUrl:
-        "https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png",
-      altText: ""
-    },
-    isSelected: false
-  },
-  {
-    productId: "A00001",
-    quantity: 3,
-    title: "好吃貓食",
-    weight: 15,
-    price: 150,
-    inStock: 10,
-    image: {
-      id: 0,
-      imgUrl:
-        "https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png",
-      altText: ""
-    },
-    isSelected: false
-  }
-]);
+const shoppingDataArr = ref([]);
 
-const isSelectedProductArr = computed(() =>
-  testArr.value.filter((eachProduct) => eachProduct.isSelected)
+// const testArr = ref([
+//   {
+//     productId: "A00001",
+//     quantity: 3,
+//     title:
+//       "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+//     weight: 15,
+//     price: 100,
+//     inStock: 10,
+//     imageGallery: {
+//       id: 0,
+//       imgUrl:
+//         "https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png",
+//       altText: ""
+//     },
+//     isChoosed: false
+//   },
+//   {
+//     productId: "A00001",
+//     quantity: 3,
+//     title: "好吃貓食",
+//     weight: 15,
+//     price: 150,
+//     inStock: 10,
+//     imageGallery: {
+//       id: 0,
+//       imgUrl:
+//         "https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png",
+//       altText: ""
+//     },
+//     isChoosed: false
+//   }
+// ]);
+
+onMounted(async () => {
+  shoppingDataArr.value = await getTransformCartArray();
+});
+
+const isChoosedProductArr = computed(() =>
+shoppingDataArr.value.filter((eachProduct) => eachProduct.isChoosed)
 );
 
 const totalPrice = computed(() =>
-  isSelectedProductArr.value.reduce(
+  isChoosedProductArr.value.reduce(
     (acc, cur) => acc + cur.quantity * cur.price,
     0
   )
@@ -48,37 +54,37 @@ const totalPrice = computed(() =>
 
 const allSelected = computed(
   () =>
-    testArr.value.filter((eachProduct) => eachProduct.isSelected).length ===
-    testArr.value.length
+  shoppingDataArr.value.filter((eachProduct) => eachProduct.isChoosed).length ===
+  shoppingDataArr.value.length
 );
 
-const checkValue = async() => {
-    // console.log(testArr);
-  console.log('count', count);
-  console.log('add', add);
-  console.log(await getTransformCartArray());
-
-  console.log('useShoppingCart', useShoppingCart);
+const checkValue = async () => {
+  // console.log(testArr);
+  // console.log("count", count);
+  // console.log("add", add);
+  // console.log(await getTransformCartArray());
+  // console.log('process.env', process);
+  // console.log("useShoppingCart", useShoppingCart);
 };
 
 const selectProduct = (i) => {
-  testArr.value[i].isSelected = !testArr.value[i].isSelected;
+  shoppingDataArr.value[i].isChoosed = !shoppingDataArr.value[i].isChoosed;
 };
 
 const deleteProduct = (i) => {
-  testArr.value.splice(i, 1);
+  shoppingDataArr.value.splice(i, 1);
 };
 
 const allSelectedClick = () => {
   if (allSelected.value)
-    testArr.value.forEach((eachProduct) => (eachProduct.isSelected = false));
-  else testArr.value.forEach((eachProduct) => (eachProduct.isSelected = true));
+  shoppingDataArr.value.forEach((eachProduct) => (eachProduct.isChoosed = false));
+  else shoppingDataArr.value.forEach((eachProduct) => (eachProduct.isChoosed = true));
 };
 
 const productQuantityChange = (i, num) => {
-  const calcQuantity = testArr.value[i].quantity + num;
-  if (calcQuantity >= 0 && calcQuantity <= testArr.value[i].inStock)
-    testArr.value[i].quantity = calcQuantity;
+  const calcQuantity = shoppingDataArr.value[i].quantity + num;
+  if (calcQuantity >= 0 && calcQuantity <= shoppingDataArr.value[i].inStock)
+  shoppingDataArr.value[i].quantity = calcQuantity;
 };
 
 const productQuantityInput = (product, e) => {
@@ -90,7 +96,7 @@ const productQuantityInput = (product, e) => {
 </script>
 
 <template>
-  <div v-if="testArr.length > 0" class="shopping_cart">
+  <div v-if="shoppingDataArr.length > 0" class="shopping_cart">
     <div p="t-3.75rem" class="title mb-7.5 flex items-center justify-center">
       <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" >
       <h1 class="text-4xl">購物車</h1>
@@ -131,9 +137,9 @@ const productQuantityInput = (product, e) => {
         <!-- mobile -->
         <div class="shopping_cart_list lg:hidden">
           <div
-            v-for="(eachProduct, i) in testArr"
+            v-for="(eachProduct, i) in shoppingDataArr"
             :key="eachProduct.productId"
-            :class="{ is_selected_product: eachProduct.isSelected }"
+            :class="{ is_selected_product: eachProduct.isChoosed }"
             class="each_product mb-7 rounded-md pb-2"
           >
             <div
@@ -147,7 +153,7 @@ const productQuantityInput = (product, e) => {
                   class="checkbox_div mr-2.5 box-border max-h-5 max-w-5 min-h-5 min-w-5 flex items-center justify-center border-2 rounded-sm"
                 >
                   <font-awesome-icon
-                    v-show="eachProduct.isSelected"
+                    v-show="eachProduct.isChoosed"
                     :icon="['fas', 'check']"
                     class="fa-solid fa-check w-3"
                   />
@@ -166,8 +172,9 @@ const productQuantityInput = (product, e) => {
               <div
                 class="product_img h-14 w-14 bg-contain bg-center bg-no-repeat"
                 style="
-                  background-image: url(&quot;https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png&quot;);
+                  background-image: url('https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png');
                 "
+                :style="{ backgroundImage: 'url(' + eachProduct.imageGallery[0].imgUrl + ')' }"
               />
               <div class="name_price_div w-full px-2.5">
                 <div class="product_name text-center">
@@ -232,17 +239,17 @@ const productQuantityInput = (product, e) => {
                 }}</span>
               </div>
             </div>
-            <div class="product_operate"/>
+            <div class="product_operate" />
           </div>
         </div>
 
         <!-- pc -->
         <div class="shopping_cart_list hidden lg:block">
           <div
-            v-for="(eachProduct, i) in testArr"
+            v-for="(eachProduct, i) in shoppingDataArr"
             :key="eachProduct.productId"
             class="each_product h-44 flex"
-            :class="{ is_selected_product: eachProduct.isSelected }"
+            :class="{ is_selected_product: eachProduct.isChoosed }"
           >
             <div
               class="product_checkbox_pc flex grow basis-0 items-center justify-center"
@@ -255,7 +262,7 @@ const productQuantityInput = (product, e) => {
                   class="checkbox_div box-border max-h-5 max-w-5 min-h-5 min-w-5 flex items-center justify-center border-2 rounded-sm"
                 >
                   <font-awesome-icon
-                    v-show="eachProduct.isSelected"
+                    v-show="eachProduct.isChoosed"
                     :icon="['fas', 'check']"
                     class="fa-solid fa-check w-3"
                   />
@@ -268,8 +275,9 @@ const productQuantityInput = (product, e) => {
               <div
                 class="product_img mr-2.5 min-h-14 min-w-14 bg-contain bg-center bg-no-repeat"
                 style="
-                  background-image: url(&quot;https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png&quot;);
+                  background-image: url('https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png');
                 "
+                :style="{ backgroundImage: 'url(' + eachProduct.imageGallery[0].imgUrl + ')' }"
               />
               <div class="product_name inline-block w-11/12">
                 {{ eachProduct.title }}
@@ -347,7 +355,7 @@ const productQuantityInput = (product, e) => {
             <span class="text-xl color-white">去買單</span>
           </div>
         </div>
-        <div class="check_btn" @click="checkValue">檢查</div>
+        <div v-if="0" class="check_btn" @click="checkValue">檢查</div>
       </div>
     </div>
   </div>
@@ -361,10 +369,6 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
-}
 .top_bar {
   background-color: #f9f0ea;
 }
