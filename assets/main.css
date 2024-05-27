@@ -37,3 +37,8 @@ h5 {
 h6 {
   font-size: 1.25rem;
 }
+
+.stopScroll {
+  overflow-y: hidden !important;
+}
+
