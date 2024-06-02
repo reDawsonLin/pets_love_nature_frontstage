@@ -23,6 +23,8 @@ const closeMobileNav = () => {
 
 const { width: window_width } = useWindowSize();
 const showNavbar = computed(() => {
+  if (window_width.value === Infinity) return false;
+
   if (window_width.value < 768) return mobileNavShow.value;
   else {
     mobileNavShow.value = false;
@@ -100,7 +102,7 @@ watchEffect(() => {});
                       class="h-1.75rem w-1.75rem"
                       src="@/assets/img/dm_cart_product.png"
                       alt="product image"
-                    >
+                    />
                     <p class="flex-nowrap text-0.875rem">鮮嫩雞肉凍乾</p>
                     <p class="ml-auto text-0.75rem text-rose-500 font-bold">$300</p>
                   </li>
@@ -154,7 +156,7 @@ watchEffect(() => {});
                 type="text"
                 placeholder="請輸入關鍵字..."
                 class="search line-clamp-1 w-100% rounded-5rem bg-neutral-50 py-0.75rem pl-1rem pr-3.5rem text-1rem md:(bg-second-400 text-neutral-600) focus:(outline-2px outline-neutral-400)"
-              >
+              />
 
               <SvgIcon
                 class="absolute right-1rem top-50% h-1.5rem w-1.5rem translate-y--50% md:(right-0 h-2rem w-2rem)"

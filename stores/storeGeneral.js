@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 
 export const useStoreGeneral = defineStore("general", () => {
-  const mobileNavShow = ref(true)
+  const mobileNavShow = ref(false)
   
 
   return {mobileNavShow};
