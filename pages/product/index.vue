@@ -1,10 +1,10 @@
 <script setup>
 const searchValue = ref({
-  // searchText: "",
-  // sortOrder: "",
-  // sortBy: "",
-  page: "3",
-  limit: "2"
+  searchText: "",
+  sortOrder: "1",
+  sortBy: "",
+  page: 1,
+  // limit: "2"
 })
 
 let productData = ref([
@@ -78,17 +78,17 @@ const changeSort = (sortValue) => {
   fetchData()
 }
 
+const updateSearchText = (e)=>{
+  fetchData()
+}
+
 const addToCart = () => {
   console.log('addToCart');
 }
 
-const handlePageChange = async(e) =>{
-  console.log(e.target.value);
+const handlePageChange = async() =>{
   searchValue.value.page = e.target.value;
-  // console.log(searchValue.value);
   fetchData()
-
-
 }
 
 onMounted(() => {
@@ -127,18 +127,18 @@ onMounted(() => {
         <!-- search section -->
         <div class="bg_orange_primary search_section p-4 box-border">
           <a href="#"
-            class="box-border mr-1 w-[32%] sm:w-[113px] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
+            class="box-border mr-[8px] w-[calc(25%-8px)] sm:w-[113px] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
             @click="changeSort('star')">最熱銷</a>
           <a href="#"
-            class="box-border mr-1 w-[32%] sm:w-[113px]  inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
+            class="box-border mr-[8px] w-[calc(25%-8px)] sm:w-[113px]  inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
             @click="changeSort('price')">評價最高</a>
-          <select id=""
-            class="box-border mr-1 w-[32%] sm:w-[113px]  inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
-            name="">
-            <option value="" disabled>價格/時間</option>
-            <option value="">時間</option>
-            <option value="">價格</option>
-          </select>
+          <a href="#"
+            class="box-border mr-[8px] w-[calc(25%-8px)] sm:w-[113px]  inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
+            @click="changeSort('price')">價格</a>
+          <a href="#"
+            class="box-border mr-[8px] w-[calc(25%-8px)] sm:w-[113px]  inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
+            @click="changeSort('priupdatedAtce')">時間</a>
+            
 
           <div class="relative w-[100%] sm:w-auto mt-3 sm:mt-0 mt-2w-[226px] inline-flex rounded-md shadow-sm">
             <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center pl-3">
@@ -146,6 +146,8 @@ onMounted(() => {
             </div>
             <input id="price" type="text" name="price"
               class="w-[100%] md:w-[226px] inline-flex border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+              @keydown.enter="updateSearchText()"
+              v-model="searchValue.searchText"
               placeholder="搜尋">
           </div>
 
@@ -169,11 +171,8 @@ onMounted(() => {
             <div class="mt-4 flex justify-between">
               <div>
                 <h3 class="text-sm text-gray-700">
-                  <a href="#">
-
+                  <a :href="`/product/${product._id}`">
                     {{ product.product.title }}
-
-
                   </a>
 
                 </h3>
@@ -200,7 +199,7 @@ onMounted(() => {
           <div class="flex items-center justify-between px-4 py-3 sm:px-6">
             <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center">
               <div class="">
-                {{ pageInfo }}
+                <!-- {{ pageInfo }} -->
                 <nav class="isolate inline-flex rounded-md" aria-label="Pagination">
                   <button
                     type="button"
@@ -232,7 +231,6 @@ onMounted(() => {
 
                     {{ page }}
                   </button>
-               
 
                   <button type="button"
                     class="relative mr-10 inline-flex items-center rounded-r-md bg-white px-2 py-2 text-black ring-gray-300 ring-inset focus:z-20 hover:bg-gray-50 focus:outline-offset-0"
