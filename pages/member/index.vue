@@ -45,7 +45,7 @@ const fetchData = async () => {
     );
     if (!response.ok) {
       // throw new Error("Network response was not ok");
-      const e = new Error("請重新登入"); 
+      const e = new Error("請重新登入");
       e.name = response.status;
       throw e;
 
@@ -56,10 +56,6 @@ const fetchData = async () => {
   } catch (e) {
     console.log(e.message)
     console.log("err", e);
-    if(e.name=="403"){
-      alert("請重新登入")
-      router.push('/')
-    }
 
   }
 };
@@ -100,192 +96,112 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="member">
-    <div p="t-3.75rem" class="title mb-7.5 flex items-center justify-center">
-      <!-- <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" /> -->
-      <h1 class="text-4xl">編輯個人資訊</h1>
-    </div>
-    <div class="mb-7.5 flex grid-justify-center grid-items-center">
-      <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="" >
-    </div>
-    <div class="flex flex-col grid-justify-center grid-items-center">
-      <form>
-        <div class="mb-4">
-          <label
-            for="customerName"
-            class="block text-sm text-gray-900 font-medium leading-6"
-            >顧客姓名</label
-          >
-          <input
-            id="customerName"
-            v-model="data.customerName"
-            type="text"
-            name="customerName"
-            class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
-            placeholder=""
-          >
-        </div>
+  <div class=" container member md-flex">
 
-        <div class="mb-4">
-          <label
-            for="email"
-            class="block text-sm text-gray-900 font-medium leading-6"
-            >信箱</label
-          >
-          <input
-            id="email"
-            v-model="data.email"
-            type="text"
-            name="email"
-            class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
-            placeholder=""
-          >
-        </div>
-
-        <div class="mb-4">
-          <label
-            for="phone"
-            class="block text-sm text-gray-900 font-medium leading-6"
-            >聯絡電話</label
-          >
-          <input
-            id="phone"
-            v-model="data.phone"
-            type="text"
-            name="phone"
-            class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
-            placeholder=""
-          >
-        </div>
-
-        <div class="mb-4">
-          <label
-            for="recipient_name"
-            class="block text-sm text-gray-900 font-medium leading-6"
-            >收件人</label
-          >
-          <input
-            id="recipient_name"
-            v-model="data.recipientName"
-            type="text"
-            name="recipient_name"
-            class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
-            placeholder=""
-          >
-        </div>
-
-        <div class="mb-4">
-          <label
-            for="recipient_phone"
-            class="block text-sm text-gray-900 font-medium leading-6"
-            >收件人聯絡電話</label
-          >
-          <input
-            id="recipient_phone"
-            v-model="data.recipientPhone"
-            type="text"
-            name="recipient_phone"
-            class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
-            placeholder=""
-          >
-        </div>
-
-        <div class="mb-4">
-          <label
-            for="recipient_location"
-            class="block text-sm text-gray-900 font-medium leading-6"
-            >送貨地點</label
-          >
-          <input
-            id="recipient_location"
-            v-model="data.deliveryAddress.country"
-            type="text"
-            name="recipient_location"
-            class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
-            placeholder=""
-          >
-        </div>
-
-        <div class="mb-4">
-          <label
-            for="recipient_city"
-            class="block text-sm text-gray-900 font-medium leading-6"
-            >城市/縣</label
-          >
-          <input
-            id="recipient_city"
-            v-model="data.deliveryAddress.county"
-            type="text"
-            name="recipient_city"
-            class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
-            placeholder=""
-          >
-        </div>
-
-        <div class="mb-4">
-          <label
-            for="recipient_area"
-            class="block text-sm text-gray-900 font-medium leading-6"
-            >地區</label
-          >
-          <input
-            id="recipient_area"
-            v-model="data.deliveryAddress.district"
-            type="text"
-            name="recipient_area"
-            class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
-            placeholder=""
-          >
-        </div>
-
-        <div class="mb-4">
-          <label
-            for="recipient_address"
-            class="block text-sm text-gray-900 font-medium leading-6"
-            >地址</label
-          >
-          <input
-            id="recipient_address"
-            v-model="data.deliveryAddress.address"
-            type="text"
-            name="recipient_address"
-            class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
-            placeholder=""
-          >
-        </div>
-
-        <div class="mb-4 flex grid-justify-center grid-items-center">
-          <a
-            href="#"
-            class="mr-1 w-full inline-flex justify-center rounded-md bg-red-600 px-3 py-2 text-sm text-white font-semibold shadow-sm sm:ml-3 sm:w-auto hover:bg-red-500"
-            >取消</a
-          >
-          <a
-            href="#"
-            class="w-full inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 font-semibold shadow-sm ring-1 ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
-            @click.prevent="saveMember"
-            >儲存</a
-          >
-        </div>
-      </form>
+    <div class="sidebar w-[100%] flex grid-justify-start grid-items-center flex-col md:mt-[100px] md-w-[30%]">
+      <ul class=" w-[100%] text-center flex justify-center  flex-row md:flex-col md-w-[80%]">
+        <li class="m-2">
+          <a href="#" class="block hover:bg-[#fdd8bf] p-2">個人資訊</a>
+        </li>
+        <li class="m-2">
+          <a href="#" class="block hover:bg-[#fdd8bf] p-2">訂單資訊</a>
+        </li>
+        <li class="m-2">
+          <a href="#" class="block hover:bg-[#fdd8bf] p-2">收藏商品</a>
+        </li>
+        <li class="m-2">
+          <a href="#" class="block hover:bg-[#fdd8bf] p-2">聊聊紀錄</a>
+        </li>
+      </ul>
     </div>
 
-    <!--    RWD時在做 並包成元件
-        <div class="sidebar flex grid-justify-center grid-items-center flex-col">
-            <ul class="bg-red w-[80%] text-center">
-                <li class="m-2">
-                    <a href="#">個人資訊</a>
-                </li>
-                <li class="m-2">
-                    <a href="#">訂單資訊</a>
-                </li>
-                <li class="m-2">
-                    <a href="#">收藏商品</a>
-                </li>
-                <li class="m-2">
-                    <a href="#">聊聊紀錄</a>
-                </li>
-            </ul>
-        </div> -->
+    <div class="w-[100%] md-w-[70%]">
+      <div class="mt-[16px] md:mt-[32px] title mb-7.5 flex items-center justify-center">
+        <!-- <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" /> -->
+        <h1 class="text-4xl">編輯個人資訊</h1>
+      </div>
+      <div class="mb-7.5 flex grid-justify-center grid-items-center">
+        <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+      </div>
+      <div class="flex flex-col grid-justify-center grid-items-center">
+        <form>
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div class="md:mr-[32px]">
+              <div class="mb-4">
+                <label for="customerName" class="block text-sm text-gray-900 font-medium leading-6">顧客姓名</label>
+                <input id="customerName" v-model="data.customerName" type="text" name="customerName"
+                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  placeholder="">
+              </div>
+
+              <div class="mb-4">
+                <label for="email" class="block text-sm text-gray-900 font-medium leading-6">信箱</label>
+                <input id="email" v-model="data.email" type="text" name="email"
+                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  placeholder="">
+              </div>
+
+              <div class="mb-4">
+                <label for="phone" class="block text-sm text-gray-900 font-medium leading-6">聯絡電話</label>
+                <input id="phone" v-model="data.phone" type="text" name="phone"
+                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  placeholder="">
+              </div>
+            </div>
+            <div>
+              <div class="mb-4">
+                <label for="recipient_name" class="block text-sm text-gray-900 font-medium leading-6">收件人</label>
+                <input id="recipient_name" v-model="data.recipientName" type="text" name="recipient_name"
+                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  placeholder="">
+              </div>
+
+              <div class="mb-4">
+                <label for="recipient_phone" class="block text-sm text-gray-900 font-medium leading-6">收件人聯絡電話</label>
+                <input id="recipient_phone" v-model="data.recipientPhone" type="text" name="recipient_phone"
+                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  placeholder="">
+              </div>
+
+              <div class="mb-4">
+                <label for="recipient_location" class="block text-sm text-gray-900 font-medium leading-6">送貨地點</label>
+                <input id="recipient_location" v-model="data.deliveryAddress.country" type="text"
+                  name="recipient_location"
+                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  placeholder="">
+              </div>
+
+              <div class="mb-4">
+                <label for="recipient_city" class="block text-sm text-gray-900 font-medium leading-6">城市/縣</label>
+                <input id="recipient_city" v-model="data.deliveryAddress.county" type="text" name="recipient_city"
+                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  placeholder="">
+              </div>
+
+              <div class="mb-4">
+                <label for="recipient_area" class="block text-sm text-gray-900 font-medium leading-6">地區</label>
+                <input id="recipient_area" v-model="data.deliveryAddress.district" type="text" name="recipient_area"
+                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  placeholder="">
+              </div>
+
+              <div class="mb-4">
+                <label for="recipient_address" class="block text-sm text-gray-900 font-medium leading-6">地址</label>
+                <input id="recipient_address" v-model="data.deliveryAddress.address" type="text"
+                  name="recipient_address"
+                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  placeholder="">
+              </div>
+            </div>
+          </div>
+          <div class="mb-4 flex grid-justify-center grid-items-center">
+            <a href="#"
+              class="w-[100px] w-full inline-flex justify-center rounded-md bg-[#191919] px-3 py-2 text-sm text-gray-900 font-semibold shadow-sm ring-1 ring-gray-300 ring-inset sm:mt-0  hover:bg-gray-50 text-white"
+              @click.prevent="saveMember">儲存</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
   </div>
 </template>
