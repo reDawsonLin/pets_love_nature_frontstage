@@ -7,7 +7,7 @@ const searchValue = ref({
   // limit: "2"
 })
 
-let productData = ref([
+const productData = ref([
   // {
   //   _id: 11,
   //   price: 200,
@@ -28,9 +28,7 @@ let productData = ref([
 ]
 );
 
-let pageInfo = ref([]);
-
-const currentPage = ref(1);
+const pageInfo = ref([]);
 
 
 const fetchData = async () => {
@@ -78,7 +76,7 @@ const changeSort = (sortValue) => {
   fetchData()
 }
 
-const updateSearchText = (e)=>{
+const updateSearchText = ()=>{
   fetchData()
 }
 
@@ -99,67 +97,75 @@ onMounted(() => {
 <template>
   <div class="products_page md:flex">
 
-    <div class="menu  sidebar w-[100%] flex grid-justify-start grid-items-center flex-col md:mt-[100px] md-w-[30%] ">
+    <div class="sidebar menu w-[100%] flex flex-col grid-justify-start grid-items-center md:mt-[100px] md-w-[30%]">
       <ul
-        class="bg_orange_primary w-[100%] text-center flex justify-center  flex-row md:flex-col md-w-[80%] overflow-scroll">
+        class="bg_orange_primary w-[100%] flex flex-row justify-center overflow-scroll text-center md-w-[80%] md:flex-col">
         <li class="">
-          <a href="#" class="block hover:bg-[#fdd8bf]  p-2 text-nowrap">所有商品</a>
+          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]">所有商品</a>
         </li>
         <li class="">
-          <a href="#" class="block hover:bg-[#fdd8bf] p-2 text-nowrap">貓貓專區</a>
+          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]">貓貓專區</a>
         </li>
         <li class="">
-          <a href="#" class="block hover:bg-[#fdd8bf] p-2 text-nowrap">狗狗專區</a>
+          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]">狗狗專區</a>
         </li>
         <li class="">
-          <a href="#" class="block hover:bg-[#fdd8bf] p-2 text-nowrap">凍乾專區</a>
+          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]">凍乾專區</a>
         </li>
         <li class="">
-          <a href="#" class="block hover:bg-[#fdd8bf] p-2 text-nowrap">鮮食專區</a>
+          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]">鮮食專區</a>
         </li>
       </ul>
     </div>
 
     <div class="bg-white">
 
-      <div class="mx-auto max-w-2xl px-4 py-4 md:py-8 lg:max-w-7xl lg:px-8 sm:px-6 sm:py-24">
+      <div class="mx-auto max-w-2xl px-4 py-4 lg:max-w-7xl lg:px-8 md:py-8 sm:px-6 sm:py-24">
 
         <!-- search section -->
-        <div class="bg_orange_primary search_section p-4 box-border">
-          <a href="#"
-            class="box-border mr-[8px] w-[calc(25%-8px)] sm:w-[113px] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
+        <div class="bg_orange_primary search_section box-border p-4">
+          <a
+href="#"
+            class="mr-[8px] box-border w-[calc(25%-8px)] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-[113px] sm:w-auto hover:bg-gray-50"
             @click="changeSort('star')">最熱銷</a>
-          <a href="#"
-            class="box-border mr-[8px] w-[calc(25%-8px)] sm:w-[113px]  inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
+          <a
+href="#"
+            class="mr-[8px] box-border w-[calc(25%-8px)] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-[113px] sm:w-auto hover:bg-gray-50"
             @click="changeSort('price')">評價最高</a>
-          <a href="#"
-            class="box-border mr-[8px] w-[calc(25%-8px)] sm:w-[113px]  inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
+          <a
+href="#"
+            class="mr-[8px] box-border w-[calc(25%-8px)] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-[113px] sm:w-auto hover:bg-gray-50"
             @click="changeSort('price')">價格</a>
-          <a href="#"
-            class="box-border mr-[8px] w-[calc(25%-8px)] sm:w-[113px]  inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
+          <a
+href="#"
+            class="mr-[8px] box-border w-[calc(25%-8px)] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-[113px] sm:w-auto hover:bg-gray-50"
             @click="changeSort('priupdatedAtce')">時間</a>
             
 
-          <div class="relative w-[100%] sm:w-auto mt-3 sm:mt-0 mt-2w-[226px] inline-flex rounded-md shadow-sm">
+          <div class="mt-2w-[226px] relative mt-3 w-[100%] inline-flex rounded-md shadow-sm sm:mt-0 sm:w-auto">
             <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center pl-3">
               <span class="text-gray-500 sm:text-sm">O</span>
             </div>
-            <input id="price" type="text" name="price"
-              class="w-[100%] md:w-[226px] inline-flex border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
-              @keydown.enter="updateSearchText()"
-              v-model="searchValue.searchText"
-              placeholder="搜尋">
+            <input
+id="price" v-model="searchValue.searchText" type="text"
+              name="price"
+              class="w-[100%] inline-flex border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset md:w-[226px] sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+              placeholder="搜尋"
+              @keydown.enter="updateSearchText()">
           </div>
 
         </div>
         <!-- products section -->
         <div class="grid grid-cols-1 mt-6 gap-x-6 gap-y-10 lg:grid-cols-4 sm:grid-cols-2 xl:gap-x-8">
 
-          <div v-for="(product, index) in productData" :key="product._id"
-            class="group product relative border b-rd-2xl pb-4 pl-2  md:pr-2">
-            <div v-if="product.product.imageGallery.length > 0"
+          <div
+v-for="(product) in productData" :key="product._id"
+            class="group product relative border b-rd-2xl pb-4 pl-2 md:pr-2">
+            <div
+v-if="product.product.imageGallery.length > 0"
               class="aspect-h-1 aspect-w-1 lg:aspect-none relative w-full overflow-hidden rounded-md bg-gray-200 lg:h-80 group-hover:opacity-75">
-              <img :src="product.product.imageGallery[0].imgUrl.trim()" :alt="product.product.imageGallery[0].altText"
+              <img
+:src="product.product.imageGallery[0].imgUrl.trim()" :alt="product.product.imageGallery[0].altText"
                 class="h-full w-full object-cover object-center lg:h-full lg:w-full">
               <div class="absolute right-2 top-2">
                 <img src="/assets/img/icon/icon-favorite.svg" alt="">
@@ -179,8 +185,9 @@ onMounted(() => {
                 <p class="mt-1 text-sm text-gray-500">NT$ {{ product.price }}</p>
               </div>
               <div class="flex flex-col grid-justify-end flex-items-end">
-                <div class="flex" v-if="product.product.star > 0">
-                  <img v-for="index in Math.floor(product.product.star)" :key="index"
+                <div v-if="product.product.star > 0" class="flex">
+                  <img
+v-for="index in Math.floor(product.product.star)" :key="index"
                     src="/assets/img/icon/icon-star.svg" alt="Star">
                   <img v-if="product.product.star % 1 === 0.5" src="/assets/img/icon/icon-star_half.svg" alt="">
                 </div>
@@ -204,13 +211,14 @@ onMounted(() => {
                   <button
                     type="button"
                     
-                    class="relative mr-2 inline-flex items-center rounded-l-md bg-white px-2 py-2 text-black ring-gray-300 ring-inset focus:z-20 bg-gray-50 focus:outline-offset-0"
+                    class="relative mr-2 inline-flex items-center rounded-l-md bg-gray-50 bg-white px-2 py-2 text-black ring-gray-300 ring-inset focus:z-20 focus:outline-offset-0"
                     :disabled="pageInfo.nowPage==1"
                     :class="{'button_hover_color': pageInfo.nowPage==1}  "
                     >
                     <span class="sr-only">Previous</span>
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fill-rule="evenodd"
+                      <path
+fill-rule="evenodd"
                         d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
                         clip-rule="evenodd" />
                     </svg>
@@ -218,35 +226,37 @@ onMounted(() => {
                   <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
                   
                   <button 
-                    type="button" 
-                    aria-current="page"
-                    v-for="page in pageInfo.totalPages"
+                    v-for="page in pageInfo.totalPages" 
                     :key="page"
-                    class="relative z-10 mr-2 inline-flex items-center b-rd-1 bg-white px-4 py-2 text-sm text-gray-900 hover:bg-gray-50 font-semibold focus:z-20 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 focus-visible:outline"
+                    type="button"
+                    aria-current="page"
+                    class="relative z-10 mr-2 inline-flex items-center b-rd-1 bg-white px-4 py-2 text-sm text-gray-900 font-semibold focus:z-20 hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 focus-visible:outline"
                     :disabled="pageInfo.nowPage === page"
                     :class="{'button_hover_color': pageInfo.nowPage === page}  "
-                    @click="handlePageChange" 
-                    :value=page
+                    :value=page 
+                    @click="handlePageChange"
                     >
 
                     {{ page }}
                   </button>
 
-                  <button type="button"
+                  <button
+type="button"
                     class="relative mr-10 inline-flex items-center rounded-r-md bg-white px-2 py-2 text-black ring-gray-300 ring-inset focus:z-20 hover:bg-gray-50 focus:outline-offset-0"
                     :disabled="pageInfo.nowPage === pageInfo.totalPages"
                     :class="{'button_hover_color': pageInfo.nowPage === pageInfo.totalPages}"
-                    @click="handlePageChange" 
-                    :value="pageInfo.nowPage"
+                    :value="pageInfo.nowPage" 
+                    @click="handlePageChange"
                     >
                     <span class="sr-only">Next</span>
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fill-rule="evenodd"
+                      <path
+fill-rule="evenodd"
                         d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
                         clip-rule="evenodd" />
                     </svg>
                   </button>
-                  <select id="" class="h-40px w-150px b-rd-1 p-8px text-gray-700" name="" v-model="pageInfo.nowPage" @change="handlePageChange">
+                  <select id="" v-model="pageInfo.nowPage" class="h-40px w-150px b-rd-1 p-8px text-gray-700" name="" @change="handlePageChange">
                     <option v-for="page in pageInfo.totalPages" :key="page" :value="page">第{{ page }}頁</option>
                   </select>
                 </nav>
