@@ -1,5 +1,5 @@
 <script setup>
-const { getTransformCartArray } = await useShoppingCart();
+const { getTransformCartArray, useAddCartNoLogin } = await useShoppingCart();
 
 const shoppingDataArr = ref([]);
 
@@ -38,11 +38,13 @@ const shoppingDataArr = ref([]);
 // ]);
 
 onMounted(async () => {
+  console.log("mounted");
   shoppingDataArr.value = await getTransformCartArray();
+  console.log("shoppingDataArr", shoppingDataArr.value);
 });
 
 const isChoosedProductArr = computed(() =>
-shoppingDataArr.value.filter((eachProduct) => eachProduct.isChoosed)
+  shoppingDataArr.value.filter((eachProduct) => eachProduct.isChoosed)
 );
 
 const totalPrice = computed(() =>
@@ -54,8 +56,8 @@ const totalPrice = computed(() =>
 
 const allSelected = computed(
   () =>
-  shoppingDataArr.value.filter((eachProduct) => eachProduct.isChoosed).length ===
-  shoppingDataArr.value.length
+    shoppingDataArr.value.filter((eachProduct) => eachProduct.isChoosed)
+      .length === shoppingDataArr.value.length
 );
 
 const checkValue = async () => {
@@ -65,6 +67,7 @@ const checkValue = async () => {
   // console.log(await getTransformCartArray());
   // console.log('process.env', process);
   // console.log("useShoppingCart", useShoppingCart);
+  useAddCartNoLogin();
 };
 
 const selectProduct = (i) => {
@@ -77,14 +80,19 @@ const deleteProduct = (i) => {
 
 const allSelectedClick = () => {
   if (allSelected.value)
-  shoppingDataArr.value.forEach((eachProduct) => (eachProduct.isChoosed = false));
-  else shoppingDataArr.value.forEach((eachProduct) => (eachProduct.isChoosed = true));
+    shoppingDataArr.value.forEach(
+      (eachProduct) => (eachProduct.isChoosed = false)
+    );
+  else
+    shoppingDataArr.value.forEach(
+      (eachProduct) => (eachProduct.isChoosed = true)
+    );
 };
 
 const productQuantityChange = (i, num) => {
   const calcQuantity = shoppingDataArr.value[i].quantity + num;
   if (calcQuantity >= 0 && calcQuantity <= shoppingDataArr.value[i].inStock)
-  shoppingDataArr.value[i].quantity = calcQuantity;
+    shoppingDataArr.value[i].quantity = calcQuantity;
 };
 
 const productQuantityInput = (product, e) => {
@@ -132,6 +140,8 @@ const productQuantityInput = (product, e) => {
           <div class="top_total_price flex grow basis-0 justify-center">
             總計
           </div>
+          <div class="product_instock flex grow basis-0 justify-center">庫存</div>
+
           <div class="top_operate flex grow basis-0 justify-center">操作</div>
         </div>
         <!-- mobile -->
@@ -174,7 +184,10 @@ const productQuantityInput = (product, e) => {
                 style="
                   background-image: url('https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png');
                 "
-                :style="{ backgroundImage: 'url(' + eachProduct.imageGallery[0].imgUrl + ')' }"
+                :style="{
+                  backgroundImage:
+                    'url(' + eachProduct.imageGallery[0].imgUrl + ')'
+                }"
               />
               <div class="name_price_div w-full px-2.5">
                 <div class="product_name text-center">
@@ -191,7 +204,7 @@ const productQuantityInput = (product, e) => {
             <!-- <div class="product_single_price"><span>NT$</span> <span class="single_price">450</span></div> -->
 
             <div
-              class="quantity_price_div flex items-center justify-between pl-2 pr-3"
+              class="quantity_price_div flex items-center pl-2 pr-3"
             >
               <div class="product_quantity">
                 <!-- <select
@@ -209,8 +222,9 @@ const productQuantityInput = (product, e) => {
                 </select> -->
 
                 <div
-                  class="quantity_out_div h-10 w-36 flex items-center justify-around rounded bg-white px-2"
+                  class="quantity_out_div h-10 w-25 flex items-center justify-around rounded bg-white px-2"
                 >
+              
                   <div
                     class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                     @click="productQuantityChange(i, -1)"
@@ -231,8 +245,10 @@ const productQuantityInput = (product, e) => {
                     <img class="plus" src="/assets/img/plus.png" alt="" >
                   </div>
                 </div>
+                
               </div>
-              <div class="product_total_price">
+              <div class="product_instock ml-3">庫存：{{ eachProduct.inStock }}</div>
+              <div class="product_total_price ml-auto">
                 總計<span class="total_price ml-1">NT$</span>
                 <span class="total_price text-2xl">{{
                   eachProduct.quantity * eachProduct.price
@@ -277,7 +293,10 @@ const productQuantityInput = (product, e) => {
                 style="
                   background-image: url('https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png');
                 "
-                :style="{ backgroundImage: 'url(' + eachProduct.imageGallery[0].imgUrl + ')' }"
+                :style="{
+                  backgroundImage:
+                    'url(' + eachProduct.imageGallery[0].imgUrl + ')'
+                }"
               />
               <div class="product_name inline-block w-11/12">
                 {{ eachProduct.title }}
@@ -293,8 +312,9 @@ const productQuantityInput = (product, e) => {
               class="product_quantity flex grow basis-0 items-center justify-center"
             >
               <div
-                class="quantity_out_div h-10 w-36 flex items-center justify-around rounded bg-white px-2"
+                class="quantity_out_div h-10 w-25 flex items-center justify-around rounded bg-white px-2"
               >
+              
                 <div
                   class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                   @click="productQuantityChange(i, -1)"
@@ -324,6 +344,7 @@ const productQuantityInput = (product, e) => {
                 eachProduct.quantity * eachProduct.price
               }}</span>
             </div>
+            <div class="product_instoc flex grow basis-0 items-center justify-center">{{ eachProduct.inStock }}</div>
             <div
               class="product_operate flex grow basis-0 items-center justify-center"
             >
@@ -355,7 +376,7 @@ const productQuantityInput = (product, e) => {
             <span class="text-xl color-white">去買單</span>
           </div>
         </div>
-        <div v-if="0" class="check_btn" @click="checkValue">檢查</div>
+        <div v-if="1" class="check_btn" @click="checkValue">檢查</div>
       </div>
     </div>
   </div>
