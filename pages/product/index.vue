@@ -1,8 +1,10 @@
 <script setup>
 const searchValue = ref({
-  filter: "",
-  sort: "",
-  search: ""
+  // searchText: "",
+  // sortOrder: "",
+  // sortBy: "",
+  page: "3",
+  limit: "2"
 })
 
 let productData = ref([
@@ -26,7 +28,13 @@ let productData = ref([
 ]
 );
 
+let pageInfo = ref([]);
+
+const currentPage = ref(1);
+
+
 const fetchData = async () => {
+  console.log('36' ,searchValue.value);
   try {
     const params = {
       ...searchValue.value,
@@ -36,10 +44,13 @@ const fetchData = async () => {
 
     const response = await fetch(
       // `https://pets-love-nature-backend-n.onrender.com/api/v1/product?${queryString}`,
-      `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList`,
+      `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList?${queryString}`,
+      // `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList`,
+
       {
         method: "GET",
       }
+
     );
     if (!response.ok) {
       // throw new Error("Network response was not ok");
@@ -52,7 +63,8 @@ const fetchData = async () => {
 
     // data.value = result.data;
     productData.value = result.data.content
-    console.log(result.data.content);
+    pageInfo.value = result.data.page
+    console.log(result.data.page);
     console.log("成功得到產品資訊", result.data.content);
   } catch (e) {
     console.log(e.message)
@@ -61,13 +73,22 @@ const fetchData = async () => {
   }
 };
 
-const updateSort = (sortType) => {
-  searchValue.value.filter = sortType
+const changeSort = (sortValue) => {
+  searchValue.value.sortBy = sortValue
   fetchData()
 }
 
 const addToCart = () => {
   console.log('addToCart');
+}
+
+const handlePageChange = async(e) =>{
+  console.log(e.target.value);
+  searchValue.value.page = e.target.value;
+  // console.log(searchValue.value);
+  fetchData()
+
+
 }
 
 onMounted(() => {
@@ -107,10 +128,10 @@ onMounted(() => {
         <div class="bg_orange_primary search_section p-4 box-border">
           <a href="#"
             class="box-border mr-1 w-[32%] sm:w-[113px] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
-            @click="updateSort('sell')">最熱銷</a>
+            @click="changeSort('star')">最熱銷</a>
           <a href="#"
             class="box-border mr-1 w-[32%] sm:w-[113px]  inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
-            @click="updateSort('sell')">評價最高</a>
+            @click="changeSort('price')">評價最高</a>
           <select id=""
             class="box-border mr-1 w-[32%] sm:w-[113px]  inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-auto hover:bg-gray-50"
             name="">
@@ -178,41 +199,57 @@ onMounted(() => {
           <!-- <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"> -->
           <div class="flex items-center justify-between px-4 py-3 sm:px-6">
             <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center">
-              <div>
+              <div class="">
+                {{ pageInfo }}
                 <nav class="isolate inline-flex rounded-md" aria-label="Pagination">
-                  <a href="#"
-                    class="relative mr-2 inline-flex items-center rounded-l-md bg-white px-2 py-2 text-gray-400 ring-gray-300 ring-inset focus:z-20 hover:bg-gray-50 focus:outline-offset-0">
+                  <button
+                    type="button"
+                    
+                    class="relative mr-2 inline-flex items-center rounded-l-md bg-white px-2 py-2 text-black ring-gray-300 ring-inset focus:z-20 bg-gray-50 focus:outline-offset-0"
+                    :disabled="pageInfo.nowPage==1"
+                    :class="{'button_hover_color': pageInfo.nowPage==1}  "
+                    >
                     <span class="sr-only">Previous</span>
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                       <path fill-rule="evenodd"
                         d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
                         clip-rule="evenodd" />
                     </svg>
-                  </a>
+                  </button>
                   <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
-                  <a href="#" aria-current="page"
-                    class="relative z-10 mr-2 inline-flex items-center b-rd-1 bg-white px-4 py-2 text-sm text-gray-900 font-semibold focus:z-20 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 focus-visible:outline">1</a>
-                  <a href="#"
-                    class="relative mr-2 inline-flex items-center b-rd-1 bg-white px-4 py-2 text-sm text-gray-900 font-semibold ring-gray-300 ring-inset focus:z-20 hover:bg-gray-50 focus:outline-offset-0">2</a>
-                  <a href="#"
-                    class="relative mr-2 hidden items-center b-rd-1 bg-white px-4 py-2 text-sm text-gray-900 font-semibold ring-inset focus:z-20 md:inline-flex hover:bg-gray-50 focus:outline-offset-0">3</a>
-                  <span
-                    class="relative mr-2 inline-flex items-center px-4 py-2 text-sm text-gray-700 font-semibold ring-gray-300 ring-inset focus:outline-offset-0">...</span>
-                  <a href="#"
-                    class="relative mr-10 inline-flex items-center rounded-r-md bg-white px-2 py-2 text-gray-400 ring-gray-300 ring-inset focus:z-20 hover:bg-gray-50 focus:outline-offset-0">
+                  
+                  <button 
+                    type="button" 
+                    aria-current="page"
+                    v-for="page in pageInfo.totalPages"
+                    :key="page"
+                    class="relative z-10 mr-2 inline-flex items-center b-rd-1 bg-white px-4 py-2 text-sm text-gray-900 hover:bg-gray-50 font-semibold focus:z-20 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 focus-visible:outline"
+                    :disabled="pageInfo.nowPage === page"
+                    :class="{'button_hover_color': pageInfo.nowPage === page}  "
+                    @click="handlePageChange" 
+                    :value=page
+                    >
+
+                    {{ page }}
+                  </button>
+               
+
+                  <button type="button"
+                    class="relative mr-10 inline-flex items-center rounded-r-md bg-white px-2 py-2 text-black ring-gray-300 ring-inset focus:z-20 hover:bg-gray-50 focus:outline-offset-0"
+                    :disabled="pageInfo.nowPage === pageInfo.totalPages"
+                    :class="{'button_hover_color': pageInfo.nowPage === pageInfo.totalPages}"
+                    @click="handlePageChange" 
+                    :value="pageInfo.nowPage"
+                    >
                     <span class="sr-only">Next</span>
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                       <path fill-rule="evenodd"
                         d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
                         clip-rule="evenodd" />
                     </svg>
-                  </a>
-
-
-                  <select id="" class="h-40px w-150px b-rd-1 p-8px text-gray-700" name="">
-                    <option value="">第一頁</option>
-                    <option value="">第二頁</option>
-                    <option value="">第三頁</option>
+                  </button>
+                  <select id="" class="h-40px w-150px b-rd-1 p-8px text-gray-700" name="" v-model="pageInfo.nowPage" @change="handlePageChange">
+                    <option v-for="page in pageInfo.totalPages" :key="page" :value="page">第{{ page }}頁</option>
                   </select>
                 </nav>
               </div>
@@ -227,6 +264,13 @@ onMounted(() => {
 </template>
 
 <style scoped>
+button{
+  background-color: white;
+}
+.button_hover_color{
+  background-color: #e5e5e5;
+
+}
 .bg_orange_primary {
   background-color: #f9f0ea;
 }
