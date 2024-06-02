@@ -48,8 +48,11 @@ export const useShoppingCart = async () => {
       getCartById = await use$Fetch(
         `/shopping_cart/login/${id_customer.value}`,
         {
-          method: "GET"
+          method: "GET",
           // body: { code }
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
         }
       );
     }
@@ -129,7 +132,10 @@ export const useShoppingCart = async () => {
         "/shopping_cart/",
         {
           method: "POST",
-          body:  JSON.stringify(obj)
+          body:  JSON.stringify(obj),
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
         }
       );
     console.log('addCartLoginReturn', addCartLoginReturn);
@@ -238,7 +244,10 @@ export const useShoppingCart = async () => {
       "/shopping_cart/",
       {
         method: "DELETE",
-        body:  JSON.stringify(obj)
+        body:  JSON.stringify(obj),
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
       }
     );
   }

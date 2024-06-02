@@ -413,7 +413,7 @@ const productQuantityInput = async (product, e) => {
             <span class="text-xl color-white">去買單</span>
           </div>
         </div>
-        <div v-if="1" class="check_btn" @click="checkValue">檢查</div>
+        <div v-show="1" class="check_btn" @click="checkValue">檢查</div>
       </div>
     </div>
   </div>
