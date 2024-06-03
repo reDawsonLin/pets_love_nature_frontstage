@@ -24,7 +24,7 @@ defineProps({
 
 <template>
   <label class="box_input">
-    <p v-if="labelName" class="ml-2px mb-0.25rem">
+    <p v-if="labelName" class="mb-0.25rem ml-2px">
       {{ labelName }} <sup v-show="required" class="text-rose-500">*</sup>
     </p>
     
@@ -33,8 +33,8 @@ defineProps({
       :name="inputName"
       :type="inputType"
       :placeholder="placeholder"
-      class="p-1rem pb-0.75rem rounded-0.5rem text-0.875rem text-neutral-600 border-(~ 2px neutral-200) placeholder:(text-neutral-400 ) focus:( outline-neutral-400)"
-    />
+      class="border border-(2px neutral-200) rounded-0.5rem p-1rem pb-0.75rem text-0.875rem text-neutral-600 placeholder:(text-neutral-400) focus:(outline-neutral-400)"
+    >
   </label>
 </template>
 

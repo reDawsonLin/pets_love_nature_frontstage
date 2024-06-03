@@ -9,7 +9,6 @@ const { setToken } = store_login;
 
 const store_general = useStoreGeneral();
 const { mobileNavShow } = storeToRefs(store_general);
-const {} = store_general;
 
 const openMobileNav = () => {
   document.querySelector("body").classList.add("stopScroll");

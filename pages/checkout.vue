@@ -22,23 +22,25 @@ const current_step = Number(route.fullPath.split("/").at(-1)?.at(-1));
 </script>
 
 <template>
-  <section class="flex justify-center items-center px-1.5rem pt-3rem pb-5.5rem">
-    <ul class="list_stepper relative flex justify-between w-100%">
+  <section class="flex items-center justify-center px-1.5rem pb-5.5rem pt-3rem">
+    <ul class="list_stepper relative w-100% flex justify-between lg:(max-w-856px)">
       <template v-for="stepper in list_step" :key="stepper.step">
-        <li class="stepper flex flex-col items-center gap-0.25rem">
+        <li class="stepper flex flex-col items-center gap-0.25rem lg:(gap-0.5rem)">
           <p
-            class="step_number flex justify-center items-center w-3.5rem h-3.5rem rounded-50% bg-neutral-200 text-neutral-600 text-2rem"
+            class="step_number h-3.5rem w-3.5rem flex items-center justify-center rounded-50% bg-neutral-200 text-2rem text-neutral-600 lg:(w-4.25rem h-4.25rem)"
             :class="{ active: current_step === stepper.step }"
           >
             {{ stepper.step }}
           </p>
-          <p class="flex flex-grow-1 items-center w-2rem text-neutral-600">
+          <p
+            class="w-2rem flex flex-grow-1 items-center text-neutral-600 lg:(w-auto text-1.5rem)"
+          >
             {{ stepper.step_info }}
           </p>
         </li>
         <hr
           v-if="stepper.step !== 3"
-          class="line flex-grow-1 mt-1.75rem h-0.25rem bg-neutral-200"
+          class="line mt-1.75rem h-0.25rem flex-grow-1 bg-neutral-200 lg:(mt-2.125rem mx--1rem z--1)"
           :class="{ active: current_step === stepper.step }"
         />
       </template>

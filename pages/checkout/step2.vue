@@ -2,7 +2,7 @@
 
 <template>
   <div
-    class="wrapper_step1 flex flex-col gap-2rem py-3rem px-0.75rem max-w-1076px mx-auto"
+    class="wrapper_step1 mx-auto max-w-1076px flex flex-col gap-2rem px-0.75rem py-3rem"
   >
     <h1>step2 loading</h1>
   </div>
