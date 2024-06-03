@@ -1,4 +1,7 @@
 <script setup>
+// route middleware -------
+// definePageMeta({ middleware: "need-login" });
+
 const list_step = [
   {
     step: 1,
@@ -42,8 +45,14 @@ const current_step = Number(route.fullPath.split("/").at(-1)?.at(-1));
     </ul>
   </section>
 
-  
+  <div class="relative flex-grow-1 bg-second-200">
+    <SvgIcon
+      name="wave-checkout"
+      class="absolute bottom-100% left-50% translate-x--50%"
+    />
+
     <NuxtPage :page-key="(route) => route.fullPath" />
+  </div>
 </template>
 
 <style scoped>

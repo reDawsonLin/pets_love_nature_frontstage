@@ -1,4 +1,6 @@
 <script setup>
+const inputValue = defineModel();
+
 defineProps({
   labelName: {
     type: String,
@@ -22,10 +24,12 @@ defineProps({
 
 <template>
   <label class="box_input">
-    <p class="ml-2px mb-0.25rem">
+    <p v-if="labelName" class="ml-2px mb-0.25rem">
       {{ labelName }} <sup v-show="required" class="text-rose-500">*</sup>
     </p>
+    
     <input
+      v-model="inputValue"
       :name="inputName"
       :type="inputType"
       :placeholder="placeholder"
