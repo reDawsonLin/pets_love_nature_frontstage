@@ -3,6 +3,7 @@ const show_cart = () => {
   console.log("show cart");
 };
 
+<<<<<<< HEAD
 const dummy_cart = ref([
   {
     id: 1,
@@ -41,6 +42,18 @@ const totalPrice = (cart) => {
     result += item.price * item.amount;
   });
   return result;
+=======
+// 選擇滑窗
+const show_modal = ref(false);
+const openModal = () => {
+  document.querySelector("body").classList.add("stopScroll");
+  show_modal.value = true;
+};
+
+const closeModal = () => {
+  document.querySelector("body").classList.remove("stopScroll");
+  show_modal.value = false;
+>>>>>>> f1ae432 (temporary: modal)
 };
 
 // -------
@@ -74,6 +87,7 @@ const { width: window_width } = useWindowSize();
 </script>
 
 <template>
+<<<<<<< HEAD
   <Teleport to="body">
     <div
       class="bg_blur bg-neutral-500/80 fixed inset-0 z-10 backdrop-blur-5px opacity-0 pointer-events-none"
@@ -183,16 +197,71 @@ const { width: window_width } = useWindowSize();
   </Teleport>
 
   <div
+=======
+  <div class="bg_blur bg-neutral-500/80 fixed inset-0 z-2 backdrop-blur-5px" />
+  <div
+    class="modal_cart fixed top-50% left-50% translate--50% bg-neutral-50 w-[calc(100%-2rem)] max-w-1064px z-5 py-1.5rem px-1rem rounded-0.5rem flex flex-col"
+  >
+    <p class="bg-neutral-200 text-neutral-600 text-1.25rem p-0.5rem rounded-0.5rem">
+      商品
+    </p>
+
+    <ul class="mb-1.5rem">
+      <li class="flex flex-col gap-1.5rem py-1rem px-0.5rem">
+        <div class="flex ">
+        
+        
+        
+        
+        
+        </div>
+
+
+
+
+        <div class="flex items-end justify-end gap-0.25rem pr-0.5rem">
+          <p class=" text-neutral-600">總計</p>
+          <p class="text-rose-500">
+            NT$
+            <span class="ml-0.25rem text-1.5rem line-height-120%">{{
+              addThousandPoint(1904)
+            }}</span>
+          </p>
+        </div>
+      </li>
+    </ul>
+
+    <div
+      class="flex items-end justify-center gap-1rem rounded-0.5rem p-1.5rem border border-neutral-200"
+    >
+      <p class="text-1.25rem text-neutral-600">總金額</p>
+      <p class="text-rose-500">
+        NT$
+        <span class="ml-0.25rem text-1.5rem line-height-120%">{{
+          addThousandPoint(1904)
+        }}</span>
+      </p>
+    </div>
+  </div>
+
+  <div
+>>>>>>> f1ae432 (temporary: modal)
     class="wrapper_step1 mx-auto max-w-1076px flex flex-col gap-2rem px-0.75rem py-3rem"
   >
     <section
       class="group info_cart transition-background flex flex-col cursor-pointer gap-1.5rem rounded-1rem bg-second-400 px-1rem py-1.5rem text-neutral-600 transition-colors hover:(bg-neutral-600 text-neutral-50) lg:(px-1.75rem py-2.5rem)"
+<<<<<<< HEAD
       @click="openModal()"
     >
       <SvgIcon
         name="cart"
         class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)"
       />
+=======
+      @click="show_cart()"
+    >
+      <SvgIcon name="cart" class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)" />
+>>>>>>> f1ae432 (temporary: modal)
 
       <div class="">
         <p class="mb-0.75rem flex justify-center text-1.5rem">購物車（2件）</p>
@@ -264,9 +333,13 @@ const { width: window_width } = useWindowSize();
         />
 
         <div class="flex flex-col">
+<<<<<<< HEAD
           <p class="mb-0.25rem ml-2px">
             地址 <sup class="text-rose-500">*</sup>
           </p>
+=======
+          <p class="mb-0.25rem ml-2px">地址 <sup class="text-rose-500">*</sup></p>
+>>>>>>> f1ae432 (temporary: modal)
 
           <div class="mb-1rem flex gap-0.5rem">
             <InputSelect
@@ -300,9 +373,13 @@ const { width: window_width } = useWindowSize();
         </div>
 
         <div class="box_select flex flex-col">
+<<<<<<< HEAD
           <p class="mb-0.25rem ml-2px">
             發票<sup class="text-rose-500">*</sup>
           </p>
+=======
+          <p class="mb-0.25rem ml-2px">發票<sup class="text-rose-500">*</sup></p>
+>>>>>>> f1ae432 (temporary: modal)
 
           <InputSelect
             v-model="param_post.receipt"
@@ -407,59 +484,12 @@ const { width: window_width } = useWindowSize();
   }
 }
 
-/* // modal part -------
 .bg_blur {
-} */
-
-.thead_tr {
-  > th {
-    @apply font-400 pt-1rem pb-0.625rem;
-  }
-}
-
-.tbody_tr {
-  display: grid;
-  grid-template-areas:
-    "img content content"
-    "img price amount"
-    "total total total";
-
-  grid-template-columns: 1fr 1fr 1fr;
-  padding: 1rem 0.5rem;
-
-  @media screen and (min-width: 640px) {
-    grid-template-areas:
-      "img content content"
-      "img price amount"
-      "img total total";
-  }
-
-  @media screen and (min-width: 1024px) {
-    display: table-row;
-  }
-
-  > td {
-    @apply lg:([&:nth-child(1)]-pr-0 px-1rem py-4.5rem);
-  }
-}
-
-.td_img {
-  grid-area: img;
-}
-
-.td_content {
-  grid-area: content;
-}
-
-.td_price {
-  grid-area: price;
-}
-
-.td_amount {
-  grid-area: amount;
-}
-
-.td_total {
-  grid-area: total;
+  /* background-color: rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  position: fixed;
+  inset: 0;
+  z-index: 5; */
 }
 </style>
