@@ -1,6 +1,12 @@
 <script setup>
 // import { useRouter } from 'vue-router'
 
+// import { createResolver } from "nuxt/kit";
+
+// Resolve relative from the current file
+// const resolver = createResolver(import.meta.env);
+// console.log("resolver :>> ", resolver);
+
 onMounted(() => {
   // const urlParams = new URLSearchParams(window.location.search);
   // console.log("urlParams :>> ", urlParams);
@@ -9,6 +15,8 @@ onMounted(() => {
   // if (code) {
   //   fetchToken(code);
   // }
+
+  console.log("process.env", process);
 });
 
 // async function fetchToken(code) {
@@ -23,6 +31,13 @@ onMounted(() => {
 //     console.error("Error fetching JWT:", error);
 //   }
 // }
+
+const url_login = computed(() => {
+  // console.log("process?.dev :>> ", process?.dev);
+  return process?.dev
+    ? "https://pets-love-nature-backend-n.onrender.com/api/v1/customer/google?env=dev"
+    : "https://pets-love-nature-backend-n.onrender.com/api/v1/customer/google?env=pro";
+});
 </script>
 
 <template>
@@ -33,7 +48,7 @@ onMounted(() => {
       <li class="">
         <NuxtLink
           class="flex gap-1rem border rounded-0.5rem px-1.5rem py-0.75rem transition-shadow active:(shadow-none) hover:(shadow-md)"
-          to="https://pets-love-nature-backend-n.onrender.com/api/v1/customer/google"
+          :to="url_login"
         >
           <SvgIcon name="google" class="h-1.5rem w-1.5rem" />
           <p class="">Google 登入</p>
