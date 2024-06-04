@@ -7,6 +7,7 @@ const { getTransformCartArray, addCart, deleteCart, addTestCartNoLogin } = await
 const store_login = useStoreLogin();
 const { token, id_customer } = storeToRefs(store_login);
 const shoppingDataArr = ref([]);
+const testData = ref(false);
 // console.log('token11', token.value);
 //   console.log('id_customer11', id_customer.value);
 // const testArr = ref([
@@ -43,7 +44,10 @@ const shoppingDataArr = ref([]);
 //   }
 // ]);
 
+
+
 onMounted(async () => {
+  if (!!sessionStorage.getItem('shoppingCartNoLogin')) checkValue()
   console.log("mounted");
   shoppingDataArr.value = await getTransformCartArray();
   console.log("shoppingDataArr", shoppingDataArr.value);
@@ -138,7 +142,7 @@ const productQuantityInput = async (product, e) => {
 </script>
 
 <template>
-  <div v-if="shoppingDataArr.length > 0" class="shopping_cart">
+  <div v-if="shoppingDataArr.length > 0 || 1" class="shopping_cart">
     <div p="t-3.75rem" class="title mb-7.5 flex items-center justify-center">
       <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" >
       <h1 class="text-4xl">購物車</h1>
