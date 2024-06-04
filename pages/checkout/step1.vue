@@ -15,6 +15,46 @@ const closeModal = () => {
   show_modal.value = false;
 };
 
+const dummy_cart = ref([
+  {
+    id: 1,
+    imgUrl: "",
+    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    price: 450,
+    amount: 1,
+  },
+  {
+    id: 2,
+    imgUrl: "",
+    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    price: 450,
+    amount: 2,
+  },
+  {
+    id: 3,
+    imgUrl: "",
+    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    price: 450,
+    amount: 3,
+  },
+  {
+    id: 4,
+    imgUrl: "",
+    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    price: 450,
+    amount: 4,
+  },
+]);
+
+const totalPrice = (cart) => {
+  let result = null;
+
+  cart.forEach((item) => {
+    result += item.price * item.amount;
+  });
+  return result;
+};
+
 // -------
 const same_member = ref(false);
 const param_post = ref({
@@ -30,50 +70,104 @@ const param_post = ref({
 </script>
 
 <template>
-  <div class="bg_blur bg-neutral-500/80 fixed inset-0 z-2 backdrop-blur-5px" />
+  <div class="bg_blur bg-neutral-500/80 fixed inset-0 z-10 backdrop-blur-5px" />
+
   <div
-    class="modal_cart fixed top-50% left-50% translate--50% bg-neutral-50 w-[calc(100%-2rem)] max-w-1064px z-5 py-1.5rem px-1rem rounded-0.5rem flex flex-col"
+    class="modal_cart fixed top-50% left-50% z-11 translate--50% max-h-1087px h-80% w-[calc(100%-2rem)] max-w-1064px"
   >
-    <p class="bg-neutral-200 text-neutral-600 text-1.25rem p-0.5rem rounded-0.5rem">
-      商品
-    </p>
+    <SvgIcon
+      name="close"
+      class="absolute right--4px top--2.5rem z-11 text-neutral-50 w-2rem h-2rem text-neutral-50"
+    />
 
-    <ul class="mb-1.5rem">
+    <section
+      class="bg-neutral-50 overflow-y-auto h-100% py-1.5rem px-1rem rounded-0.5rem flex flex-col"
+    >
+      <p
+        class="hidden bg-neutral-200 text-neutral-600 text-1.25rem p-0.5rem rounded-0.5rem"
+      >
+        商品
+      </p>
+
+      <table>
+        <thead>
+          <tr class="thead_tr">
+            <th
+              class="rounded-0.25rem text-1.25rem lg:(text-1rem rounded-l-0.25rem w-35%)"
+            >
+              商品
+            </th>
+            <th class="hidden">單價</th>
+            <th class="hidden">數量</th>
+            <th class="hidden lg:(rounded-r-0.25rem)">總計</th>
+          </tr>
+        </thead>
+
+        <tbody class="">
+          <tr v-for="item in dummy_cart" :key="item.id" class="tbody_tr">
+            <td class="px-1rem py-4.5rem">
+              <div class="box_td flex items-center gap-1rem">
+                <img
+                  class="w-3.75rem h-3.75rem object-cover object-center"
+                  src="@/assets/img/product-1.png"
+                  alt="product image"
+                />
+                <p class="line-clamp-2">
+                  {{ item.productName }}
+                </p>
+              </div>
+            </td>
+            <td class="text-center">
+              <p class="">
+                NT$
+                <span class="ml-0.25rem text-1.5rem line-height-120%">{{
+                  addThousandPoint(item.price)
+                }}</span>
+              </p>
+            </td>
+            <td class="text-1.5rem text-center">{{ item.amount }}</td>
+            <td class="text-center">
+              <p class="text-rose-500">
+                NT$
+                <span class="ml-0.25rem text-1.5rem line-height-120%">{{
+                  addThousandPoint(item.price * item.amount)
+                }}</span>
+              </p>
+            </td>
+          </tr>
+        </tbody>
+
+        <tfoot></tfoot>
+      </table>
+
+      <!-- <ul class="mb-1.5rem">
       <li class="flex flex-col gap-1.5rem py-1rem px-0.5rem">
-        <div class="flex ">
-        
-        
-        
-        
-        
-        </div>
-
-
-
-
+        <div class="flex"></div>
+  
         <div class="flex items-end justify-end gap-0.25rem pr-0.5rem">
-          <p class=" text-neutral-600">總計</p>
+          <p class="text-neutral-600">總計</p>
           <p class="text-rose-500">
             NT$
             <span class="ml-0.25rem text-1.5rem line-height-120%">{{
-              addThousandPoint(1904)
+              addThousandPoint(450)
             }}</span>
           </p>
         </div>
       </li>
-    </ul>
+    </ul> -->
 
-    <div
-      class="flex items-end justify-center gap-1rem rounded-0.5rem p-1.5rem border border-neutral-200"
-    >
-      <p class="text-1.25rem text-neutral-600">總金額</p>
-      <p class="text-rose-500">
-        NT$
-        <span class="ml-0.25rem text-1.5rem line-height-120%">{{
-          addThousandPoint(1904)
-        }}</span>
-      </p>
-    </div>
+      <div
+        class="flex items-end justify-center gap-1rem rounded-0.5rem p-1.5rem border border-neutral-200"
+      >
+        <p class="text-1.25rem text-neutral-600">總金額</p>
+        <p class="text-rose-500">
+          NT$
+          <span class="ml-0.25rem text-1.5rem line-height-120%">{{
+            addThousandPoint(totalPrice(dummy_cart))
+          }}</span>
+        </p>
+      </div>
+    </section>
   </div>
 
   <div
@@ -83,7 +177,10 @@ const param_post = ref({
       class="group info_cart transition-background flex flex-col cursor-pointer gap-1.5rem rounded-1rem bg-second-400 px-1rem py-1.5rem text-neutral-600 transition-colors hover:(bg-neutral-600 text-neutral-50) lg:(px-1.75rem py-2.5rem)"
       @click="show_cart()"
     >
-      <SvgIcon name="cart" class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)" />
+      <SvgIcon
+        name="cart"
+        class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)"
+      />
 
       <div class="">
         <p class="mb-0.75rem flex justify-center text-1.5rem">購物車（2件）</p>
@@ -155,7 +252,9 @@ const param_post = ref({
         />
 
         <div class="flex flex-col">
-          <p class="mb-0.25rem ml-2px">地址 <sup class="text-rose-500">*</sup></p>
+          <p class="mb-0.25rem ml-2px">
+            地址 <sup class="text-rose-500">*</sup>
+          </p>
 
           <div class="mb-1rem flex gap-0.5rem">
             <InputSelect
@@ -189,7 +288,9 @@ const param_post = ref({
         </div>
 
         <div class="box_select flex flex-col">
-          <p class="mb-0.25rem ml-2px">發票<sup class="text-rose-500">*</sup></p>
+          <p class="mb-0.25rem ml-2px">
+            發票<sup class="text-rose-500">*</sup>
+          </p>
 
           <InputSelect
             v-model="param_post.receipt"
@@ -294,12 +395,27 @@ const param_post = ref({
   }
 }
 
-.bg_blur {
-  /* background-color: rgba(255, 255, 255, 0.4);
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  position: fixed;
-  inset: 0;
-  z-index: 5; */
+.thead_tr {
+  @apply text-neutral-600 bg-neutral-200;
+
+  @media screen and (min-width: 1024px) {
+    @apply bg-second-400;
+
+    /* display: grid;
+    grid-template-areas:
+      "address cart"
+      "address  payment"
+      "button   button";
+    grid-template-columns: repeat(1fr, 0.8fr);
+    gap: 1.5rem; */
+  }
+
+  > th {
+    @apply font-400 pt-1rem pb-0.625rem;
+  }
+}
+
+.tbody_tr {
+  display: grid;
 }
 </style>
