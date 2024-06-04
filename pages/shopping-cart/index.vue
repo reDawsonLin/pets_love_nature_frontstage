@@ -142,7 +142,7 @@ const productQuantityInput = async (product, e) => {
 </script>
 
 <template>
-  <div v-if="shoppingDataArr.length > 0 || 1" class="shopping_cart">
+  <div v-if="shoppingDataArr.length > 0" class="shopping_cart">
     <div p="t-3.75rem" class="title mb-7.5 flex items-center justify-center">
       <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" >
       <h1 class="text-4xl">購物車</h1>

@@ -86,7 +86,7 @@ export const useShoppingCart = async () => {
       
     }
     console.log('tempCartArray', tempCartArray);
-    transformArray = tempCartArray.map(eachProduct => {
+    transformArray = tempCartArray?.map(eachProduct => {
         const product = eachProduct.productSpec?.productId;
         const productSpec = eachProduct.productSpec;
         delete eachProduct.productSpec?.productId;
