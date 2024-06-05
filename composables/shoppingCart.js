@@ -59,7 +59,6 @@ export const useShoppingCart = async () => {
     else {
       console.log('未登入');
       noLoginObj = sessionStorage.getItem("shoppingCartNoLogin");
-      console.log(typeof noLoginObj);
       if(noLoginObj) {
         getCartNoLogin = await use$Fetch(
           `/shopping_cart/nologin/`,
@@ -68,6 +67,8 @@ export const useShoppingCart = async () => {
             body:  noLoginObj
           }
         );
+      }else {
+        return []
       }
 
     }
@@ -100,8 +101,9 @@ export const useShoppingCart = async () => {
         return obj
     })
 
-    console.log('transformArray', transformArray);
-    return transformArray;
+    const filteredArr = transformArray.filter(eachData => eachData._id)
+
+    return filteredArr;
   };
 
   const addCart = async(cartArr, addWay) => {
@@ -151,6 +153,7 @@ export const useShoppingCart = async () => {
   
       // 如果session storage未有shoppingCartNoLogin的key時新建資料
       if(!sessionStorage.getItem('shoppingCartNoLogin')) {
+        // 要新建
         const noLoginObj = {
           "shoppingCart": [
             {
@@ -192,7 +195,7 @@ export const useShoppingCart = async () => {
 
           prevData.shoppingCart[index].quantity = focusQuantity;
 
-          if(addWay ===0) {
+          if(addWay === 0) {
             Swal.fire({
               position: "top-end",
               icon: "success",
@@ -224,8 +227,6 @@ export const useShoppingCart = async () => {
 
   const deleteCart = async(productSpec) => {
     const {token, id_customer} = checkToken();
-    console.log('token.value', token.value);
-    console.log('id_customer', id_customer.value);
     if(token.value && id_customer.value) {
       await deleteCartLogin(productSpec, token, id_customer);
 
@@ -265,8 +266,21 @@ export const useShoppingCart = async () => {
     }
   }
 
+  const loginAddCart = async() => {
+    let prevData = JSON.parse(sessionStorage.getItem('shoppingCartNoLogin'));
+
+    if (prevData) {
+      // session storage內有購物車資訊
+     const add =  await addCart(prevData, 0);
+     sessionStorage.removeItem("shoppingCartNoLogin");
+     
+    }else {
+      // session storage內沒有購物車資訊
+    }
+  }
+
   return {
-    getTransformCartArray, addCart, deleteCart, addTestCartNoLogin
+    getTransformCartArray, addCart, deleteCart, addTestCartNoLogin, loginAddCart
   };
 };
 

@@ -1,13 +1,16 @@
 <script setup>
-import { storeToRefs } from "pinia";
-import { useStoreLogin } from "~/stores/storeLogin";
 
-const { getTransformCartArray, addCart, deleteCart, addTestCartNoLogin } = await useShoppingCart();
+const {
+  getTransformCartArray,
+  addCart,
+  deleteCart,
+} = await useShoppingCart();
 
-const store_login = useStoreLogin();
-const { token, id_customer } = storeToRefs(store_login);
+const noImgUrl = ref(
+  "https://storage.googleapis.com/petstore-3a2e1.appspot.com/images/ecbb5438-43c3-4a9b-9316-f8e8aecc7d15.jpg?GoogleAccessId=firebase-adminsdk-p5zjq%40petstore-3a2e1.iam.gserviceaccount.com&Expires=16756675200&Signature=sU4UW2CPGkhBDRGf4ncTUXeN%2B5YVxIOdHuVOMxIeDg%2FtxZ6pEIuElGuz1CM14yBtyXO4BvkreykJkUuqS80Bbf%2FUJIyHESkJrNbepEbcVrZBTrX7SLdOZFrQYD86SB%2B7AoXt3JQ43%2BcRTGZki%2FAgdAmd1nqtI2b2F3PipzkWHhitUjdcruJpSsbPSTQwkUfC46B2Pv%2FzxPHrdx6kyFgoICYy21zFhxj7x3DcJq%2Ftj28gUP%2BCeTElNKUMVyWKPyvmBP76XWy8JLWGBs43uJFOuwmjxu4yfk0vc9L8GM%2Bu9PDFLRBrfBlJ30knbCIHHIBeKCDSkpgLb2ZJJhZ888r4GQ%3D%3D"
+);
+
 const shoppingDataArr = ref([]);
-const testData = ref(false);
 // console.log('token11', token.value);
 //   console.log('id_customer11', id_customer.value);
 // const testArr = ref([
@@ -44,10 +47,7 @@ const testData = ref(false);
 //   }
 // ]);
 
-
-
 onMounted(async () => {
-  if (!!sessionStorage.getItem('shoppingCartNoLogin')) checkValue()
   console.log("mounted");
   shoppingDataArr.value = await getTransformCartArray();
   console.log("shoppingDataArr", shoppingDataArr.value);
@@ -77,15 +77,14 @@ const checkValue = async () => {
   // console.log(await getTransformCartArray());
   // console.log('process.env', process);
   // console.log("useShoppingCart", useShoppingCart);
-  addTestCartNoLogin()
-
+  // addTestCartNoLogin();
 };
 
 const selectProduct = (i) => {
   shoppingDataArr.value[i].isChoosed = !shoppingDataArr.value[i].isChoosed;
 };
 
-const deleteProduct = async(i, eachProduct) => {
+const deleteProduct = async (i, eachProduct) => {
   // console.log('shoppingDataArr.value[i]', shoppingDataArr.value[i]);
   // console.log('eachProduct', eachProduct._id);
   shoppingDataArr.value.splice(i, 1);
@@ -103,17 +102,16 @@ const allSelectedClick = () => {
     );
 };
 
-const productQuantityChange = async(i, num) => {
+const productQuantityChange = async (i, num) => {
   const calcQuantity = shoppingDataArr.value[i].quantity + num;
   if (calcQuantity >= 0 && calcQuantity <= shoppingDataArr.value[i].inStock) {
     shoppingDataArr.value[i].quantity = calcQuantity;
-    console.log('shoppingDataArr.value[i]', shoppingDataArr.value[i]);
 
     const obj = {
       productSpec: shoppingDataArr.value[i]._id,
       quantity: Number(shoppingDataArr.value[i].quantity),
       inStock: Number(shoppingDataArr.value[i].inStock)
-    }
+    };
     const arr = [obj];
     await addCart(arr, 1);
   }
@@ -126,8 +124,6 @@ const productQuantityInput = async (product, e) => {
     product.quantity = targetNum;
   }
   console.log("product", product);
-  console.log('originQuantity', originQuantity);
-  console.log('product.quantity', product.quantity);
   if (originQuantity !== product.quantity) {
     const obj = {
       productSpec: product._id,
@@ -136,13 +132,28 @@ const productQuantityInput = async (product, e) => {
     };
     const arr = [obj];
     await addCart(arr, 1);
-    console.log('productQuantityInput');
+  }
+};
+
+// 組合字串
+const concatStr = (...strArr) => {
+  const str = strArr.reduce((acc, cur) => acc + cur, "");
+
+  return str;
+};
+
+// image判斷
+const getImage = (eachProduct) => {
+  if (eachProduct?.imageGallery?.length > 0) {
+    return eachProduct?.imageGallery[0].imgUrl;
+  } else {
+    return noImgUrl.value;
   }
 };
 </script>
 
 <template>
-  <div v-if="shoppingDataArr.length > 0" class="shopping_cart">
+  <div class="shopping_cart">
     <div p="t-3.75rem" class="title mb-7.5 flex items-center justify-center">
       <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" >
       <h1 class="text-4xl">購物車</h1>
@@ -225,13 +236,15 @@ const productQuantityInput = async (product, e) => {
                   background-image: url('https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png');
                 "
                 :style="{
-                  backgroundImage:
-                    'url(' + eachProduct.imageGallery[0].imgUrl + ')'
+                  backgroundImage: 'url(' + getImage(eachProduct) + ')'
                 }"
               />
               <div class="name_price_div w-full px-2.5">
-                <div class="product_name text-center">
-                  {{ eachProduct.title }}
+                <div
+                  :title="concatStr(eachProduct.title, eachProduct.weight, 'g')"
+                  class="product_name text-center"
+                >
+                  {{ concatStr(eachProduct.title, eachProduct.weight, "g") }}
                 </div>
                 <div class="product_single_price ml-5.5">
                   <span>NT$</span>
@@ -332,12 +345,14 @@ const productQuantityInput = async (product, e) => {
                   background-image: url('https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png');
                 "
                 :style="{
-                  backgroundImage:
-                    'url(' + eachProduct.imageGallery[0].imgUrl + ')'
+                  backgroundImage: 'url(' + getImage(eachProduct) + ')'
                 }"
               />
-              <div class="product_name inline-block w-11/12">
-                {{ eachProduct.title }}
+              <div
+                :title="concatStr(eachProduct.title, eachProduct.weight, 'g')"
+                class="product_name inline-block w-11/12"
+              >
+                {{ concatStr(eachProduct.title, eachProduct.weight, "g") }}
               </div>
             </div>
             <div
