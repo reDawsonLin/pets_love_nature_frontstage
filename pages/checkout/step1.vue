@@ -32,6 +32,27 @@ const dummy_cart = ref([
     price: 450,
     amount: 4,
   },
+  {
+    id: 5,
+    imgUrl: "",
+    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    price: 450,
+    amount: 4,
+  },
+  {
+    id: 6,
+    imgUrl: "",
+    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    price: 450,
+    amount: 4,
+  },
+  {
+    id: 7,
+    imgUrl: "",
+    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    price: 450,
+    amount: 4,
+  },
 ]);
 
 const totalPrice = (cart) => {
@@ -57,7 +78,7 @@ const param_post = ref({
 });
 
 // 選擇滑窗
-const show_modal = ref(false);
+const show_modal = ref(true);
 const openModal = () => {
   console.log("in open Modal");
   document.querySelector("body").classList.add("stopScroll");
@@ -81,7 +102,7 @@ const { width: window_width } = useWindowSize();
       @click.self="closeModal()"
     >
       <div
-        class="modal_cart fixed top-50% left-50% z-11 translate--50% max-h-80% h-fit w-[calc(100%-2rem)] max-w-1064px lg:(max-h-1087px)"
+        class="modal_cart fixed top-50% left-50% z-11 translate--50% h-fit max-h-80% w-[calc(100%-2rem)] max-w-1064px lg:(max-h-1087px) flex flex-col"
       >
         <SvgIcon
           name="close"
@@ -94,9 +115,7 @@ const { width: window_width } = useWindowSize();
         >
           <table>
             <thead>
-              <tr
-                class="thead_tr text-neutral-600 bg-neutral-200 lg:(bg-second-400)"
-              >
+              <tr class="thead_tr text-neutral-600 bg-neutral-200 lg:(bg-second-400)">
                 <th
                   class="rounded-0.25rem text-1.25rem lg:(text-1rem rounded-l-0.25rem w-37%)"
                   :colspan="window_width < 1024 ? 1 : 2"
@@ -105,20 +124,13 @@ const { width: window_width } = useWindowSize();
                 </th>
                 <th class="hidden lg:(table-cell)">單價</th>
                 <th class="hidden lg:(table-cell)">數量</th>
-                <th class="hidden lg:(table-cell) lg:(rounded-r-0.25rem)">
-                  總計
-                </th>
+                <th class="hidden lg:(table-cell) lg:(rounded-r-0.25rem)">總計</th>
               </tr>
             </thead>
 
             <tbody class="">
-              <tr
-                v-for="item in dummy_cart"
-                :key="item.id"
-                class="tbody_tr mb-1.5rem"
-              >
+              <tr v-for="item in dummy_cart" :key="item.id" class="tbody_tr mb-1.5rem">
                 <td class="td_img mr-1rem lg:(min-w-76px)">
-                  <!-- class="w-3.75rem h-3.75rem object-cover object-center" -->
                   <img
                     class="h-100% object-cover object-center lg:(w-3.75rem h-3.75rem)"
                     src="@/assets/img/product-1.png"
@@ -149,9 +161,7 @@ const { width: window_width } = useWindowSize();
                 </td>
 
                 <td class="td_total mt-1.5rem sm:(mt-0.5rem) lg:(mt-0)">
-                  <p
-                    class="text-rose-500 flex justify-end items-end lg:(justify-center)"
-                  >
+                  <p class="text-rose-500 flex justify-end items-end lg:(justify-center)">
                     NT$
                     <span class="ml-0.25rem text-1.5rem line-height-120%">{{
                       addThousandPoint(item.price * item.amount)
@@ -162,9 +172,7 @@ const { width: window_width } = useWindowSize();
             </tbody>
           </table>
 
-          <div
-            class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)"
-          >
+          <div class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)">
             <div
               class="flex items-end justify-center gap-1rem rounded-0.5rem p-1.5rem border border-neutral-200 lg:(px-1.5rem py-1rem bg-neutral-50 border-none)"
             >
@@ -189,10 +197,7 @@ const { width: window_width } = useWindowSize();
       class="group info_cart transition-background flex flex-col cursor-pointer gap-1.5rem rounded-1rem bg-second-400 px-1rem py-1.5rem text-neutral-600 transition-colors hover:(bg-neutral-600 text-neutral-50) lg:(px-1.75rem py-2.5rem)"
       @click="openModal()"
     >
-      <SvgIcon
-        name="cart"
-        class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)"
-      />
+      <SvgIcon name="cart" class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)" />
 
       <div class="">
         <p class="mb-0.75rem flex justify-center text-1.5rem">購物車（2件）</p>
@@ -264,9 +269,7 @@ const { width: window_width } = useWindowSize();
         />
 
         <div class="flex flex-col">
-          <p class="mb-0.25rem ml-2px">
-            地址 <sup class="text-rose-500">*</sup>
-          </p>
+          <p class="mb-0.25rem ml-2px">地址 <sup class="text-rose-500">*</sup></p>
 
           <div class="mb-1rem flex gap-0.5rem">
             <InputSelect
@@ -300,9 +303,7 @@ const { width: window_width } = useWindowSize();
         </div>
 
         <div class="box_select flex flex-col">
-          <p class="mb-0.25rem ml-2px">
-            發票<sup class="text-rose-500">*</sup>
-          </p>
+          <p class="mb-0.25rem ml-2px">發票<sup class="text-rose-500">*</sup></p>
 
           <InputSelect
             v-model="param_post.receipt"
@@ -418,6 +419,7 @@ const { width: window_width } = useWindowSize();
 }
 
 .tbody_tr {
+  position: relative;
   display: grid;
   grid-template-areas:
     "img content content"
@@ -426,6 +428,23 @@ const { width: window_width } = useWindowSize();
 
   grid-template-columns: 1fr 1fr 1fr;
   padding: 1rem 0.5rem;
+
+  &:first-of-type {
+    &::before {
+      content: none;
+    }
+  }
+
+  &::before {
+    @apply bg-neutral-200;
+    content: "";
+    position: absolute;
+    top: -0.75rem;
+    left: 0;
+    display: flex;
+    width: 100%;
+    height: 2px;
+  }
 
   @media screen and (min-width: 640px) {
     grid-template-areas:
@@ -436,6 +455,16 @@ const { width: window_width } = useWindowSize();
 
   @media screen and (min-width: 1024px) {
     display: table-row;
+
+    &::before {
+      content: none;
+    }
+
+    &:not(&:first-of-type) {
+      border-top: 2px solid;
+
+      @apply border-t-neutral-200;
+    }
   }
 
   > td {
