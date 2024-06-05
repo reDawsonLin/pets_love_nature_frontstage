@@ -1,8 +1,4 @@
 <script setup>
-const show_cart = () => {
-  console.log("show cart");
-};
-
 const dummy_cart = ref([
   {
     id: 1,
@@ -78,7 +74,7 @@ const param_post = ref({
 });
 
 // 選擇滑窗
-const show_modal = ref(true);
+const show_modal = ref(false);
 const openModal = () => {
   console.log("in open Modal");
   document.querySelector("body").classList.add("stopScroll");
@@ -96,98 +92,102 @@ const { width: window_width } = useWindowSize();
 
 <template>
   <Teleport to="body">
-    <div
-      class="bg_blur bg-neutral-500/80 fixed inset-0 z-10 backdrop-blur-5px opacity-0 pointer-events-none"
-      :class="show_modal ? 'opacity-100 pointer-events-unset' : ''"
-      @click.self="closeModal()"
-    >
+    <ClientOnly>
       <div
-        class="modal_cart fixed top-50% left-50% z-11 translate--50% h-fit max-h-80% w-[calc(100%-2rem)] max-w-1064px lg:(max-h-1087px) flex flex-col"
+        class="bg_blur pointer-events-none fixed inset-0 z-10 bg-neutral-500/80 opacity-0 backdrop-blur-5px"
+        :class="show_modal ? 'opacity-100 pointer-events-unset' : ''"
+        @click.self="closeModal()"
       >
-        <SvgIcon
-          name="close"
-          class="absolute right--4px top--2.5rem z-11 text-neutral-50 w-2rem h-2rem text-neutral-50 cursor-pointer"
-          @click="closeModal()"
-        />
-
-        <section
-          class="bg-neutral-50 overflow-y-auto h-100% py-1.5rem px-1rem rounded-0.5rem flex flex-col lg:(py-2.25rem px-2rem)"
+        <div
+          class="modal_cart fixed left-50% top-50% z-11 h-fit max-h-80% max-w-1064px w-[calc(100%-2rem)] flex flex-col translate--50% lg:(max-h-1087px)"
         >
-          <table>
-            <thead>
-              <tr class="thead_tr text-neutral-600 bg-neutral-200 lg:(bg-second-400)">
-                <th
-                  class="rounded-0.25rem text-1.25rem lg:(text-1rem rounded-l-0.25rem w-37%)"
-                  :colspan="window_width < 1024 ? 1 : 2"
-                >
-                  商品
-                </th>
-                <th class="hidden lg:(table-cell)">單價</th>
-                <th class="hidden lg:(table-cell)">數量</th>
-                <th class="hidden lg:(table-cell) lg:(rounded-r-0.25rem)">總計</th>
-              </tr>
-            </thead>
+          <SvgIcon
+            name="close"
+            class="absolute right--4px top--2.5rem z-11 h-2rem w-2rem cursor-pointer text-neutral-50 text-neutral-50"
+            @click="closeModal()"
+          />
 
-            <tbody class="">
-              <tr v-for="item in dummy_cart" :key="item.id" class="tbody_tr mb-1.5rem">
-                <td class="td_img mr-1rem lg:(min-w-76px)">
-                  <img
-                    class="h-100% object-cover object-center lg:(w-3.75rem h-3.75rem)"
-                    src="@/assets/img/product-1.png"
-                    alt="product image"
-                  />
-                </td>
-                <td class="td_content">
-                  <p class="line-clamp-2">
-                    {{ item.productName }}
-                  </p>
-                </td>
-
-                <td class="td_price lg:(text-center)">
-                  <p class="">
-                    NT$
-                    <span class="ml-0.25rem text-1.5rem line-height-120%">{{
-                      addThousandPoint(item.price)
-                    }}</span>
-                  </p>
-                </td>
-
-                <td class="td_amount">
-                  <p
-                    class="flex justify-end relative top-2px before:(content-['x']) lg:(text-1.5rem before:(content-empty) justify-center)"
+          <section
+            class="h-100% flex flex-col overflow-y-auto rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(px-2rem py-2.25rem)"
+          >
+            <table>
+              <thead>
+                <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
+                  <th
+                    class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0.25rem text-1rem)"
+                    :colspan="window_width < 1024 ? 1 : 2"
                   >
-                    {{ item.amount }}
-                  </p>
-                </td>
+                    商品
+                  </th>
+                  <th class="hidden lg:(table-cell)">單價</th>
+                  <th class="hidden lg:(table-cell)">數量</th>
+                  <th class="hidden lg:(table-cell rounded-r-0.25rem)">總計</th>
+                </tr>
+              </thead>
 
-                <td class="td_total mt-1.5rem sm:(mt-0.5rem) lg:(mt-0)">
-                  <p class="text-rose-500 flex justify-end items-end lg:(justify-center)">
-                    NT$
-                    <span class="ml-0.25rem text-1.5rem line-height-120%">{{
-                      addThousandPoint(item.price * item.amount)
-                    }}</span>
-                  </p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+              <tbody class="">
+                <tr v-for="item in dummy_cart" :key="item.id" class="tbody_tr mb-1.5rem">
+                  <td class="td_img mr-1rem lg:(min-w-76px)">
+                    <img
+                      class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
+                      src="@/assets/img/product-1.png"
+                      alt="product image"
+                    />
+                  </td>
+                  <td class="td_content">
+                    <p class="line-clamp-2">
+                      {{ item.productName }}
+                    </p>
+                  </td>
 
-          <div class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)">
-            <div
-              class="flex items-end justify-center gap-1rem rounded-0.5rem p-1.5rem border border-neutral-200 lg:(px-1.5rem py-1rem bg-neutral-50 border-none)"
-            >
-              <p class="text-1.25rem text-neutral-600">總金額</p>
-              <p class="text-rose-500">
-                NT$
-                <span class="ml-0.25rem text-1.5rem line-height-120%">{{
-                  addThousandPoint(totalPrice(dummy_cart))
-                }}</span>
-              </p>
+                  <td class="td_price lg:(text-center)">
+                    <p class="">
+                      NT$
+                      <span class="ml-0.25rem text-1.5rem line-height-120%">{{
+                        addThousandPoint(item.price)
+                      }}</span>
+                    </p>
+                  </td>
+
+                  <td class="td_amount">
+                    <p
+                      class="relative top-2px flex justify-end lg:(justify-center text-1.5rem before:content-empty) before:(content-['x'])"
+                    >
+                      {{ item.amount }}
+                    </p>
+                  </td>
+
+                  <td class="td_total mt-1.5rem lg:(mt-0) sm:(mt-0.5rem)">
+                    <p
+                      class="flex items-end justify-end text-rose-500 lg:(justify-center)"
+                    >
+                      NT$
+                      <span class="ml-0.25rem text-1.5rem line-height-120%">{{
+                        addThousandPoint(item.price * item.amount)
+                      }}</span>
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)">
+              <div
+                class="flex items-end justify-center gap-1rem border border-neutral-200 rounded-0.5rem p-1.5rem lg:(border-none bg-neutral-50 px-1.5rem py-1rem)"
+              >
+                <p class="text-1.25rem text-neutral-600">總金額</p>
+                <p class="text-rose-500">
+                  NT$
+                  <span class="ml-0.25rem text-1.5rem line-height-120%">{{
+                    addThousandPoint(totalPrice(dummy_cart))
+                  }}</span>
+                </p>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
-    </div>
+    </ClientOnly>
   </Teleport>
 
   <div

@@ -44,6 +44,7 @@ const shoppingDataArr = ref([]);
 // ]);
 
 onMounted(async () => {
+  if (sessionStorage.getItem('shoppingCartNoLogin')) checkValue()
   console.log("mounted");
   shoppingDataArr.value = await getTransformCartArray();
   console.log("shoppingDataArr", shoppingDataArr.value);
