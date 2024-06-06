@@ -1,14 +1,10 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { useStoreLogin } from "~/stores/storeLogin";
-import { useStoreGeneral } from "~/stores/storeGeneral";
 
 const store_login = useStoreLogin();
 const { token } = storeToRefs(store_login);
 const { setToken } = store_login;
-
-// const store_general = useStoreGeneral();
-// const { mobileNavShow } = storeToRefs(store_general);
 
 const openMobileNav = () => {
   document.querySelector("body").classList.add("stopScroll");
@@ -20,29 +16,14 @@ const closeMobileNav = () => {
   mobileNavShow.value = false;
 };
 
-const { width: window_width } = useWindowSize();
-
 const mobileNavShow = ref(false);
-const showNavbar = computed(() => {
-  if (window_width.value === Infinity) return false;
-
-  if (window_width.value < 768) return mobileNavShow.value;
-  else if (window_width.value >= 768) {
-    mobileNavShow.value = false;
-    return true;
-  }
-
-  return false;
-});
-
-watchEffect(() => {});
 </script>
 
 <template>
   <div class="nav_wrapper bg-neutral-800">
     <div
-      v-if="showNavbar && window_width < 768"
-      class="bg_blur absolute inset-0 z-5 bg-neutral-50 opacity-80"
+      v-if="mobileNavShow"
+      class="bg_blur absolute inset-0 z-5 bg-neutral-50 opacity-80 md:(hidden)"
       @click.self="closeMobileNav()"
     />
 
@@ -57,7 +38,7 @@ watchEffect(() => {});
 
       <ClientOnly>
         <div
-          v-if="showNavbar"
+          v-if="mobileNavShow"
           class="absolute right-0 top-0 z-6 h-100% w-375px flex flex-col gap-1rem rounded-l-1rem bg-second-200 pb-2.5rem pt-1.75rem text-1.25rem md:(relative min-h-unset w-unset flex-grow-1 flex-row bg-transparent pb-unset pt-unset text-neutral-50)"
         >
           <div class="flex justify-end px-1.5rem md:(hidden)">
@@ -78,7 +59,9 @@ watchEffect(() => {});
               <NuxtLink :to="{ name: 'about' }">關於我們</NuxtLink>
             </li>
             <li class="">
-              <NuxtLink :to="{ name: 'frequently-questions' }">常見問題</NuxtLink>
+              <NuxtLink :to="{ name: 'frequently-questions' }"
+                >常見問題</NuxtLink
+              >
             </li>
           </ul>
 
@@ -112,11 +95,15 @@ watchEffect(() => {});
                         alt="product image"
                       />
                       <p class="flex-nowrap text-0.875rem">鮮嫩雞肉凍乾</p>
-                      <p class="ml-auto text-0.75rem text-rose-500 font-bold">$300</p>
+                      <p class="ml-auto text-0.75rem text-rose-500 font-bold">
+                        $300
+                      </p>
                     </li>
                   </template>
 
-                  <li class="mt-0.5rem text-0.75rem text-neutral-400">10件商品未展示</li>
+                  <li class="mt-0.5rem text-0.75rem text-neutral-400">
+                    10件商品未展示
+                  </li>
                 </ul>
 
                 <NuxtLink
@@ -150,7 +137,10 @@ watchEffect(() => {});
                   <li class="cursor-pointer whitespace-nowrap">訂單記錄</li>
                   <li class="cursor-pointer whitespace-nowrap">收藏商品</li>
                   <li class="cursor-pointer whitespace-nowrap">聊聊紀錄</li>
-                  <li class="cursor-pointer whitespace-nowrap" @click="setToken(null)">
+                  <li
+                    class="cursor-pointer whitespace-nowrap"
+                    @click="setToken(null)"
+                  >
                     登出
                   </li>
                 </template>
@@ -180,11 +170,13 @@ watchEffect(() => {});
                 <SvgIcon name="facebook" class="h-2rem w-2rem" />
               </NuxtLink>
             </li>
+
             <li class="">
               <NuxtLink to="/">
                 <SvgIcon name="instagram" class="h-2rem w-2rem" />
               </NuxtLink>
             </li>
+
             <li class="">
               <NuxtLink to="/">
                 <SvgIcon name="shopee" class="h-2rem w-2rem" />
