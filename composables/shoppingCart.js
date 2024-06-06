@@ -9,7 +9,7 @@ const noLoginTestObj = {
           "quantity": 1
       },
       {
-          "productSpec": "6649cfcacbe5453a4e99f001",
+          "productSpec": "664c90d099eb1ab9b3c4f645",
           "quantity": 2
       }
   ]

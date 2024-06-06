@@ -1,10 +1,6 @@
 <script setup>
-
-const {
-  getTransformCartArray,
-  addCart,
-  deleteCart,
-} = await useShoppingCart();
+const { getTransformCartArray, addCart, deleteCart, addTestCartNoLogin } =
+  await useShoppingCart();
 
 const noImgUrl = ref(
   "https://storage.googleapis.com/petstore-3a2e1.appspot.com/images/ecbb5438-43c3-4a9b-9316-f8e8aecc7d15.jpg?GoogleAccessId=firebase-adminsdk-p5zjq%40petstore-3a2e1.iam.gserviceaccount.com&Expires=16756675200&Signature=sU4UW2CPGkhBDRGf4ncTUXeN%2B5YVxIOdHuVOMxIeDg%2FtxZ6pEIuElGuz1CM14yBtyXO4BvkreykJkUuqS80Bbf%2FUJIyHESkJrNbepEbcVrZBTrX7SLdOZFrQYD86SB%2B7AoXt3JQ43%2BcRTGZki%2FAgdAmd1nqtI2b2F3PipzkWHhitUjdcruJpSsbPSTQwkUfC46B2Pv%2FzxPHrdx6kyFgoICYy21zFhxj7x3DcJq%2Ftj28gUP%2BCeTElNKUMVyWKPyvmBP76XWy8JLWGBs43uJFOuwmjxu4yfk0vc9L8GM%2Bu9PDFLRBrfBlJ30knbCIHHIBeKCDSkpgLb2ZJJhZ888r4GQ%3D%3D"
@@ -77,7 +73,7 @@ const checkValue = async () => {
   // console.log(await getTransformCartArray());
   // console.log('process.env', process);
   // console.log("useShoppingCart", useShoppingCart);
-  // addTestCartNoLogin();
+  addTestCartNoLogin();
 };
 
 const selectProduct = (i) => {
