@@ -131,7 +131,6 @@ export const useShoppingCart = async () => {
         addWay: addWay,
         shoppingCart: cartArr
       }
-
       let addCartLoginReturn = await use$Fetch(
         "/shopping_cart/",
         {
@@ -143,13 +142,27 @@ export const useShoppingCart = async () => {
         }
       );
     console.log('addCartLoginReturn', addCartLoginReturn);
-
+        if(addCartLoginReturn?.status) {
+          if(addWay === 0) {
+            if(addCartLoginReturn?.message === '成功') {
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "商品已新增至購物車",
+                showConfirmButton: false,
+                timer: 1500
+              });
+            }else {
+              Swal.fire(addCartLoginReturn?.message);
+            }
+          }
+        }
     }
   }
 
   // 新增購物車 未登入
   const addCartNoLogin = (cartArr, addWay) => {
-    const { productSpec, quantity, inStock} = cartArr[0];
+    const { productSpec, quantity, inStock } = cartArr[0];
     // productSpec = '66487aba27b3916f705679f0', quantity = 2, inStock = 10
 
     if (typeof window !== "undefined") {
