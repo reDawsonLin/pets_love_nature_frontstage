@@ -149,7 +149,7 @@ const getImage = (eachProduct) => {
 </script>
 
 <template>
-  <div class="shopping_cart">
+  <div class="shopping_cart grow">
     <div p="t-3.75rem" class="title mb-7.5 flex items-center justify-center">
       <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" >
       <h1 class="text-4xl">購物車</h1>
@@ -307,7 +307,7 @@ const getImage = (eachProduct) => {
         </div>
 
         <!-- pc -->
-        <div class="shopping_cart_list hidden lg:block">
+        <div class="shopping_cart_list hidden max-h-[44rem] overflow-y-auto lg:block">
           <div
             v-for="(eachProduct, i) in shoppingDataArr"
             :key="eachProduct.productId"
@@ -408,6 +408,7 @@ const getImage = (eachProduct) => {
               </div>
             </div>
           </div>
+          <div v-if="shoppingDataArr.length === 0" class="h-70"/>
         </div>
         <div
           class="bottom_block h-36 rounded pt-6 text-center lg:h-24 lg:flex lg:items-center lg:justify-end lg:bg-gray-300 lg:pt-0"
