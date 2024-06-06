@@ -28,7 +28,7 @@ const current_step = Number(route.fullPath.split("/").at(-1)?.at(-1));
         <li class="stepper flex flex-col items-center gap-0.25rem lg:(gap-0.5rem)">
           <p
             class="step_number h-3.5rem w-3.5rem flex items-center justify-center rounded-50% bg-neutral-200 text-2rem text-neutral-600 lg:(h-4.25rem w-4.25rem)"
-            :class="{ active: current_step === stepper.step }"
+            :class="{ active: stepper.step <= current_step }"
           >
             {{ stepper.step }}
           </p>
@@ -41,8 +41,8 @@ const current_step = Number(route.fullPath.split("/").at(-1)?.at(-1));
         <hr
           v-if="stepper.step !== 3"
           class="line mt-1.75rem h-0.25rem flex-grow-1 bg-neutral-200 lg:(z--1 mx--1rem mt-2.125rem)"
-          :class="{ active: current_step === stepper.step }"
-        >
+          :class="{ active: stepper.step < current_step }"
+        />
       </template>
     </ul>
   </section>
