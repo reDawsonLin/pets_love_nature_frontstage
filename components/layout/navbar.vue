@@ -39,15 +39,48 @@ const mobileNavShow = ref(false);
       <ClientOnly>
         <div
           v-if="mobileNavShow"
-          class="absolute right-0 top-0 z-6 h-100% w-375px flex flex-col gap-1rem rounded-l-1rem bg-second-200 pb-2.5rem pt-1.75rem text-1.25rem md:(relative min-h-unset w-unset flex-grow-1 flex-row bg-transparent pb-unset pt-unset text-neutral-50)"
+          
+      
+        :class="{ flex: mobileNavShow }"
+        class="hidden absolute right-0 top-0 z-6 h-100% max-w-375px flex-col gap-1rem rounded-l-1rem bg-second-200 pb-2.5rem pt-1.75rem text-1.25rem md:(relative min-h-unset w-unset flex-grow-1 flex-row bg-transparent pb-unset pt-unset text-neutral-50)"
+      >
+        <div class="flex justify-end px-1.5rem md:(hidden)">
+          <SvgIcon name="close" class="w-2rem cursor-pointer" @click="closeMobileNav()" />
+        </div>
+
+        <ul
+          class="flex flex-col gap-1rem px-2.25rem md:(flex-grow-1 flex-row items-center justify-end gap-3rem px-unset)"
         >
-          <div class="flex justify-end px-1.5rem md:(hidden)">
-            <SvgIcon
-              name="close"
-              class="w-2rem cursor-pointer"
+          <li class="">
+            <NuxtLink :to="{ name: 'product' }" @click="closeMobileNav()"
+              >所有商品</NuxtLink
+            >
+          </li>
+          <li class="">
+            <NuxtLink :to="{ name: 'about' }" @click="closeMobileNav()"
+              >關於我們</NuxtLink
+            >
+          </li>
+          <li class="">
+            <NuxtLink :to="{ name: 'frequently-questions' }" @click="closeMobileNav()"
+              >常見問題</NuxtLink
+            >
+          </li>
+        </ul>
+
+        <ul
+          class="mb-0.5rem flex flex-grow-1 flex-col gap-1rem px-2.25rem md:(mb-unset flex-grow-1 flex-row items-center justify-end gap-1.25rem px-unset)"
+        >
+          <li class="wrapper_icon md:(relative order-2)">
+            <NuxtLink
+              :to="token ? { name: 'shopping-cart' } : null"
+              class="flex gap-0.5rem"
               @click="closeMobileNav()"
-            />
-          </div>
+            >
+              <SvgIcon
+                class="h-1.5rem w-1.5rem cursor-pointer md:(h-2rem w-2rem)"
+                name="cart"
+              />
 
           <ul
             class="flex flex-col gap-1rem px-2.25rem md:(flex-grow-1 flex-row items-center justify-end gap-3rem px-unset)"
@@ -65,18 +98,10 @@ const mobileNavShow = ref(false);
             </li>
           </ul>
 
-          <ul
-            class="mb-0.5rem flex flex-grow-1 flex-col gap-1rem px-2.25rem md:(mb-unset flex-grow-1 flex-row items-center justify-end gap-1.25rem px-unset)"
-          >
-            <li class="wrapper_icon md:(relative order-2)">
-              <NuxtLink
-                :to="token ? { name: 'shopping-cart' } : null"
-                class="flex gap-0.5rem"
-              >
-                <SvgIcon
-                  class="h-1.5rem w-1.5rem cursor-pointer md:(h-2rem w-2rem)"
-                  name="cart"
-                />
+            <div
+              class="list_content hidden md:(absolute left-50% top-100% w-200px flex flex-col translate-x--50% gap-1.5rem rounded-0.5rem bg-neutral-50 px-1.5rem py-1rem text-neutral-600)"
+            >
+              <p class="whitespace-nowrap">最近加入商品</p>
 
                 <p class="md:(hidden)">購物車</p>
               </NuxtLink>
@@ -144,54 +169,99 @@ const mobileNavShow = ref(false);
                     登出
                   </li>
                 </template>
+
+                <li class="mt-0.5rem text-0.75rem text-neutral-400">10件商品未展示</li>
               </ul>
-            </li>
 
-            <li class="wrapper_search mt-auto md:(order-1 mt-unset)">
-              <label class="box_search md:() relative flex">
-                <input
-                  name="search-bar"
-                  type="text"
-                  placeholder="請輸入關鍵字..."
-                  class="search line-clamp-1 w-100% rounded-5rem bg-neutral-50 py-0.75rem pl-1rem pr-3.5rem text-1rem md:(bg-second-400 text-neutral-600) focus:(outline-2px outline-neutral-400)"
-                />
+              <NuxtLink
+                :to="{ name: 'shopping-cart' }"
+                class="w-100% flex items-center justify-center rounded-5rem bg-rose-500 p-0.5rem text-0.75rem text-white"
+                >查看購物車</NuxtLink
+              >
+            </div>
+          </li>
 
-                <SvgIcon
-                  class="absolute right-1rem top-50% h-1.5rem w-1.5rem translate-y--50% md:(right-0 h-2rem w-2rem)"
-                  name="search"
-                />
-              </label>
-            </li>
-          </ul>
+          <li class="wrapper_icon md:(relative order-3)">
+            <div class="mb-0.75rem flex gap-0.5rem md:(mb-unset)">
+              <SvgIcon
+                class="h-1.5rem w-1.5rem md:(h-2rem w-2rem cursor-pointer)"
+                name="account"
+              />
+              <p class="md:(hidden)">會員中心</p>
+            </div>
 
-          <ul class="flex gap-1.5rem px-2.25rem md:(hidden)">
-            <li class="">
-              <NuxtLink to="/">
-                <SvgIcon name="facebook" class="h-2rem w-2rem" />
-              </NuxtLink>
-            </li>
+            <ul
+              class="list_content flex flex-col gap-0.75rem px-2rem text-1rem md:(absolute left-50% top-100% translate-x--50% rounded-0.5rem bg-neutral-50 px-1.5rem py-1rem text-neutral-600)"
+            >
+              <li v-if="!token" class="whitespace-nowrap">
+                <NuxtLink to="/Login"> 登入 </NuxtLink>
+              </li>
 
-            <li class="">
-              <NuxtLink to="/">
-                <SvgIcon name="instagram" class="h-2rem w-2rem" />
-              </NuxtLink>
-            </li>
+              <template v-else>
+                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                  <NuxtLink :to="{ name: 'member' }"> 個人資訊 </NuxtLink>
+                </li>
+                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                  訂單記錄
+                </li>
+                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                  收藏商品
+                </li>
+                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                  聊聊紀錄
+                </li>
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="setToken(null), closeMobileNav()"
+                >
+                  登出
+                </li>
+              </template>
+            </ul>
+          </li>
 
-            <li class="">
-              <NuxtLink to="/">
-                <SvgIcon name="shopee" class="h-2rem w-2rem" />
-              </NuxtLink>
-            </li>
-          </ul>
-        </div>
+          <li class="wrapper_search mt-auto md:(order-1 mt-unset)">
+            <label class="box_search md:() relative flex">
+              <input
+                name="search-bar"
+                type="text"
+                placeholder="請輸入關鍵字..."
+                class="search line-clamp-1 w-100% rounded-5rem bg-neutral-50 py-0.75rem pl-1rem pr-3.5rem text-1rem md:(bg-second-400 text-neutral-600) focus:(outline-2px outline-neutral-400)"
+              />
 
-        <div
-          class="h-4 w-1.5rem flex cursor-pointer cursor-pointer items-center md:(hidden)"
-          @click="openMobileNav()"
-        >
-          <p class="hamburger" />
-        </div>
-      </ClientOnly>
+              <SvgIcon
+                class="absolute right-1rem top-50% h-1.5rem w-1.5rem translate-y--50% md:(right-0 h-2rem w-2rem)"
+                name="search"
+              />
+            </label>
+          </li>
+        </ul>
+
+        <ul class="flex gap-1.5rem px-2.25rem md:(hidden)">
+          <li class="">
+            <NuxtLink to="/">
+              <SvgIcon name="facebook" class="h-2rem w-2rem" />
+            </NuxtLink>
+          </li>
+          <li class="">
+            <NuxtLink to="/">
+              <SvgIcon name="instagram" class="h-2rem w-2rem" />
+            </NuxtLink>
+          </li>
+          <li class="">
+            <NuxtLink to="/">
+              <SvgIcon name="shopee" class="h-2rem w-2rem" />
+            </NuxtLink>
+          </li>
+        </ul>
+      </div>
+
+      <div
+        class="h-4 w-1.5rem flex cursor-pointer cursor-pointer items-center md:(hidden)"
+        @click="openMobileNav()"
+      >
+        <p class="hamburger" />
+      </div>
     </nav>
   </div>
 </template>
