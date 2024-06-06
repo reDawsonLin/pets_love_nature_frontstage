@@ -140,11 +140,14 @@ const concatStr = (...strArr) => {
 
 // image判斷
 const getImage = (eachProduct) => {
-  if (eachProduct?.imageGallery?.length > 0) {
-    return eachProduct?.imageGallery[0].imgUrl;
-  } else {
-    return noImgUrl.value;
+  if (eachProduct?.imageGallery) {
+    if (eachProduct?.imageGallery?.length > 0) {
+      return eachProduct?.imageGallery[0].imgUrl;
+    } else {
+      return noImgUrl.value;
+    }
   }
+  return noImgUrl.value;
 };
 </script>
 
