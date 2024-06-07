@@ -27,6 +27,7 @@ export const useApiFetch = (url, options) => {
 // for need token data -------
 export const useTokenFetch = async (url, options) => {
   const token = useCookie("token");
+  if (!token.value) return 'cookie 無 token';
 
   return await useFetch(url, {
     baseURL,
