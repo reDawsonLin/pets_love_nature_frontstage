@@ -42,7 +42,7 @@ const mobileNavShow = ref(false);
           
       
         :class="{ flex: mobileNavShow }"
-        class="hidden absolute right-0 top-0 z-6 h-100% max-w-375px flex-col gap-1rem rounded-l-1rem bg-second-200 pb-2.5rem pt-1.75rem text-1.25rem md:(relative min-h-unset w-unset flex-grow-1 flex-row bg-transparent pb-unset pt-unset text-neutral-50)"
+        class="hidden absolute right-0 top-0 z-6 h-100% max-w-375px flex-col gap-1rem rounded-l-1rem bg-second-200 pb-2.5rem pt-1.75rem text-1.25rem md:(relative min-h-unset w-unset flex-grow-1 flex flex-row bg-transparent pb-unset pt-unset text-neutral-50 max-w-unset )"
       >
         <div class="flex justify-end px-1.5rem md:(hidden)">
           <SvgIcon name="close" class="w-2rem cursor-pointer" @click="closeMobileNav()" />

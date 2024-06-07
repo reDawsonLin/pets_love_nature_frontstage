@@ -1,16 +1,20 @@
 <script setup>
 import { Vue3Lottie } from "vue3-lottie";
 import loading_pet from "@/assets/lottie/loading-pet.json";
+
 const nuxtApp = useNuxtApp();
 const isLoading = ref(false);
 
+const lottie_container = ref(null);
 nuxtApp.hook("page:start", () => {
   isLoading.value = true;
+  lottie_container.value.play();
 });
 
 nuxtApp.hook("page:finish", () => {
   setTimeout(() => {
     isLoading.value = false;
+    lottie_container.value.pause();
   }, 300);
 });
 </script>
@@ -18,7 +22,11 @@ nuxtApp.hook("page:finish", () => {
 <template>
   <ClientOnly>
     <div class="loading-indicator" :class="{ show: isLoading }">
-      <Vue3Lottie class="lottie" :animationData="loading_pet" />
+      <Vue3Lottie
+        ref="lottie_container"
+        class="lottie"
+        :animationData="loading_pet"
+      />
     </div>
   </ClientOnly>
 </template>
@@ -32,6 +40,7 @@ nuxtApp.hook("page:finish", () => {
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;
+  backdrop-filter: blur(3px);
 
   &.show {
     opacity: 1;
