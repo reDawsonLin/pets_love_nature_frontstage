@@ -25,38 +25,34 @@ export const useApiFetch = (url, options) => {
 };
 
 // for need token data -------
-export const useTokenFetch = (url, options) => {
-  return $fetch(url, {
+export const useTokenFetch = async (url, options) => {
+  const token = useCookie("token");
+
+  return await useFetch(url, {
     baseURL,
-    ...options,
-    // onRequest({ request, options }) {
-    //   options.headers = options.headers || {};
-    //   const token = useCookie("token");
-    //   // 設定請求時的 headers
-    //   console.log("request :>> ", request);
-    //   console.log("options :>> ", options);
-    //   // options.headers.Authorization = token.value;
-    //   options.headers.Authorization = `Bearer ${token.value}`;
-    // },
-    // onRequestError({ request, options, error }) {
-    //   // 捕捉請求時發生的錯誤
-    //   // console.log("request :>> ", request);
-    //   // console.log("options :>> ", options);
-    //   console.log("error :>> ", error);
-    // },
-    // onResponse({ request, response, options }) {
-    //   // console.log("request :>> ", request);
-    //   // console.log("response :>> ", response);
-    //   // console.log("options :>> ", options);
-    //   // 處理請求回覆資料
-    //   return response;
-    //   return response._data;
-    // },
-    // onResponseError({ request, response, options }) {
-    //   // 捕捉請求回覆時發生的錯誤
-    //   // console.log("request :>> ", request);
-    //   // console.log("response :>> ", response);
-    //   console.log("options :>> ", options);
-    // },
+    onRequest({ request, options }) {
+      console.log("on request");
+      console.log("request :>> ", request);
+      console.log("options :>> ", options);
+      // Set the request headers
+      options.headers = options.headers || {};
+      // 暫時把快取關掉
+      options.initialCache = false;
+      options.headers.authorization = `Bearer ${token.value}`;
+    },
+    onRequestError({ request, options, error }) {
+      // Handle the request errors
+      console.log("on request error :>> ", error);
+    },
+    onResponse({ request, response, options }) {
+      // Process the response data
+      console.log("on response");
+      console.log("response :>> ", response);
+    },
+    onResponseError({ request, response, options }) {
+      // Handle the response errors
+      console.log("on response error");
+      console.log("response :>> ", response);
+    },
   });
 };

@@ -45,7 +45,11 @@ const mobileNavShow = ref(false);
         class="hidden absolute right-0 top-0 z-6 h-100% max-w-375px flex-col gap-1rem rounded-l-1rem bg-second-200 pb-2.5rem pt-1.75rem text-1.25rem md:(relative min-h-unset w-unset flex-grow-1 flex flex-row bg-transparent pb-unset pt-unset text-neutral-50 max-w-unset )"
       >
         <div class="flex justify-end px-1.5rem md:(hidden)">
-          <SvgIcon name="close" class="w-2rem cursor-pointer" @click="closeMobileNav()" />
+          <SvgIcon
+            name="close"
+            class="w-2rem cursor-pointer"
+            @click="closeMobileNav()"
+          />
         </div>
 
         <ul
@@ -62,7 +66,9 @@ const mobileNavShow = ref(false);
             >
           </li>
           <li class="">
-            <NuxtLink :to="{ name: 'frequently-questions' }" @click="closeMobileNav()"
+            <NuxtLink
+              :to="{ name: 'frequently-questions' }"
+              @click="closeMobileNav()"
               >常見問題</NuxtLink
             >
           </li>
@@ -170,7 +176,9 @@ const mobileNavShow = ref(false);
                   </li>
                 </template>
 
-                <li class="mt-0.5rem text-0.75rem text-neutral-400">10件商品未展示</li>
+                <li class="mt-0.5rem text-0.75rem text-neutral-400">
+                  10件商品未展示
+                </li>
               </ul>
 
               <NuxtLink
@@ -193,21 +201,37 @@ const mobileNavShow = ref(false);
             <ul
               class="list_content flex flex-col gap-0.75rem px-2rem text-1rem md:(absolute left-50% top-100% translate-x--50% rounded-0.5rem bg-neutral-50 px-1.5rem py-1rem text-neutral-600)"
             >
-              <li v-if="!token" class="whitespace-nowrap">
+              <li
+                v-if="!token"
+                class="whitespace-nowrap"
+                @click="closeMobileNav()"
+              >
                 <NuxtLink to="/Login"> 登入 </NuxtLink>
               </li>
 
               <template v-else>
-                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="closeMobileNav()"
+                >
                   <NuxtLink :to="{ name: 'member' }"> 個人資訊 </NuxtLink>
                 </li>
-                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="closeMobileNav()"
+                >
                   訂單記錄
                 </li>
-                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="closeMobileNav()"
+                >
                   收藏商品
                 </li>
-                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="closeMobileNav()"
+                >
                   聊聊紀錄
                 </li>
                 <li
