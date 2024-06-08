@@ -93,8 +93,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="member container md-flex">
-
+  <div class="member mx-auto container md-flex">
     <div class="sidebar w-[100%] flex flex-col grid-justify-start grid-items-center md:mt-[100px] md-w-[30%]">
       <ul class="w-[100%] flex flex-row justify-center text-center md-w-[80%] md:flex-col">
         <li class="m-2">
@@ -121,7 +120,7 @@ onMounted(() => {
         <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
       </div>
       <div class="flex flex-col grid-justify-center grid-items-center">
-        <form class="w-[50%] sm:w-[90%] lg:w-[70%]">
+        <form class="w-[90%] lg:w-[70%] md:w-[90%] sm:w-[50%]">
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div class="md:mr-[32px]">
               <div class="mb-4">
@@ -203,7 +202,7 @@ id="recipient_address" v-model="data.deliveryAddress.address" type="text"
           <div class="mb-4 flex grid-justify-center grid-items-center">
             <a
 href="#"
-              class="w-[100px] w-full inline-flex justify-center rounded-md bg-[#191919] px-3 py-2 text-sm  text-white font-semibold shadow-sm ring-1 ring-gray-300 ring-inset sm:mt-0 hover:bg-[#484848]"
+              class="w-[100px] w-full inline-flex justify-center rounded-md bg-[#191919] px-3 py-2 text-sm text-white font-semibold shadow-sm ring-1 ring-gray-300 ring-inset sm:mt-0 hover:bg-[#484848]"
               @click.prevent="saveMember">儲存</a>
           </div>
         </form>
