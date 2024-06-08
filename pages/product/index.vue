@@ -1,4 +1,5 @@
 <script setup>
+const { addCart } = await useShoppingCart();
 const searchValue = ref({
   searchText: "",
   sortOrder: "1",
@@ -97,14 +98,16 @@ const updateFetchData = ()=>{
   fetchData()
 }
 
-// const updateSearchText = ()=>{
-//   fetchData()
-// }
-
-
-const addToCart = () => {
-  console.log('addToCart');
+const addToCart = async(product) => {
+  const obj = {
+    productSpec: product._id,
+    quantity: 1,
+    inStock: product.inStock
+  }
+  const arr = [obj];
+  await addCart(arr, 0)
 }
+
 
 const changeOrder = () =>{
   console.log('changeOrder' , searchValue.value.sortOrder);
