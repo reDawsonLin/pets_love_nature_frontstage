@@ -77,9 +77,11 @@ const fetchData = async () => {
 const changeSort = (sortValue) => {
   if(sortValue == searchValue.value.sortBy){
     searchValue.value.dbclick= true;
+  }else{
+    searchValue.value.dbclick= false;
+
   }
   searchValue.value.sortBy = sortValue
-
   fetchData()
 }
 
@@ -106,7 +108,7 @@ const addToCart = () => {
 
 const changeOrder = () =>{
   console.log('changeOrder' , searchValue.value.sortOrder);
-  if(searchValue.value.dbclick= true){
+  if(searchValue.value.dbclick === true){
     if(searchValue.value.sortOrder == -1){
     searchValue.value.sortOrder = 1
   }else{
@@ -117,8 +119,6 @@ const changeOrder = () =>{
 }
 
 const handlePageChange = async(e) =>{
-  
-  debugger
   if(e.target.value){
     searchValue.value.page = e.target.value;
 
@@ -335,9 +335,6 @@ fill-rule="evenodd"
                     </svg>
                   </button>
                   <select id="" v-model="searchValue.limit" class="h-40px w-150px b-rd-1 p-8px text-gray-700" name="" @change="updateFetchData">
-                    <!-- <option v-for="page in pageInfo.totalPages" :key="page" :value="page">第{{ page }}頁</option> -->
-                    <option value="1">1筆/頁</option>
-
                     <option value="5">5筆/頁</option>
                     <option value="10">10筆/頁</option>
                     <option value="50">50筆/頁</option>
