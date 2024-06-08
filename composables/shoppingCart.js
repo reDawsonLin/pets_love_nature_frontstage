@@ -9,7 +9,7 @@ const noLoginTestObj = {
           "quantity": 1
       },
       {
-          "productSpec": "6649cfcacbe5453a4e99f001",
+          "productSpec": "664c90d099eb1ab9b3c4f645",
           "quantity": 2
       }
   ]
@@ -106,6 +106,7 @@ export const useShoppingCart = async () => {
     return filteredArr;
   };
 
+  // 新增購物車 通用 addWay = 0 加x至購物車, addWay = 1 購物車數量調整至x
   const addCart = async(cartArr, addWay) => {
     const {token, id_customer} = checkToken();
     console.log('token.value', token.value);
@@ -121,6 +122,7 @@ export const useShoppingCart = async () => {
     }
   }
 
+  // 新增購物車 已登入
   const addCartLogin = async(cartArr, addWay, token, id_customer) => {
 
     if(token.value && id_customer.value) {
@@ -129,7 +131,6 @@ export const useShoppingCart = async () => {
         addWay: addWay,
         shoppingCart: cartArr
       }
-
       let addCartLoginReturn = await use$Fetch(
         "/shopping_cart/",
         {
@@ -141,12 +142,27 @@ export const useShoppingCart = async () => {
         }
       );
     console.log('addCartLoginReturn', addCartLoginReturn);
-
+        if(addCartLoginReturn?.status) {
+          if(addWay === 0) {
+            if(addCartLoginReturn?.message === '成功') {
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "商品已新增至購物車",
+                showConfirmButton: false,
+                timer: 1500
+              });
+            }else {
+              Swal.fire(addCartLoginReturn?.message);
+            }
+          }
+        }
     }
   }
 
+  // 新增購物車 未登入
   const addCartNoLogin = (cartArr, addWay) => {
-    const { productSpec, quantity, inStock} = cartArr[0];
+    const { productSpec, quantity, inStock } = cartArr[0];
     // productSpec = '66487aba27b3916f705679f0', quantity = 2, inStock = 10
 
     if (typeof window !== "undefined") {
@@ -216,6 +232,7 @@ export const useShoppingCart = async () => {
     }
   }
 
+  // 測試用資料
   const addTestCartNoLogin = () => {
     
 
@@ -225,6 +242,7 @@ export const useShoppingCart = async () => {
     }
   }
 
+  // 刪除購物車
   const deleteCart = async(productSpec) => {
     const {token, id_customer} = checkToken();
     if(token.value && id_customer.value) {
@@ -236,6 +254,7 @@ export const useShoppingCart = async () => {
     }
   }
 
+  // 刪除購物車 已登入
   const deleteCartLogin = async(productSpec, token, id_customer) => {
     const obj = {
       customerId: id_customer.value,
@@ -253,6 +272,7 @@ export const useShoppingCart = async () => {
     );
   }
 
+  // 刪除購物車 未登入
   const deleteCartNoLogin = (productSpec) => {
     console.log('deleteCartNoLogin');
     console.log('productSpec', productSpec);
