@@ -1,10 +1,14 @@
 <script setup>
+const { addCart } = await useShoppingCart();
 const searchValue = ref({
   searchText: "",
   sortOrder: "1",
   sortBy: "",
+  sortOrder: -1,
   page: 1,
-  // limit: "2"
+  limit: 10,
+  filterCategory: "",
+  dbclick: false
 })
 
 const productData = ref([
@@ -72,20 +76,62 @@ const fetchData = async () => {
 };
 
 const changeSort = (sortValue) => {
+  if(sortValue == searchValue.value.sortBy){
+    searchValue.value.dbclick= true;
+  }else{
+    searchValue.value.dbclick= false;
+
+  }
   searchValue.value.sortBy = sortValue
   fetchData()
 }
 
-const updateSearchText = ()=>{
+
+
+const changeCategory = (category) =>{
+  searchValue.value.filterCategory = category
+
   fetchData()
 }
 
-const addToCart = () => {
-  console.log('addToCart');
+const updateFetchData = ()=>{
+  fetchData()
 }
 
-const handlePageChange = async() =>{
-  searchValue.value.page = e.target.value;
+const addToCart = async(product) => {
+  const obj = {
+    productSpec: product._id,
+    quantity: 1,
+    inStock: product.inStock
+  }
+  const arr = [obj];
+  await addCart(arr, 0)
+}
+
+
+const changeOrder = () =>{
+  console.log('changeOrder' , searchValue.value.sortOrder);
+  if(searchValue.value.dbclick === true){
+    if(searchValue.value.sortOrder == -1){
+    searchValue.value.sortOrder = 1
+  }else{
+    searchValue.value.sortOrder = -1
+  }
+  }
+ 
+}
+
+const handlePageChange = async(e) =>{
+  if(e.target.value){
+    searchValue.value.page = e.target.value;
+
+  }else if(e.target.id==="nextPage"){
+    searchValue.value.page = parseInt(searchValue.value.page) + 1
+
+  }else if(e.target.id==="previousPage"){
+    searchValue.value.page = parseInt(searchValue.value.page) - 1
+
+  }
   fetchData()
 }
 
@@ -101,19 +147,16 @@ onMounted(() => {
       <ul
         class="bg_orange_primary w-[100%] flex flex-row justify-center overflow-scroll text-center md-w-[80%] md:flex-col">
         <li class="">
-          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]">所有商品</a>
+          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]" @click.prevent="changeCategory('')">所有商品</a>
         </li>
         <li class="">
-          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]">貓貓專區</a>
+          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]" @click.prevent="changeCategory('cat')">貓貓專區</a>
         </li>
         <li class="">
-          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]">狗狗專區</a>
+          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]" @click.prevent="changeCategory('dog')">狗狗專區</a>
         </li>
         <li class="">
-          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]">凍乾專區</a>
-        </li>
-        <li class="">
-          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]">鮮食專區</a>
+          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]" @click.prevent="changeCategory('dry')">凍乾專區</a>
         </li>
       </ul>
     </div>
@@ -124,24 +167,62 @@ onMounted(() => {
 
         <!-- search section -->
         <div class="bg_orange_primary search_section box-border p-4">
+          <div class="w-[100%] flex inline-flex sm:w-[auto]">
           <a
 href="#"
             class="mr-[8px] box-border w-[calc(25%-8px)] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-[113px] sm:w-auto hover:bg-gray-50"
-            @click="changeSort('star')">最熱銷</a>
+            @click.prevent="changeSort('star')">最熱銷</a>
           <a
 href="#"
             class="mr-[8px] box-border w-[calc(25%-8px)] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-[113px] sm:w-auto hover:bg-gray-50"
-            @click="changeSort('price')">評價最高</a>
+            @click.prevent="changeSort('price')">評價最高</a>
           <a
 href="#"
             class="mr-[8px] box-border w-[calc(25%-8px)] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-[113px] sm:w-auto hover:bg-gray-50"
-            @click="changeSort('price')">價格</a>
+            @click.prevent="changeSort('price');changeOrder()"
+            >
+            <svg
+v-if="searchValue.sortOrder == -1 && searchValue.sortBy == 'price' ||  searchValue.sortBy != 'price'" 
+            class="down h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path
+                  fill-rule="evenodd"
+                  d="M10 14l-5-5h10l-5 5z"
+                  clip-rule="evenodd" />
+            </svg>
+            <svg
+v-if="searchValue.sortOrder == 1 && searchValue.sortBy == 'price'" 
+            class="up h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path
+                  fill-rule="evenodd"
+                  d="M10 6l5 5H5l5-5z"
+                  clip-rule="evenodd" />
+          </svg>
+            價格</a>
           <a
 href="#"
             class="mr-[8px] box-border w-[calc(25%-8px)] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-[113px] sm:w-auto hover:bg-gray-50"
-            @click="changeSort('priupdatedAtce')">時間</a>
-            
+            @click.prevent="changeSort('priupdatedAtce');changeOrder()"
+            >
 
+            <svg
+v-if="(searchValue.sortOrder == -1 && searchValue.sortBy == 'priupdatedAtce') ||  searchValue.sortBy != 'priupdatedAtce'" 
+            class="down h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path
+                  fill-rule="evenodd"
+                  d="M10 14l-5-5h10l-5 5z"
+                  clip-rule="evenodd" />
+            </svg>
+            <svg
+v-if="searchValue.sortOrder == 1 && searchValue.sortBy == 'priupdatedAtce'" 
+            class="up h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path
+                  fill-rule="evenodd"
+                  d="M10 6l5 5H5l5-5z"
+                  clip-rule="evenodd" />
+          </svg>
+            時間</a>
+            
+          </div>
           <div class="mt-2w-[226px] relative mt-3 w-[100%] inline-flex rounded-md shadow-sm sm:mt-0 sm:w-auto">
             <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center pl-3">
               <span class="text-gray-500 sm:text-sm">O</span>
@@ -151,7 +232,7 @@ id="price" v-model="searchValue.searchText" type="text"
               name="price"
               class="w-[100%] inline-flex border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset md:w-[226px] sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
               placeholder="搜尋"
-              @keydown.enter="updateSearchText()">
+              @keydown.enter="updateFetchData()">
           </div>
 
         </div>
@@ -209,11 +290,12 @@ v-for="index in Math.floor(product.product.star)" :key="index"
                 <!-- {{ pageInfo }} -->
                 <nav class="isolate inline-flex rounded-md" aria-label="Pagination">
                   <button
+                    id="previousPage"
                     type="button"
-                    
                     class="relative mr-2 inline-flex items-center rounded-l-md bg-gray-50 bg-white px-2 py-2 text-black ring-gray-300 ring-inset focus:z-20 focus:outline-offset-0"
                     :disabled="pageInfo.nowPage==1"
                     :class="{'button_hover_color': pageInfo.nowPage==1}  "
+                    @click.prevent="handlePageChange"
                     >
                     <span class="sr-only">Previous</span>
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -223,7 +305,6 @@ fill-rule="evenodd"
                         clip-rule="evenodd" />
                     </svg>
                   </button>
-                  <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
                   
                   <button 
                     v-for="page in pageInfo.totalPages" 
@@ -234,19 +315,19 @@ fill-rule="evenodd"
                     :disabled="pageInfo.nowPage === page"
                     :class="{'button_hover_color': pageInfo.nowPage === page}  "
                     :value=page 
-                    @click="handlePageChange"
+                    @click.prevent="handlePageChange"
                     >
 
                     {{ page }}
                   </button>
 
                   <button
-type="button"
+                    id="nextPage"
+                    type="button"
                     class="relative mr-10 inline-flex items-center rounded-r-md bg-white px-2 py-2 text-black ring-gray-300 ring-inset focus:z-20 hover:bg-gray-50 focus:outline-offset-0"
                     :disabled="pageInfo.nowPage === pageInfo.totalPages"
                     :class="{'button_hover_color': pageInfo.nowPage === pageInfo.totalPages}"
-                    :value="pageInfo.nowPage" 
-                    @click="handlePageChange"
+                    @click.prevent="handlePageChange"
                     >
                     <span class="sr-only">Next</span>
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -256,8 +337,10 @@ fill-rule="evenodd"
                         clip-rule="evenodd" />
                     </svg>
                   </button>
-                  <select id="" v-model="pageInfo.nowPage" class="h-40px w-150px b-rd-1 p-8px text-gray-700" name="" @change="handlePageChange">
-                    <option v-for="page in pageInfo.totalPages" :key="page" :value="page">第{{ page }}頁</option>
+                  <select id="" v-model="searchValue.limit" class="h-40px w-150px b-rd-1 p-8px text-gray-700" name="" @change="updateFetchData">
+                    <option value="5">5筆/頁</option>
+                    <option value="10">10筆/頁</option>
+                    <option value="50">50筆/頁</option>
                   </select>
                 </nav>
               </div>
@@ -289,5 +372,8 @@ button{
 
 .choosed_product {
   background-color: #e5e5e5;
+}
+svg {
+  pointer-events: none;
 }
 </style>
