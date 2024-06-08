@@ -121,14 +121,14 @@ onMounted(() => {
         <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
       </div>
       <div class="flex flex-col grid-justify-center grid-items-center">
-        <form>
+        <form class="w-[50%] sm:w-[90%] lg:w-[70%]">
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div class="md:mr-[32px]">
               <div class="mb-4">
                 <label for="customerName" class="block text-sm text-gray-900 font-medium leading-6">顧客姓名</label>
                 <input
 id="customerName" v-model="data.customerName" type="text" name="customerName"
-                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  class="block w-full border-0 rounded-md py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
                   placeholder="">
               </div>
 
@@ -136,7 +136,7 @@ id="customerName" v-model="data.customerName" type="text" name="customerName"
                 <label for="email" class="block text-sm text-gray-900 font-medium leading-6">信箱</label>
                 <input
 id="email" v-model="data.email" type="text" name="email"
-                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  class="block w-full border-0 rounded-md py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
                   placeholder="">
               </div>
 
@@ -144,7 +144,7 @@ id="email" v-model="data.email" type="text" name="email"
                 <label for="phone" class="block text-sm text-gray-900 font-medium leading-6">聯絡電話</label>
                 <input
 id="phone" v-model="data.phone" type="text" name="phone"
-                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  class="block w-full border-0 rounded-md py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
                   placeholder="">
               </div>
             </div>
@@ -153,7 +153,7 @@ id="phone" v-model="data.phone" type="text" name="phone"
                 <label for="recipient_name" class="block text-sm text-gray-900 font-medium leading-6">收件人</label>
                 <input
 id="recipient_name" v-model="data.recipientName" type="text" name="recipient_name"
-                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  class="block w-full border-0 rounded-md py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
                   placeholder="">
               </div>
 
@@ -161,7 +161,7 @@ id="recipient_name" v-model="data.recipientName" type="text" name="recipient_nam
                 <label for="recipient_phone" class="block text-sm text-gray-900 font-medium leading-6">收件人聯絡電話</label>
                 <input
 id="recipient_phone" v-model="data.recipientPhone" type="text" name="recipient_phone"
-                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  class="block w-full border-0 rounded-md py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
                   placeholder="">
               </div>
 
@@ -170,7 +170,7 @@ id="recipient_phone" v-model="data.recipientPhone" type="text" name="recipient_p
                 <input
 id="recipient_location" v-model="data.deliveryAddress.country" type="text"
                   name="recipient_location"
-                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  class="block w-full border-0 rounded-md py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
                   placeholder="">
               </div>
 
@@ -178,7 +178,7 @@ id="recipient_location" v-model="data.deliveryAddress.country" type="text"
                 <label for="recipient_city" class="block text-sm text-gray-900 font-medium leading-6">城市/縣</label>
                 <input
 id="recipient_city" v-model="data.deliveryAddress.county" type="text" name="recipient_city"
-                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  class="block w-full border-0 rounded-md py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
                   placeholder="">
               </div>
 
@@ -186,7 +186,7 @@ id="recipient_city" v-model="data.deliveryAddress.county" type="text" name="reci
                 <label for="recipient_area" class="block text-sm text-gray-900 font-medium leading-6">地區</label>
                 <input
 id="recipient_area" v-model="data.deliveryAddress.district" type="text" name="recipient_area"
-                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  class="block w-full border-0 rounded-md py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
                   placeholder="">
               </div>
 
@@ -195,7 +195,7 @@ id="recipient_area" v-model="data.deliveryAddress.district" type="text" name="re
                 <input
 id="recipient_address" v-model="data.deliveryAddress.address" type="text"
                   name="recipient_address"
-                  class="block w-full border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
+                  class="block w-full border-0 rounded-md py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-gray-300 ring-inset sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
                   placeholder="">
               </div>
             </div>
@@ -203,7 +203,7 @@ id="recipient_address" v-model="data.deliveryAddress.address" type="text"
           <div class="mb-4 flex grid-justify-center grid-items-center">
             <a
 href="#"
-              class="w-[100px] w-full inline-flex justify-center rounded-md bg-[#191919] px-3 py-2 text-sm text-gray-900 text-white font-semibold shadow-sm ring-1 ring-gray-300 ring-inset sm:mt-0 hover:bg-[#484848]"
+              class="w-[100px] w-full inline-flex justify-center rounded-md bg-[#191919] px-3 py-2 text-sm  text-white font-semibold shadow-sm ring-1 ring-gray-300 ring-inset sm:mt-0 hover:bg-[#484848]"
               @click.prevent="saveMember">儲存</a>
           </div>
         </form>
