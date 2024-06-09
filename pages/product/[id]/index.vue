@@ -1,6 +1,79 @@
 <script setup>
+const route = useRoute()
+const { id } = route.params
 
-const productData = ref([
+const productIDData = ref({
+  "_id": "",
+  "productId": {
+    "_id": "",
+    "title": "",
+    "subtitle": "",
+    "description": "",
+    "category": [
+        
+    ],
+    "otherInfo": [
+        {
+            "infoName": "",
+            "infoValue": ""
+        }
+    ],
+    "star": "",
+    "imageGallery": [
+        {
+            "_id": "",
+            "imgUrl": "",
+            "altText": ""
+        }
+    ]
+  },
+  "productNumber": "",
+  "weight": "",
+  "price": "",
+  "inStock": "",
+  "onlineStatus": "",
+  "createdAt": "",
+  "updatedAt": ""
+})
+
+
+// const productIDData = ref({
+//   "_id": "66487aba27b3916f705679f0",
+//   "productId": {
+//     "_id": "663f18d3fc11d10c288dc062",
+//     "title": "鮮嫩雞胸肉鮮食罐頭",
+//     "subtitle": "新鮮雞胸肉，符合人食等級，富含高品質蛋白質，提供毛孩維持健康體愛所需的重要營養素。",
+//     "description": "",
+//     "category": [
+//         "fresh",
+//         "dog"
+//     ],
+//     "otherInfo": [
+//         {
+//             "infoName": "產地",
+//             "infoValue": "台灣"
+//         }
+//     ],
+//     "star": 4,
+//     "imageGallery": [
+//         {
+//             "_id": "66651ab35d4f421ee1495778",
+//             "imgUrl": "https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+//             "altText": "狗鮮食"
+//         }
+//     ]
+//   },
+//   "productNumber": "B0001",
+//   "weight": 76,
+//   "price": 100,
+//   "inStock": 10,
+//   "onlineStatus": false,
+//   "createdAt": "2024-05-11T08:44:02.095Z",
+//   "updatedAt": "2024-05-11T08:44:02.095Z"
+// })
+
+// for相關商品
+const productsData = ref([
   {
     _id: 11,
     price: 200,
@@ -55,9 +128,53 @@ const productData = ref([
 ]
 );
 
+const fetchData = async () => {
+  // console.log('36' ,searchValue.value);
+  try {
+  //   const params = {
+  //     ...searchValue.value,
+
+  //   }
+    // const queryString = new URLSearchParams(params).toString()
+
+    const response = await fetch(
+      // `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList?${queryString}`,
+      `https://pets-love-nature-backend-n.onrender.com/api/v1/product/${id}`,
+      {
+        method: "GET",
+      }
+
+    );
+    if (!response.ok) {
+      // throw new Error("Network response was not ok");
+      const e = new Error("請重新登入");
+      e.name = response.status;
+      throw e;
+
+    }
+    const result = await response.json();
+
+    // data.value = result.data;
+    console.log('125' , result.data);
+    productIDData.value=result.data
+    // productData.value = result.data.content
+    // pageInfo.value = result.data.page
+    // console.log(result.data.page);
+    // console.log("成功得到產品資訊", result.data.content);
+  } catch (e) {
+    console.log(e.message)
+    console.log("err", e);
+
+  }
+};
+
 const addToCart = () => {
   console.log('add');
 }
+
+onMounted(() => {
+  fetchData();
+});
 
 </script>
 
@@ -70,7 +187,7 @@ const addToCart = () => {
             <div class="mb-[16px] h-[637px]">
               <img
                 class="ma h-[100%] object-contain"
-                src="https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png"
+                :src="productIDData.productId.imageGallery[0].imgUrl"
                 alt="">
             </div>
             <div class="h-[120px] w-[90%] flex justify-between">
@@ -97,13 +214,13 @@ const addToCart = () => {
 
           </div>
           <div class="product-imgs grid grid-cols-6 flex flex-col">
-            <h2 class="mb-[16px]">鮮嫩雞胸肉凍乾</h2>
-            <p class="mb-[16px] text-[#525252] font-light">新鮮雞胸肉，符合人食等級，富含高品質蛋白質，提供毛孩維持健康體愛所需的重要營養素。</p>
-            <p class="mb-[64px]">NT$ <span class="font-size-[48px] font-300">300 </span></p>
+            <h2 class="mb-[16px]">  {{ productIDData.productId.title }}</h2>
+            <p class="mb-[16px] text-[#525252] font-light"> {{ productIDData.productId.subtitle}}</p>
+            <p class="mb-[64px]">NT$ <span class="font-size-[48px] font-300">{{ productIDData.price }} </span></p>
             <div class="weight mb-[24px] flex">
               <div
                 class="mr-4 h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#F43F5E] pb-[8px] pt-[8px] text-center font-size-[24px] text-white font-200">
-                100g</div>
+                {{ productIDData.weight }}g</div>
               <div
                 class="h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#E5E5E5] font-size-[24px] text-black font-200">
                 30g</div>
@@ -138,16 +255,15 @@ const addToCart = () => {
               <div class="h-[56px] flex items-center">
                 <p class="w-[100px]">分類</p>
                 <div class="flex">
-                  <p class="mr-2 bg-[#F9F0EA] pl-[8px] pr-[8px]">凍乾</p>
-                  <p class="bg-[#F9F0EA] pl-[8px] pr-[8px]">貓貓專區</p>
+                  <p  v-for="category in productIDData.productId.category" class="mr-2 bg-[#F9F0EA] pl-[8px] pr-[8px]">{{ category  }}</p>
                 </div>
               </div>
               <hr>
 
               <div class="h-[56px] flex items-center">
-                <p class="w-[100px]">產地</p>
+                <p class="w-[100px]"> {{  productIDData.productId.otherInfo[0].infoName}}</p>
                 <div class="flex">
-                  <p class="mr-2 pl-[8px] pr-[8px]">臺灣</p>
+                  <p class="mr-2 pl-[8px] pr-[8px]">{{  productIDData.productId.otherInfo[0].infoValue}}</p>
                 </div>
               </div>
               <hr>
@@ -155,7 +271,7 @@ const addToCart = () => {
               <div class="h-[56px] flex items-center">
                 <p class="w-[100px]">庫存</p>
                 <div class="flex">
-                  <p class="mr-2 pl-[8px] pr-[8px]">100</p>
+                  <p class="mr-2 pl-[8px] pr-[8px]">{{  productIDData.inStock}}</p>
                 </div>
               </div>
               <hr>
@@ -165,11 +281,11 @@ const addToCart = () => {
 
       </div>
 
-      <div class="content mb-[120px]">
-        <img
+      <div class="content mt-[16px] mb-[120px]">
+        <!-- <img
           class="ma"
           src="https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png"
-          alt="" >
+          alt="" > -->
 
         <p>
           24h 快速出貨🔥<br>
@@ -203,7 +319,59 @@ const addToCart = () => {
                 </div>
               </div>
             </div>
-            <div class="comment flex items-center">
+            <div>
+              <!--  -->
+
+              <!-- <Swiper
+    :modules="[SwiperAutoplay, SwiperEffectCreative]"
+    :slides-per-view="1"
+    :loop="true"
+    :effect="'creative'"
+    :autoplay="{
+      delay: 8000,
+      disableOnInteraction: true,
+    }"
+    :creative-effect="{
+      prev: {
+        shadow: false,
+        translate: ['-20%', 0, -1],
+      },
+      next: {
+        translate: ['100%', 0, 0],
+      },
+    }"
+  >
+    <SwiperSlide v-for="slide in 10" :key="slide">
+      <strong>{{ slide }}</strong>
+    </SwiperSlide>
+  </Swiper> -->
+
+              <!--  -->
+              <!-- <Swiper
+            :modules="[ SwiperNavigation, SwiperEffectCreative ]"
+            :slides-per-view="1"
+            :autoplay="{
+              delay: 3000,
+              disableOnInteraction: true,
+            }"
+            :effect="'creative'"
+            :creative-effect="{
+              prev: {
+                shadow: false,
+                translate: ['-20%', 0, -1],
+              },
+              next: {
+                translate: ['100%', 0, 0],
+              },
+            }"
+
+            :loop="true">
+            <SwiperSlide v-for="slide in 10" :key="slide">
+              <strong>{{ slide }} 333</strong>
+            </SwiperSlide>
+        </Swiper> -->
+            </div>
+            <!-- <div class="comment flex items-center">
               <div class="w-[30%]">
                 <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
               </div>
@@ -215,7 +383,7 @@ const addToCart = () => {
                   <span class="text-[#A3A3A3]">2024-01-22 21:10</span>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <div>
@@ -227,7 +395,7 @@ const addToCart = () => {
           <div class="grid grid-cols-3 mt-6 gap-x-6 gap-y-10">
 
             <div
-              v-for="(product) in productData" :key="product._id"
+              v-for="(product) in productsData" :key="product._id"
               class="group product relative border b-rd-2xl pb-4 pl-2 pr-2">
               <div
                 v-if="product.productId.imageGallery.length > 0"
