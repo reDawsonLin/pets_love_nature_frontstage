@@ -37,41 +37,6 @@ const productIDData = ref({
 })
 
 
-// const productIDData = ref({
-//   "_id": "66487aba27b3916f705679f0",
-//   "productId": {
-//     "_id": "663f18d3fc11d10c288dc062",
-//     "title": "鮮嫩雞胸肉鮮食罐頭",
-//     "subtitle": "新鮮雞胸肉，符合人食等級，富含高品質蛋白質，提供毛孩維持健康體愛所需的重要營養素。",
-//     "description": "",
-//     "category": [
-//         "fresh",
-//         "dog"
-//     ],
-//     "otherInfo": [
-//         {
-//             "infoName": "產地",
-//             "infoValue": "台灣"
-//         }
-//     ],
-//     "star": 4,
-//     "imageGallery": [
-//         {
-//             "_id": "66651ab35d4f421ee1495778",
-//             "imgUrl": "https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//             "altText": "狗鮮食"
-//         }
-//     ]
-//   },
-//   "productNumber": "B0001",
-//   "weight": 76,
-//   "price": 100,
-//   "inStock": 10,
-//   "onlineStatus": false,
-//   "createdAt": "2024-05-11T08:44:02.095Z",
-//   "updatedAt": "2024-05-11T08:44:02.095Z"
-// })
-
 // for相關商品
 const productsData = ref([
   {
@@ -154,13 +119,9 @@ const fetchData = async () => {
     }
     const result = await response.json();
 
-    // data.value = result.data;
     console.log('125' , result.data);
     productIDData.value=result.data
-    // productData.value = result.data.content
-    // pageInfo.value = result.data.page
-    // console.log(result.data.page);
-    // console.log("成功得到產品資訊", result.data.content);
+
   } catch (e) {
     console.log(e.message)
     console.log("err", e);
@@ -172,15 +133,21 @@ const addToCart = () => {
   console.log('add');
 }
 
+
 onMounted(() => {
   fetchData();
+
 });
+
+const slideChange = () => {
+    console.log('slideChange');
+};
 
 </script>
 
 <template>
   <div class="bg-white">
-    <div class="mx-auto max-w-4xl px-4 py-16 lg:max-w-7xl lg:px-8 sm:px-6 sm:py-24">
+    <div class="product mx-auto max-w-4xl px-4 py-16 lg:max-w-7xl lg:px-8 sm:px-6 sm:py-24">
       <div class="header h-auto md:h-[773px]">
         <div class="product-imgs grid grid-cols-1 md:grid-cols-2">
           <div class="imgs w-[90%]">
@@ -255,7 +222,7 @@ onMounted(() => {
               <div class="h-[56px] flex items-center">
                 <p class="w-[100px]">分類</p>
                 <div class="flex">
-                  <p  v-for="category in productIDData.productId.category" class="mr-2 bg-[#F9F0EA] pl-[8px] pr-[8px]">{{ category  }}</p>
+                  <p  v-for="(category,index) in productIDData.productId.category" :key="index" class="mr-2 bg-[#F9F0EA] pl-[8px] pr-[8px]">{{ category  }}</p>
                 </div>
               </div>
               <hr>
@@ -281,7 +248,7 @@ onMounted(() => {
 
       </div>
 
-      <div class="content mt-[16px] mb-[120px]">
+      <div class="content mb-[120px] mt-[16px]">
         <!-- <img
           class="ma"
           src="https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png"
@@ -303,10 +270,9 @@ onMounted(() => {
           <div class="mb-[48px] h-[50px] bg-[#E5E5E5] px-[16px] py-[8px] font-size-[24px] text-[#525252] font-200">
             評價
           </div>
-          <!-- <div class="flex "> -->
-          <div class="grid grid-cols-1 mt-6 gap-x-6 gap-y-10 md:grid-cols-2">
+          <div class="grid grid-cols-1 mt-6 gap-x-6 gap-y-10 md:grid-cols-1">
 
-            <div class="comment flex items-center">
+            <!-- <div class="comment flex items-center">
               <div class="w-[30%]">
                 <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
               </div>
@@ -318,58 +284,131 @@ onMounted(() => {
                   <span class="text-[#A3A3A3]">2024-01-22 21:10</span>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div>
-              <!--  -->
+              <Swiper
+                ref="mySwiper"
+                :height="300"
+                :modules="[ SwiperAutoplay, SwiperEffectCreative,SwiperPagination ]"
+                pagination
+                :slides-per-view="1"
+                :loop="true"
+                :effect="'creative'"
+                :autoplay="{
+                  delay: 3000,
+                  disableOnInteraction: true
+                }"
+                :creative-effect="{
+                  prev: {
+                    shadow: false,
+                    translate: ['100%', 0, 0]
+                  },
+                  next: {
+                    shadow: false,
+                    translate: ['100%', 0, 0]
+                  }
+                }"
+                @slide-change="slideChange()"
+              >
+    <!-- <SwiperSlide v-for="i in 3" :key="index">{{ i }}</SwiperSlide> -->
 
-              <!-- <Swiper
-    :modules="[SwiperAutoplay, SwiperEffectCreative]"
-    :slides-per-view="1"
-    :loop="true"
-    :effect="'creative'"
-    :autoplay="{
-      delay: 8000,
-      disableOnInteraction: true,
-    }"
-    :creative-effect="{
-      prev: {
-        shadow: false,
-        translate: ['-20%', 0, -1],
-      },
-      next: {
-        translate: ['100%', 0, 0],
-      },
-    }"
-  >
-    <SwiperSlide v-for="slide in 10" :key="slide">
-      <strong>{{ slide }}</strong>
-    </SwiperSlide>
-  </Swiper> -->
+    <!-- <SwiperSlide>Slide 2</SwiperSlide>
+    <SwiperSlide>Slide 3</SwiperSlide> -->
 
-              <!--  -->
-              <!-- <Swiper
-            :modules="[ SwiperNavigation, SwiperEffectCreative ]"
-            :slides-per-view="1"
-            :autoplay="{
-              delay: 3000,
-              disableOnInteraction: true,
-            }"
-            :effect="'creative'"
-            :creative-effect="{
-              prev: {
-                shadow: false,
-                translate: ['-20%', 0, -1],
-              },
-              next: {
-                translate: ['100%', 0, 0],
-              },
-            }"
+      <!-- <SwiperSlide
+        v-for="(slide, idx) in slides"
+        :key="idx"
+        :style="`background-color: ${slide.bg}; color: ${slide.color}`"
+      >
+        {{ idx }}
 
-            :loop="true">
-            <SwiperSlide v-for="slide in 10" :key="slide">
-              <strong>{{ slide }} 333</strong>
-            </SwiperSlide>
-        </Swiper> -->
+      </SwiperSlide> -->
+      <SwiperSlide 
+      :key=1
+      >
+      <div>
+         <div class="comment flex items-center">
+            <div class="min-w-[100px] w-[30%] sm:w-[15%]">
+                <img class="h-[100px] w-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+              </div>
+              <div class="w-[70%] flex items-center sm:w-[35%]">
+                <div class="triangle"/>
+                <div class="radius-square p-[48px]">
+                  <span>超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️ </span>
+                  <br >
+                  <span class="text-[#A3A3A3]">2024-04-13 10:10</span>
+                </div>
+              </div>
+              <div class="hidden w-[30%] sm:w-[15%] sm:inline-flex">
+                <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+              </div>
+              <div class="hidden w-[70%] flex items-center sm:w-[35%] sm:inline-flex">
+                <div class="triangle hidden sm:inline-flex"/>
+                <div class="radius-square hidden flex-col p-[48px] sm:flex sm:inline-flex">
+                  <span>良心商家，值得多買 </span>
+                  <br >
+                  <span class="text-[#A3A3A3]">2024-04-14 21:10</span>
+                </div>
+              </div>
+        </div>
+      </div>
+        
+
+      </SwiperSlide>
+      <SwiperSlide
+      :key=2
+      >
+      <div>
+        <div class="comment flex items-center">
+            <div class="min-w-[100px] w-[30%] sm:w-[15%]">
+                <img class="h-[100px] w-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+              </div>
+              <div class="w-[70%] flex items-center sm:w-[35%]">
+                <div class="triangle"/>
+                <div class="radius-square p-[48px]">
+                  <span>超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️ </span>
+                  <br >
+                  <span class="text-[#A3A3A3]">2024-05-13 10:10</span>
+                </div>
+              </div>
+              <div class="hidden w-[30%] sm:w-[15%] sm:inline-flex">
+                <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+              </div>
+              <div class="hidden w-[70%] flex items-center sm:w-[35%] sm:inline-flex">
+                <div class="triangle hidden sm:inline-flex"/>
+                <div class="radius-square hidden flex-col p-[48px] sm:flex sm:inline-flex">
+                  <span>乾蝦❤️乾蝦❤️乾蝦❤️乾蝦❤️ </span>
+                  <br >
+                  <span class="text-[#A3A3A3]">2024-05-14 21:10</span>
+                </div>
+              </div>
+        </div>
+      </div>
+            <!-- <div class="comment flex items-center">
+              <div class="w-[30%]">
+                <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+              </div>
+              <div class="w-[70%] flex items-center">
+                <div class="triangle"/>
+                <div class="radius-square p-[48px]">
+                  <span>乾蝦❤️ 乾蝦❤️ 乾蝦❤️ 乾蝦❤️ 乾蝦❤️ </span>
+                  <br >
+                  <span class="text-[#A3A3A3]">2024-01-22 21:10</span>
+                </div>
+              </div>
+            </div> -->
+
+      </SwiperSlide>
+      <!-- <SwiperControls /> -->
+  
+      <!-- <SwiperControls2 direction="prev"/> 
+      <SwiperControls2 direction="next"/>  -->
+
+
+    </Swiper>
+              <!-- https://stackblitz.com/github/cpreston321/nuxt-swiper/tree/main/examples/swiper-basic?file=app.vue -->
+
+              
             </div>
             <!-- <div class="comment flex items-center">
               <div class="w-[30%]">
@@ -443,6 +482,41 @@ v-for="index in Math.floor(product.star)" :key="index" src="/assets/img/icon/ico
 </template>
 
 <style lang="scss" scoped>
+
+// .swiper-slide {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   font-size: 18px;
+//   height: 20vh;
+//   font-size: 4rem;
+//   font-weight: bold;
+//   font-family: 'Roboto', sans-serif;
+// }
+.swiper-wrapper {
+  min-width: 100vh;
+  width: 100vh;
+}
+.swiper-cards {
+  width: 240px;
+  height: 240px;
+}
+.swiper-cards .swiper-slide {
+  border-radius: 6px;
+  border: 1px solid black;
+}
+
+#__nuxt {
+  height: 100%;
+}
+.swiper {
+  width: 100%;
+  height: 100%;
+  /* width: 500px;
+  height: 500px; */
+  // border: 1px solid red;
+}
+
 .triangle {
   width: 0;
   height: 0;
