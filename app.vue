@@ -2,7 +2,8 @@
 
 <template>
   <!-- <NuxtLoadingIndicator :throttle="0" /> -->
-  <LoadingIndicator />
+  <!-- <LoadingIndicator /> -->
+  <LoadingTest />
 
   <NuxtLayout>
     <NuxtPage />
