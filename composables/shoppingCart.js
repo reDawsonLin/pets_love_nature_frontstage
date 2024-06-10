@@ -197,8 +197,9 @@ export const useShoppingCart = async () => {
         const index = prevData.shoppingCart.findIndex(eachCart => eachCart.productSpec === productSpec);
         // prevData.shoppingCart[index].quantity = prevData.shoppingCart[index].quantity + quantity > inStock ?  
         let focusQuantity;
-        console.log('prevData.shoppingCart[index].quantity type',typeof prevData.shoppingCart[index].quantity);
-        console.log('quantity type',typeof quantity);
+        if (index === -1) {
+        // 如果購物車有該商品 
+        
         if(addWay === 0) focusQuantity = prevData.shoppingCart[index].quantity + quantity;
         else if (addWay === 1) focusQuantity = quantity;
         console.log('focusQuantity', focusQuantity);
@@ -222,6 +223,35 @@ export const useShoppingCart = async () => {
           }
           console.log('正常增加');
         }
+      }else {
+                // 如果購物車內沒有該商品
+        
+                if (quantity > inStock) {
+                  let obj = {
+                    productSpec,
+                    quantity: inStock,
+                  }
+        
+                  prevData.push(obj);
+                  Swal.fire(`因庫存只有${inStock}個，購物車品已幫您加該商品數量至${inStock}個`);
+                } else {
+                  let obj = {
+                    productSpec,
+                    quantity,
+                  }
+        
+                  prevData.shoppingCart.push(obj);
+                  if(addWay === 0) {
+                    Swal.fire({
+                      position: "top-end",
+                      icon: "success",
+                      title: "商品已新增至購物車",
+                      showConfirmButton: false,
+                      timer: 1500
+                    });
+                  }
+                }
+      }
       sessionStorage.setItem("shoppingCartNoLogin", JSON.stringify(prevData));
 
         
