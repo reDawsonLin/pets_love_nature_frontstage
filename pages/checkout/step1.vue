@@ -51,6 +51,36 @@ const dummy_cart = ref([
   },
 ]);
 
+const id_customer = useCookie("id_customer");
+console.log("id_customer :>> ", id_customer.value);
+// const { data, pending, error, refresh } = await useTokenFetch(
+// const res = await useTokenFetch("/shopping_cart/login/", {
+//   params: { id: id_customer.value },
+// });
+// console.log("res :>> ", res);
+
+const {
+  data: data_get,
+  pending,
+  error,
+  refresh,
+} = await useTokenFetch(`/shopping_cart/login/${id_customer.value}`);
+
+const {
+  data: { shoppingCart },
+  message,
+  status,
+} = data_get.value;
+
+console.log("data_get.value :>> ", data_get.value);
+console.log("shoppingCart :>> ", shoppingCart);
+console.log("message :>> ", message);
+// console.log("data :>> ", data);
+console.log("status :>> ", status);
+console.log("error.value :>> ", error.value);
+
+onMounted(async () => {});
+
 const totalPrice = (cart) => {
   let result = null;
 
@@ -112,7 +142,9 @@ const { width: window_width } = useWindowSize();
           >
             <table>
               <thead>
-                <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
+                <tr
+                  class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)"
+                >
                   <th
                     class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0.25rem text-1rem)"
                     :colspan="window_width < 1024 ? 1 : 2"
@@ -126,7 +158,11 @@ const { width: window_width } = useWindowSize();
               </thead>
 
               <tbody class="">
-                <tr v-for="item in dummy_cart" :key="item.id" class="tbody_tr mb-1.5rem">
+                <tr
+                  v-for="item in dummy_cart"
+                  :key="item.id"
+                  class="tbody_tr mb-1.5rem"
+                >
                   <td class="td_img mr-1rem lg:(min-w-76px)">
                     <img
                       class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
@@ -171,7 +207,9 @@ const { width: window_width } = useWindowSize();
               </tbody>
             </table>
 
-            <div class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)">
+            <div
+              class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)"
+            >
               <div
                 class="flex items-end justify-center gap-1rem border border-neutral-200 rounded-0.5rem p-1.5rem lg:(border-none bg-neutral-50 px-1.5rem py-1rem)"
               >
@@ -197,7 +235,10 @@ const { width: window_width } = useWindowSize();
       class="group info_cart transition-background flex flex-col cursor-pointer gap-1.5rem rounded-1rem bg-second-400 px-1rem py-1.5rem text-neutral-600 transition-colors hover:(bg-neutral-600 text-neutral-50) lg:(px-1.75rem py-2.5rem)"
       @click="openModal()"
     >
-      <SvgIcon name="cart" class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)" />
+      <SvgIcon
+        name="cart"
+        class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)"
+      />
 
       <div class="">
         <p class="mb-0.75rem flex justify-center text-1.5rem">購物車（2件）</p>
@@ -269,7 +310,9 @@ const { width: window_width } = useWindowSize();
         />
 
         <div class="flex flex-col">
-          <p class="mb-0.25rem ml-2px">地址 <sup class="text-rose-500">*</sup></p>
+          <p class="mb-0.25rem ml-2px">
+            地址 <sup class="text-rose-500">*</sup>
+          </p>
 
           <div class="mb-1rem flex gap-0.5rem">
             <InputSelect
@@ -303,7 +346,9 @@ const { width: window_width } = useWindowSize();
         </div>
 
         <div class="box_select flex flex-col">
-          <p class="mb-0.25rem ml-2px">發票<sup class="text-rose-500">*</sup></p>
+          <p class="mb-0.25rem ml-2px">
+            發票<sup class="text-rose-500">*</sup>
+          </p>
 
           <InputSelect
             v-model="param_post.receipt"
