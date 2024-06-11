@@ -1,9 +1,7 @@
 <script setup></script>
 
 <template>
-  <!-- <NuxtLoadingIndicator :throttle="0" /> -->
-  <!-- <LoadingIndicator /> -->
-  <LoadingTest />
+  <LoadingIndicator />
 
   <NuxtLayout>
     <NuxtPage />
