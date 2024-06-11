@@ -36,20 +36,12 @@ const mobileNavShow = ref(false);
         <SvgIcon name="brand_name" class="aspect-120/27 w-7.5rem" />
       </NuxtLink>
 
-      <ClientOnly>
-        <div
-          v-if="mobileNavShow"
-          
-      
+      <div
         :class="{ flex: mobileNavShow }"
-        class="hidden absolute right-0 top-0 z-6 h-100% max-w-375px flex-col gap-1rem rounded-l-1rem bg-second-200 pb-2.5rem pt-1.75rem text-1.25rem md:(relative min-h-unset w-unset flex-grow-1 flex flex-row bg-transparent pb-unset pt-unset text-neutral-50 max-w-unset )"
+        class="hidden absolute right-0 top-0 z-6 h-100% max-w-375px flex-col gap-1rem rounded-l-1rem bg-second-200 pb-2.5rem pt-1.75rem text-1.25rem md:(relative min-h-unset w-unset max-w-unset flex-grow-1 flex-row flex bg-transparent pb-unset pt-unset text-neutral-50)"
       >
         <div class="flex justify-end px-1.5rem md:(hidden)">
-          <SvgIcon
-            name="close"
-            class="w-2rem cursor-pointer"
-            @click="closeMobileNav()"
-          />
+          <SvgIcon name="close" class="w-2rem cursor-pointer" @click="closeMobileNav()" />
         </div>
 
         <ul
@@ -66,9 +58,7 @@ const mobileNavShow = ref(false);
             >
           </li>
           <li class="">
-            <NuxtLink
-              :to="{ name: 'frequently-questions' }"
-              @click="closeMobileNav()"
+            <NuxtLink :to="{ name: 'frequently-questions' }" @click="closeMobileNav()"
               >常見問題</NuxtLink
             >
           </li>
@@ -88,97 +78,28 @@ const mobileNavShow = ref(false);
                 name="cart"
               />
 
-          <ul
-            class="flex flex-col gap-1rem px-2.25rem md:(flex-grow-1 flex-row items-center justify-end gap-3rem px-unset)"
-          >
-            <li class="">
-              <NuxtLink :to="{ name: 'product' }">所有商品</NuxtLink>
-            </li>
-            <li class="">
-              <NuxtLink :to="{ name: 'about' }">關於我們</NuxtLink>
-            </li>
-            <li class="">
-              <NuxtLink :to="{ name: 'frequently-questions' }"
-                >常見問題</NuxtLink
-              >
-            </li>
-          </ul>
+              <p class="md:(hidden)">購物車</p>
+            </NuxtLink>
 
             <div
               class="list_content hidden md:(absolute left-50% top-100% w-200px flex flex-col translate-x--50% gap-1.5rem rounded-0.5rem bg-neutral-50 px-1.5rem py-1rem text-neutral-600)"
             >
               <p class="whitespace-nowrap">最近加入商品</p>
 
-                <p class="md:(hidden)">購物車</p>
-              </NuxtLink>
-
-              <div
-                class="list_content hidden md:(absolute left-50% top-100% w-200px flex flex-col translate-x--50% gap-1.5rem rounded-0.5rem bg-neutral-50 px-1.5rem py-1rem text-neutral-600)"
-              >
-                <p class="whitespace-nowrap">最近加入商品</p>
-
-                <ul class="flex flex-grow-1 flex-col gap-0.5rem">
-                  <template v-for="item in 3" :key="item">
-                    <li class="w-100% flex items-center gap-0.25rem">
-                      <img
-                        class="h-1.75rem w-1.75rem"
-                        src="@/assets/img/dm_cart_product.png"
-                        alt="product image"
-                      />
-                      <p class="flex-nowrap text-0.875rem">鮮嫩雞肉凍乾</p>
-                      <p class="ml-auto text-0.75rem text-rose-500 font-bold">
-                        $300
-                      </p>
-                    </li>
-                  </template>
-
-                  <li class="mt-0.5rem text-0.75rem text-neutral-400">
-                    10件商品未展示
-                  </li>
-                </ul>
-
-                <NuxtLink
-                  :to="{ name: 'shopping-cart' }"
-                  class="w-100% flex items-center justify-center rounded-5rem bg-rose-500 p-0.5rem text-0.75rem text-white"
-                  >查看購物車</NuxtLink
-                >
-              </div>
-            </li>
-
-            <li class="wrapper_icon md:(relative order-3)">
-              <div class="mb-0.75rem flex gap-0.5rem md:(mb-unset)">
-                <SvgIcon
-                  class="h-1.5rem w-1.5rem md:(h-2rem w-2rem cursor-pointer)"
-                  name="account"
-                />
-                <p class="md:(hidden)">會員中心</p>
-              </div>
-
-              <ul
-                class="list_content flex flex-col gap-0.75rem px-2rem text-1rem md:(absolute left-50% top-100% translate-x--50% rounded-0.5rem bg-neutral-50 px-1.5rem py-1rem text-neutral-600)"
-              >
-                <li v-if="!token" class="whitespace-nowrap">
-                  <NuxtLink to="/Login"> 登入 </NuxtLink>
-                </li>
-
-                <template v-else>
-                  <li class="cursor-pointer whitespace-nowrap">
-                    <NuxtLink :to="{ name: 'member' }"> 個人資訊 </NuxtLink>
-                  </li>
-                  <li class="cursor-pointer whitespace-nowrap">訂單記錄</li>
-                  <li class="cursor-pointer whitespace-nowrap">收藏商品</li>
-                  <li class="cursor-pointer whitespace-nowrap">聊聊紀錄</li>
-                  <li
-                    class="cursor-pointer whitespace-nowrap"
-                    @click="setToken(null)"
-                  >
-                    登出
+              <ul class="flex flex-grow-1 flex-col gap-0.5rem">
+                <template v-for="item in 3" :key="item">
+                  <li class="w-100% flex items-center gap-0.25rem">
+                    <img
+                      class="h-1.75rem w-1.75rem"
+                      src="@/assets/img/dm_cart_product.png"
+                      alt="product image"
+                    />
+                    <p class="flex-nowrap text-0.875rem">鮮嫩雞肉凍乾</p>
+                    <p class="ml-auto text-0.75rem text-rose-500 font-bold">$300</p>
                   </li>
                 </template>
 
-                <li class="mt-0.5rem text-0.75rem text-neutral-400">
-                  10件商品未展示
-                </li>
+                <li class="mt-0.5rem text-0.75rem text-neutral-400">10件商品未展示</li>
               </ul>
 
               <NuxtLink
@@ -201,37 +122,21 @@ const mobileNavShow = ref(false);
             <ul
               class="list_content flex flex-col gap-0.75rem px-2rem text-1rem md:(absolute left-50% top-100% translate-x--50% rounded-0.5rem bg-neutral-50 px-1.5rem py-1rem text-neutral-600)"
             >
-              <li
-                v-if="!token"
-                class="whitespace-nowrap"
-                @click="closeMobileNav()"
-              >
+              <li v-if="!token" class="whitespace-nowrap">
                 <NuxtLink to="/Login"> 登入 </NuxtLink>
               </li>
 
               <template v-else>
-                <li
-                  class="cursor-pointer whitespace-nowrap"
-                  @click="closeMobileNav()"
-                >
+                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
                   <NuxtLink :to="{ name: 'member' }"> 個人資訊 </NuxtLink>
                 </li>
-                <li
-                  class="cursor-pointer whitespace-nowrap"
-                  @click="closeMobileNav()"
-                >
+                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
                   訂單記錄
                 </li>
-                <li
-                  class="cursor-pointer whitespace-nowrap"
-                  @click="closeMobileNav()"
-                >
+                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
                   收藏商品
                 </li>
-                <li
-                  class="cursor-pointer whitespace-nowrap"
-                  @click="closeMobileNav()"
-                >
+                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
                   聊聊紀錄
                 </li>
                 <li
