@@ -34,7 +34,7 @@ onMounted(() => {
 
 const url_login = computed(() => {
   // console.log("process?.dev :>> ", process?.dev);
-  return process?.dev
+  return import.meta.dev
     ? "https://pets-love-nature-backend-n.onrender.com/api/v1/customer/google?env=dev"
     : "https://pets-love-nature-backend-n.onrender.com/api/v1/customer/google?env=pro";
 });
