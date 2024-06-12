@@ -1,95 +1,103 @@
 <script setup>
-// import { useSessionStorage } from '@vueuse/core'
+import tw_postal_code from "@/assets/json/tw_postal_code.json";
 
 const dummy_cart = ref([
   {
     id: 1,
     imgUrl: "",
-    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
     price: 450,
-    amount: 1,
+    quantity: 1,
   },
   {
     id: 2,
     imgUrl: "",
-    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
     price: 450,
-    amount: 2,
+    quantity: 2,
   },
   {
     id: 3,
     imgUrl: "",
-    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
     price: 450,
-    amount: 3,
+    quantity: 3,
   },
   {
     id: 4,
     imgUrl: "",
-    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
     price: 450,
-    amount: 4,
+    quantity: 4,
   },
   {
     id: 5,
     imgUrl: "",
-    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
     price: 450,
-    amount: 4,
+    quantity: 4,
   },
   {
     id: 6,
     imgUrl: "",
-    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
     price: 450,
-    amount: 4,
+    quantity: 4,
   },
   {
     id: 7,
     imgUrl: "",
-    productName: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
+    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
     price: 450,
-    amount: 4,
+    quantity: 4,
   },
 ]);
 
-// temporary fetch shopping cart, after this must get shopping cart from session storage -------
-const id_customer = useCookie("id_customer");
-
-const {
-  data: data_getCart,
-  pending: pending_getCart,
-  error: error_getCart,
-  refresh: refresh_getCart,
-} = await useTokenFetch(`/shopping_cart/login/${id_customer.value}`);
-
-console.log("data_getCart.value :>> ", data_getCart?.value);
-// const data_cart = useSessionStorage("shopping-cart", data_getCart?.value.data);
-// console.log("data_cart.value :>> ", data_cart?.value);
-
+// cart -------
 const data_cart = useCookie("shopping-cart");
-data_cart.value = data_getCart?.value.data;
+console.log("data_cart.value :>> ", data_cart.value);
 
 const totalPrice = (cart) => {
   let result = null;
 
   cart.forEach((item) => {
-    result += item.price * item.amount;
+    result += item.price * item.quantity;
   });
   return result;
 };
 
-// -------
+// member -------
 const same_member = ref(false);
 const param_post = ref({
   name: "",
   phoneNumber: "",
   email: "",
-  city: "",
-  town: "",
+  county: "",
+  district: "",
   address: "",
   receipt: "",
   payment_method: "",
+});
+
+const id_customer = useCookie("id_customer");
+const {
+  data: data_member,
+  pending: pending_member,
+  error: error_member,
+  refresh: refresh_member,
+} = await useTokenFetch(`/customer/${id_customer.value}`);
+console.log("data_member.value :>> ", data_member.value);
+
+const {
+  data: { customerName: member_name, email: member_email, phone: member_phone },
+} = data_member.value;
+
+// postal dropdown -------
+const current_district = computed(() => {
+  const result = tw_postal_code.find((item) => item.name === param_post.value.county);
+
+  if (param_post.value.county) return result.districts;
+  else return null;
 });
 
 // 選擇滑窗
@@ -131,9 +139,7 @@ const { width: window_width } = useWindowSize();
           >
             <table>
               <thead>
-                <tr
-                  class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)"
-                >
+                <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
                   <th
                     class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0.25rem text-1rem)"
                     :colspan="window_width < 1024 ? 1 : 2"
@@ -147,11 +153,7 @@ const { width: window_width } = useWindowSize();
               </thead>
 
               <tbody class="">
-                <tr
-                  v-for="item in dummy_cart"
-                  :key="item.id"
-                  class="tbody_tr mb-1.5rem"
-                >
+                <tr v-for="item in data_cart" :key="item.id" class="tbody_tr mb-1.5rem">
                   <td class="td_img mr-1rem lg:(min-w-76px)">
                     <img
                       class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
@@ -161,7 +163,7 @@ const { width: window_width } = useWindowSize();
                   </td>
                   <td class="td_content">
                     <p class="line-clamp-2">
-                      {{ item.productName }}
+                      {{ item.title }}
                     </p>
                   </td>
 
@@ -178,7 +180,7 @@ const { width: window_width } = useWindowSize();
                     <p
                       class="relative top-2px flex justify-end lg:(justify-center text-1.5rem before:content-empty) before:(content-['x'])"
                     >
-                      {{ item.amount }}
+                      {{ item.quantity }}
                     </p>
                   </td>
 
@@ -188,7 +190,7 @@ const { width: window_width } = useWindowSize();
                     >
                       NT$
                       <span class="ml-0.25rem text-1.5rem line-height-120%">{{
-                        addThousandPoint(item.price * item.amount)
+                        addThousandPoint(item.price * item.quantity)
                       }}</span>
                     </p>
                   </td>
@@ -196,9 +198,7 @@ const { width: window_width } = useWindowSize();
               </tbody>
             </table>
 
-            <div
-              class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)"
-            >
+            <div class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)">
               <div
                 class="flex items-end justify-center gap-1rem border border-neutral-200 rounded-0.5rem p-1.5rem lg:(border-none bg-neutral-50 px-1.5rem py-1rem)"
               >
@@ -206,7 +206,7 @@ const { width: window_width } = useWindowSize();
                 <p class="text-rose-500">
                   NT$
                   <span class="ml-0.25rem text-1.5rem line-height-120%">{{
-                    addThousandPoint(totalPrice(dummy_cart))
+                    addThousandPoint(totalPrice(data_cart))
                   }}</span>
                 </p>
               </div>
@@ -224,13 +224,12 @@ const { width: window_width } = useWindowSize();
       class="group info_cart transition-background flex flex-col cursor-pointer gap-1.5rem rounded-1rem bg-second-400 px-1rem py-1.5rem text-neutral-600 transition-colors hover:(bg-neutral-600 text-neutral-50) lg:(px-1.75rem py-2.5rem)"
       @click="openModal()"
     >
-      <SvgIcon
-        name="cart"
-        class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)"
-      />
+      <SvgIcon name="cart" class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)" />
 
       <div class="">
-        <p class="mb-0.75rem flex justify-center text-1.5rem">購物車（2件）</p>
+        <p class="mb-0.75rem flex justify-center text-1.5rem">
+          購物車（{{ data_cart.length }}件）
+        </p>
         <div
           class="flex items-end justify-center gap-1.5rem rounded-0.25rem bg-neutral-50 p-0.75rem group-hover:(bg-neutral-200)"
         >
@@ -238,7 +237,7 @@ const { width: window_width } = useWindowSize();
           <p class="text-rose-500">
             NT$
             <span class="ml-0.25rem text-2rem line-height-120%">{{
-              addThousandPoint(1904)
+              addThousandPoint(totalPrice(data_cart))
             }}</span>
           </p>
         </div>
@@ -299,31 +298,39 @@ const { width: window_width } = useWindowSize();
         />
 
         <div class="flex flex-col">
-          <p class="mb-0.25rem ml-2px">
-            地址 <sup class="text-rose-500">*</sup>
-          </p>
+          <p class="mb-0.25rem ml-2px">地址 <sup class="text-rose-500">*</sup></p>
 
           <div class="mb-1rem flex gap-0.5rem">
             <InputSelect
-              v-model="param_post.city"
-              select-name="select_city"
+              v-model="param_post.county"
+              select-name="select_county"
               class="flex-grow-1"
+              @change="param_post.district = ''"
             >
               <option value="" selected disabled hidden>縣市</option>
-              <option value="123" class="text-neutral-600">123</option>
-              <option value="223" class="text-neutral-600">223</option>
-              <option value="323" class="text-neutral-600">323</option>
+              <template v-for="county in tw_postal_code" :key="county.name">
+                <option :value="county.name" class="text-neutral-600">
+                  {{ county.name }}
+                </option>
+              </template>
+
+              <!-- <option value="223" class="text-neutral-600">223</option>
+              <option value="323" class="text-neutral-600">323</option> -->
             </InputSelect>
 
             <InputSelect
-              v-model="param_post.town"
+              v-model="param_post.district"
               select-name="select_town"
               class="flex-grow-1"
+              :class="{ 'opacity-50 pointer-events-none': !param_post.county }"
             >
               <option value="" selected disabled hidden>鄉鎮市區</option>
-              <option value="123" class="text-neutral-600">123</option>
-              <option value="223" class="text-neutral-600">223</option>
-              <option value="323" class="text-neutral-600">323</option>
+
+              <template v-for="district in current_district" :key="district.zip">
+                <option :value="district.name" class="text-neutral-600">
+                  {{ district.name }}
+                </option>
+              </template>
             </InputSelect>
           </div>
 
@@ -335,9 +342,7 @@ const { width: window_width } = useWindowSize();
         </div>
 
         <div class="box_select flex flex-col">
-          <p class="mb-0.25rem ml-2px">
-            發票<sup class="text-rose-500">*</sup>
-          </p>
+          <p class="mb-0.25rem ml-2px">發票<sup class="text-rose-500">*</sup></p>
 
           <InputSelect
             v-model="param_post.receipt"
@@ -457,7 +462,7 @@ const { width: window_width } = useWindowSize();
   display: grid;
   grid-template-areas:
     "img content content"
-    "img price amount"
+    "img price quantity"
     "total total total";
 
   grid-template-columns: 1fr 1fr 1fr;
@@ -483,7 +488,7 @@ const { width: window_width } = useWindowSize();
   @media screen and (min-width: 640px) {
     grid-template-areas:
       "img content content"
-      "img price amount"
+      "img price quantity"
       "img total total";
   }
 
@@ -519,7 +524,7 @@ const { width: window_width } = useWindowSize();
 }
 
 .td_amount {
-  grid-area: amount;
+  grid-area: quantity;
 }
 
 .td_total {
