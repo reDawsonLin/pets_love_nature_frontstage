@@ -2,6 +2,8 @@
 import { storeToRefs } from "pinia";
 import { useStoreGeneral } from "~/stores/storeGeneral";
 import { useStoreLogin } from "~/stores/storeLogin";
+const { getTransformCartArray, addCart, deleteCart, addTestCartNoLogin } =
+  await useShoppingCart();
 
 const store_login = useStoreLogin();
 const { token } = storeToRefs(store_login);
@@ -29,6 +31,20 @@ const showNavbar = computed(() => {
     return true;
   }
 });
+
+const showShoppingCartArr = ref([]); // 顯示的購物車內容
+const shoppingDataArr = ref([]); // 購物車內容
+
+const checkCart = async() => {
+  shoppingDataArr.value = await getTransformCartArray();
+
+  if (shoppingDataArr.value.length > 3) {
+    showShoppingCartArr.value = shoppingDataArr.value
+    showShoppingCartArr.value.length = 3
+  } else {
+    showShoppingCartArr.value = shoppingDataArr.value;
+  }
+}
 
 watchEffect(() => {});
 </script>
@@ -75,7 +91,9 @@ watchEffect(() => {});
         <ul
           class="mb-0.5rem flex flex-grow-1 flex-col gap-1rem px-2.25rem md:(mb-unset flex-grow-1 flex-row items-center justify-end gap-1.25rem px-unset)"
         >
-          <li class="wrapper_icon md:(relative order-2)">
+          <li class="wrapper_icon md:(relative order-2)"
+                @mouseenter="checkCart"
+          >
             <NuxtLink
               :to="token ? { name: 'shopping-cart' } : null"
               class="flex gap-0.5rem"
@@ -83,30 +101,32 @@ watchEffect(() => {});
               <SvgIcon
                 class="h-1.5rem w-1.5rem cursor-pointer md:(h-2rem w-2rem)"
                 name="cart"
+
               />
 
               <p class="md:(hidden)">購物車</p>
             </NuxtLink>
 
+            <!-- 購物車內容 -->
             <div
               class="list_content hidden md:(absolute left-50% top-100% w-200px flex flex-col translate-x--50% gap-1.5rem rounded-0.5rem bg-neutral-50 px-1.5rem py-1rem text-neutral-600)"
-            >
+              >
               <p class="whitespace-nowrap">最近加入商品</p>
 
               <ul class="flex flex-grow-1 flex-col gap-0.5rem">
-                <template v-for="item in 3" :key="item">
+                <template v-for="eachProduct in showShoppingCartArr" :key="eachProduct?._id">
                   <li class="w-100% flex items-center gap-0.25rem">
                     <img
                       class="h-1.75rem w-1.75rem"
-                      src="@/assets/img/dm_cart_product.png"
+                      :src="eachProduct?.imageGallery[0]?.imgUrl"
                       alt="product image"
                     >
-                    <p class="flex-nowrap text-0.875rem">鮮嫩雞肉凍乾</p>
-                    <p class="ml-auto text-0.75rem text-rose-500 font-bold">$300</p>
+                    <p class="flex-nowrap text-0.875rem">{{ eachProduct?.title + eachProduct?.weight }}g</p>
+                    <p class="ml-auto text-0.75rem text-rose-500 font-bold">${{ eachProduct?.price }}</p>
                   </li>
                 </template>
 
-                <li class="mt-0.5rem text-0.75rem text-neutral-400">10件商品未展示</li>
+                <li v-show="shoppingDataArr.length > 3" class="mt-0.5rem text-0.75rem text-neutral-400">{{ shoppingDataArr.length - 3}}件商品未展示</li>
               </ul>
 
               <NuxtLink
