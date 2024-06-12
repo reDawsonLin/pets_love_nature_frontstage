@@ -27,14 +27,11 @@ export const useApiFetch = (url, options) => {
 // for need token data -------
 export const useTokenFetch = async (url, options) => {
   const token = useCookie("token");
-  if (!token.value) return 'cookie 無 token';
+  if (!token.value) return "cookie 無 token";
 
   return await useFetch(url, {
     baseURL,
     onRequest({ request, options }) {
-      console.log("on request");
-      console.log("request :>> ", request);
-      console.log("options :>> ", options);
       // Set the request headers
       options.headers = options.headers || {};
       // 暫時把快取關掉
@@ -42,18 +39,15 @@ export const useTokenFetch = async (url, options) => {
       options.headers.authorization = `Bearer ${token.value}`;
     },
     onRequestError({ request, options, error }) {
-      // Handle the request errors
       console.log("on request error :>> ", error);
     },
     onResponse({ request, response, options }) {
       // Process the response data
-      console.log("on response");
-      console.log("response :>> ", response);
+      // console.log("on response");
+      // console.log("response :>> ", response);
     },
     onResponseError({ request, response, options }) {
-      // Handle the response errors
-      console.log("on response error");
-      console.log("response :>> ", response);
+      console.log("on response error :>> ", response);
     },
   });
 };

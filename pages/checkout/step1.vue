@@ -1,4 +1,6 @@
 <script setup>
+// import { useSessionStorage } from '@vueuse/core'
+
 const dummy_cart = ref([
   {
     id: 1,
@@ -51,35 +53,22 @@ const dummy_cart = ref([
   },
 ]);
 
+// temporary fetch shopping cart, after this must get shopping cart from session storage -------
 const id_customer = useCookie("id_customer");
-console.log("id_customer :>> ", id_customer.value);
-// const { data, pending, error, refresh } = await useTokenFetch(
-// const res = await useTokenFetch("/shopping_cart/login/", {
-//   params: { id: id_customer.value },
-// });
-// console.log("res :>> ", res);
 
 const {
-  data: data_get,
-  pending,
-  error,
-  refresh,
+  data: data_getCart,
+  pending: pending_getCart,
+  error: error_getCart,
+  refresh: refresh_getCart,
 } = await useTokenFetch(`/shopping_cart/login/${id_customer.value}`);
 
-const {
-  data: { shoppingCart },
-  message,
-  status,
-} = data_get.value;
+console.log("data_getCart.value :>> ", data_getCart?.value);
+// const data_cart = useSessionStorage("shopping-cart", data_getCart?.value.data);
+// console.log("data_cart.value :>> ", data_cart?.value);
 
-console.log("data_get.value :>> ", data_get.value);
-console.log("shoppingCart :>> ", shoppingCart);
-console.log("message :>> ", message);
-// console.log("data :>> ", data);
-console.log("status :>> ", status);
-console.log("error.value :>> ", error.value);
-
-onMounted(async () => {});
+const data_cart = useCookie("shopping-cart");
+data_cart.value = data_getCart?.value.data;
 
 const totalPrice = (cart) => {
   let result = null;

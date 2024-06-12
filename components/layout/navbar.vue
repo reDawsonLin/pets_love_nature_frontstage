@@ -147,7 +147,7 @@ const mobileNavShow = ref(false);
             <ul
               class="list_content flex flex-col gap-0.75rem px-2rem text-1rem md:(absolute left-50% top-100% translate-x--50% rounded-0.5rem bg-neutral-50 px-1.5rem py-1rem text-neutral-600)"
             >
-              <li v-if="!token" class="whitespace-nowrap">
+              <li v-if="!token" class="whitespace-nowrap" @click="closeMobileNav()">
                 <NuxtLink to="/Login"> 登入 </NuxtLink>
               </li>
 
