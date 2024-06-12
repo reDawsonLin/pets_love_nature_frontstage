@@ -1,7 +1,8 @@
 <script setup>
 const { getTransformCartArray, addCart, deleteCart, addTestCartNoLogin } =
   await useShoppingCart();
-
+import Swal from "sweetalert2";
+import { useStoreChoosedCart } from "~/stores/storeCart";
 const noImgUrl = ref(
   "https://storage.googleapis.com/petstore-3a2e1.appspot.com/images/ecbb5438-43c3-4a9b-9316-f8e8aecc7d15.jpg?GoogleAccessId=firebase-adminsdk-p5zjq%40petstore-3a2e1.iam.gserviceaccount.com&Expires=16756675200&Signature=sU4UW2CPGkhBDRGf4ncTUXeN%2B5YVxIOdHuVOMxIeDg%2FtxZ6pEIuElGuz1CM14yBtyXO4BvkreykJkUuqS80Bbf%2FUJIyHESkJrNbepEbcVrZBTrX7SLdOZFrQYD86SB%2B7AoXt3JQ43%2BcRTGZki%2FAgdAmd1nqtI2b2F3PipzkWHhitUjdcruJpSsbPSTQwkUfC46B2Pv%2FzxPHrdx6kyFgoICYy21zFhxj7x3DcJq%2Ftj28gUP%2BCeTElNKUMVyWKPyvmBP76XWy8JLWGBs43uJFOuwmjxu4yfk0vc9L8GM%2Bu9PDFLRBrfBlJ30knbCIHHIBeKCDSkpgLb2ZJJhZ888r4GQ%3D%3D"
 );
@@ -146,12 +147,29 @@ const getImage = (eachProduct) => {
     return noImgUrl.value;
   }
 };
+
+// 去買單 將購物車打勾的內容存到pinia
+const goPurchaseOrder = () => {
+  const choosedCartArr = shoppingDataArr.value.filter(
+    (eachProduct) => eachProduct.isChoosed
+  );
+
+  if (choosedCartArr.length > 0) {
+    // 有打勾的商品
+  } else {
+    // 沒有打勾的商品
+    Swal.fire("購物車未有打勾的商品，請再確認");
+  }
+
+  const store = useStoreChoosedCart();
+  store.choosedCart = choosedCartArr;
+};
 </script>
 
 <template>
   <div class="shopping_cart grow">
     <div p="t-3.75rem" class="title mb-7.5 flex items-center justify-center">
-      <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" >
+      <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" />
       <h1 class="text-4xl">購物車</h1>
     </div>
     <div
@@ -222,7 +240,7 @@ const getImage = (eachProduct) => {
                 class="operate_div ml-auto h-8 w-10 flex cursor-pointer items-center justify-center rounded-sm"
                 @click="deleteProduct(i, eachProduct)"
               >
-                <img src="/assets/img/garbage_can.png" alt="" >
+                <img src="/assets/img/garbage_can.png" alt="" />
               </div>
             </div>
             <div class="product mb-6 flex items-center pl-2 pt-3">
@@ -275,7 +293,7 @@ const getImage = (eachProduct) => {
                     class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                     @click="productQuantityChange(i, -1)"
                   >
-                    <img class="minus" src="/assets/img/minus.png" alt="" >
+                    <img class="minus" src="/assets/img/minus.png" alt="" />
                   </div>
 
                   <input
@@ -283,12 +301,12 @@ const getImage = (eachProduct) => {
                     type="number"
                     :value="eachProduct.quantity"
                     @input="productQuantityInput(eachProduct, $event)"
-                  >
+                  />
                   <div
                     class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                     @click="productQuantityChange(i, 1)"
                   >
-                    <img class="plus" src="/assets/img/plus.png" alt="" >
+                    <img class="plus" src="/assets/img/plus.png" alt="" />
                   </div>
                 </div>
               </div>
@@ -307,7 +325,9 @@ const getImage = (eachProduct) => {
         </div>
 
         <!-- pc -->
-        <div class="shopping_cart_list hidden max-h-[44rem] overflow-y-auto lg:block">
+        <div
+          class="shopping_cart_list hidden max-h-[44rem] overflow-y-auto lg:block"
+        >
           <div
             v-for="(eachProduct, i) in shoppingDataArr"
             :key="eachProduct.productId"
@@ -367,7 +387,7 @@ const getImage = (eachProduct) => {
                   class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                   @click="productQuantityChange(i, -1)"
                 >
-                  <img class="minus" src="/assets/img/minus.png" alt="" >
+                  <img class="minus" src="/assets/img/minus.png" alt="" />
                 </div>
 
                 <input
@@ -375,12 +395,12 @@ const getImage = (eachProduct) => {
                   type="number"
                   :value="eachProduct.quantity"
                   @input="productQuantityInput(eachProduct, $event)"
-                >
+                />
                 <div
                   class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                   @click="productQuantityChange(i, 1)"
                 >
-                  <img class="plus" src="/assets/img/plus.png" alt="" >
+                  <img class="plus" src="/assets/img/plus.png" alt="" />
                 </div>
               </div>
             </div>
@@ -404,11 +424,11 @@ const getImage = (eachProduct) => {
                 class="operate_div_pc h-8 w-10 flex cursor-pointer items-center justify-center"
                 @click="deleteProduct(i, eachProduct)"
               >
-                <img src="/assets/img/garbage_can.png" alt="" >
+                <img src="/assets/img/garbage_can.png" alt="" />
               </div>
             </div>
           </div>
-          <div v-if="shoppingDataArr.length === 0" class="h-70"/>
+          <div v-if="shoppingDataArr.length === 0" class="h-70" />
         </div>
         <div
           class="bottom_block h-36 rounded pt-6 text-center lg:h-24 lg:flex lg:items-center lg:justify-end lg:bg-gray-300 lg:pt-0"
@@ -424,8 +444,9 @@ const getImage = (eachProduct) => {
           </div>
           <div
             class="go_shop mx-auto h-15 w-11/12 flex cursor-pointer items-center justify-center rounded lg:mx-0 lg:mr-4 lg:h-16 lg:w-64"
+            @click="goPurchaseOrder"
           >
-            <img class="mr-3" src="/assets/img/card.png" alt="" >
+            <img class="mr-3" src="/assets/img/card.png" alt="" />
             <span class="text-xl color-white">去買單</span>
           </div>
         </div>
