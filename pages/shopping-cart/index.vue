@@ -101,7 +101,7 @@ const allSelectedClick = () => {
 
 const productQuantityChange = async (i, num) => {
   const calcQuantity = shoppingDataArr.value[i].quantity + num;
-  if (calcQuantity >= 0 && calcQuantity <= shoppingDataArr.value[i].inStock) {
+  if (calcQuantity > 0 && calcQuantity <= shoppingDataArr.value[i].inStock) {
     shoppingDataArr.value[i].quantity = calcQuantity;
 
     const obj = {
@@ -117,7 +117,7 @@ const productQuantityChange = async (i, num) => {
 const productQuantityInput = async (product, e) => {
   const targetNum = Number(e.target.value);
   const originQuantity = product.quantity;
-  if (targetNum >= 0 && targetNum <= product.inStock && !isNaN(targetNum)) {
+  if (targetNum > 0 && targetNum <= product.inStock && !isNaN(targetNum)) {
     product.quantity = targetNum;
   }
   console.log("product", product);
