@@ -197,7 +197,7 @@ export const useShoppingCart = async () => {
         const index = prevData.shoppingCart.findIndex(eachCart => eachCart.productSpec === productSpec);
         // prevData.shoppingCart[index].quantity = prevData.shoppingCart[index].quantity + quantity > inStock ?  
         let focusQuantity;
-        if (index === -1) {
+        if (index !== -1) {
         // 如果購物車有該商品 
         
         if(addWay === 0) focusQuantity = prevData.shoppingCart[index].quantity + quantity;
