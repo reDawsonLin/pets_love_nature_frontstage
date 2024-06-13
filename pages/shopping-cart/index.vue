@@ -2,11 +2,10 @@
 const { getTransformCartArray, addCart, deleteCart, addTestCartNoLogin } =
   await useShoppingCart();
 import Swal from "sweetalert2";
-import { useStoreChoosedCart } from "~/stores/storeCart";
 const noImgUrl = ref(
   "https://storage.googleapis.com/petstore-3a2e1.appspot.com/images/ecbb5438-43c3-4a9b-9316-f8e8aecc7d15.jpg?GoogleAccessId=firebase-adminsdk-p5zjq%40petstore-3a2e1.iam.gserviceaccount.com&Expires=16756675200&Signature=sU4UW2CPGkhBDRGf4ncTUXeN%2B5YVxIOdHuVOMxIeDg%2FtxZ6pEIuElGuz1CM14yBtyXO4BvkreykJkUuqS80Bbf%2FUJIyHESkJrNbepEbcVrZBTrX7SLdOZFrQYD86SB%2B7AoXt3JQ43%2BcRTGZki%2FAgdAmd1nqtI2b2F3PipzkWHhitUjdcruJpSsbPSTQwkUfC46B2Pv%2FzxPHrdx6kyFgoICYy21zFhxj7x3DcJq%2Ftj28gUP%2BCeTElNKUMVyWKPyvmBP76XWy8JLWGBs43uJFOuwmjxu4yfk0vc9L8GM%2Bu9PDFLRBrfBlJ30knbCIHHIBeKCDSkpgLb2ZJJhZ888r4GQ%3D%3D"
 );
-
+const storageCart = useCookie("choosedCartArr");
 const shoppingDataArr = ref([]);
 // console.log('token11', token.value);
 //   console.log('id_customer11', id_customer.value);
@@ -47,7 +46,6 @@ const shoppingDataArr = ref([]);
 onMounted(async () => {
   console.log("mounted");
   shoppingDataArr.value = await getTransformCartArray();
-  console.log("shoppingDataArr", shoppingDataArr.value);
 });
 
 const isChoosedProductArr = computed(() =>
@@ -156,13 +154,12 @@ const goPurchaseOrder = () => {
 
   if (choosedCartArr.length > 0) {
     // 有打勾的商品
+    storageCart.value = choosedCartArr;
+    navigateTo({ name: "checkout-step1" });
   } else {
     // 沒有打勾的商品
     Swal.fire("購物車未有打勾的商品，請再確認");
   }
-
-  const store = useStoreChoosedCart();
-  store.choosedCart = choosedCartArr;
 };
 </script>
 
