@@ -1,6 +1,76 @@
 <script setup>
 import tw_postal_code from "@/assets/json/tw_postal_code.json";
 
+// route middleware -------
+definePageMeta({ middleware: "need-login" });
+
+// cart -------
+const data_cart = useCookie("shopping-cart");
+console.log("data_cart.value :>> ", data_cart.value);
+
+const totalPrice = (cart) => {
+  if (!cart) return 0;
+  let result = null;
+
+  cart.forEach((item) => {
+    result += item.price * item.quantity;
+  });
+  return result;
+};
+
+// member -------
+const same_member = ref(false);
+const param_post = ref({
+  name: "",
+  phoneNumber: "",
+  email: "",
+  county: "",
+  district: "",
+  address: "",
+  receipt: "",
+  payment_method: "",
+});
+
+const id_customer = useCookie("id_customer");
+const {
+  data: data_member,
+  pending: pending_member,
+  error: error_member,
+  refresh: refresh_member,
+} = await useTokenFetch(`/customer/${id_customer.value}`);
+console.log("data_member.value :>> ", data_member.value);
+
+const {
+  data: { customerName: member_name, email: member_email, phone: member_phone },
+} = data_member.value;
+
+// postal dropdown -------
+const current_district = computed(() => {
+  const result = tw_postal_code.find(
+    (item) => item.name === param_post.value.county
+  );
+
+  if (param_post.value.county) return result.districts;
+  else return null;
+});
+
+// 選擇滑窗
+const show_modal = ref(false);
+const openModal = () => {
+  console.log("in open Modal");
+  document.querySelector("body").classList.add("stopScroll");
+  show_modal.value = true;
+};
+
+const closeModal = () => {
+  console.log("in close Modal");
+  document.querySelector("body").classList.remove("stopScroll");
+  show_modal.value = false;
+};
+
+const { width: window_width } = useWindowSize();
+
+// -------
 const dummy_cart = ref([
   {
     id: 1,
@@ -52,69 +122,6 @@ const dummy_cart = ref([
     quantity: 4,
   },
 ]);
-
-// cart -------
-const data_cart = useCookie("shopping-cart");
-console.log("data_cart.value :>> ", data_cart.value);
-
-const totalPrice = (cart) => {
-  let result = null;
-
-  cart.forEach((item) => {
-    result += item.price * item.quantity;
-  });
-  return result;
-};
-
-// member -------
-const same_member = ref(false);
-const param_post = ref({
-  name: "",
-  phoneNumber: "",
-  email: "",
-  county: "",
-  district: "",
-  address: "",
-  receipt: "",
-  payment_method: "",
-});
-
-const id_customer = useCookie("id_customer");
-const {
-  data: data_member,
-  pending: pending_member,
-  error: error_member,
-  refresh: refresh_member,
-} = await useTokenFetch(`/customer/${id_customer.value}`);
-console.log("data_member.value :>> ", data_member.value);
-
-const {
-  data: { customerName: member_name, email: member_email, phone: member_phone },
-} = data_member.value;
-
-// postal dropdown -------
-const current_district = computed(() => {
-  const result = tw_postal_code.find((item) => item.name === param_post.value.county);
-
-  if (param_post.value.county) return result.districts;
-  else return null;
-});
-
-// 選擇滑窗
-const show_modal = ref(false);
-const openModal = () => {
-  console.log("in open Modal");
-  document.querySelector("body").classList.add("stopScroll");
-  show_modal.value = true;
-};
-
-const closeModal = () => {
-  console.log("in close Modal");
-  document.querySelector("body").classList.remove("stopScroll");
-  show_modal.value = false;
-};
-
-const { width: window_width } = useWindowSize();
 </script>
 
 <template>
@@ -139,7 +146,9 @@ const { width: window_width } = useWindowSize();
           >
             <table>
               <thead>
-                <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
+                <tr
+                  class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)"
+                >
                   <th
                     class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0.25rem text-1rem)"
                     :colspan="window_width < 1024 ? 1 : 2"
@@ -153,7 +162,11 @@ const { width: window_width } = useWindowSize();
               </thead>
 
               <tbody class="">
-                <tr v-for="item in data_cart" :key="item.id" class="tbody_tr mb-1.5rem">
+                <tr
+                  v-for="item in data_cart"
+                  :key="item.id"
+                  class="tbody_tr mb-1.5rem"
+                >
                   <td class="td_img mr-1rem lg:(min-w-76px)">
                     <img
                       class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
@@ -198,7 +211,9 @@ const { width: window_width } = useWindowSize();
               </tbody>
             </table>
 
-            <div class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)">
+            <div
+              class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)"
+            >
               <div
                 class="flex items-end justify-center gap-1rem border border-neutral-200 rounded-0.5rem p-1.5rem lg:(border-none bg-neutral-50 px-1.5rem py-1rem)"
               >
@@ -224,7 +239,10 @@ const { width: window_width } = useWindowSize();
       class="group info_cart transition-background flex flex-col cursor-pointer gap-1.5rem rounded-1rem bg-second-400 px-1rem py-1.5rem text-neutral-600 transition-colors hover:(bg-neutral-600 text-neutral-50) lg:(px-1.75rem py-2.5rem)"
       @click="openModal()"
     >
-      <SvgIcon name="cart" class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)" />
+      <SvgIcon
+        name="cart"
+        class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)"
+      />
 
       <div class="">
         <p class="mb-0.75rem flex justify-center text-1.5rem">
@@ -298,7 +316,9 @@ const { width: window_width } = useWindowSize();
         />
 
         <div class="flex flex-col">
-          <p class="mb-0.25rem ml-2px">地址 <sup class="text-rose-500">*</sup></p>
+          <p class="mb-0.25rem ml-2px">
+            地址 <sup class="text-rose-500">*</sup>
+          </p>
 
           <div class="mb-1rem flex gap-0.5rem">
             <InputSelect
@@ -326,7 +346,10 @@ const { width: window_width } = useWindowSize();
             >
               <option value="" selected disabled hidden>鄉鎮市區</option>
 
-              <template v-for="district in current_district" :key="district.zip">
+              <template
+                v-for="district in current_district"
+                :key="district.zip"
+              >
                 <option :value="district.name" class="text-neutral-600">
                   {{ district.name }}
                 </option>
@@ -342,7 +365,9 @@ const { width: window_width } = useWindowSize();
         </div>
 
         <div class="box_select flex flex-col">
-          <p class="mb-0.25rem ml-2px">發票<sup class="text-rose-500">*</sup></p>
+          <p class="mb-0.25rem ml-2px">
+            發票<sup class="text-rose-500">*</sup>
+          </p>
 
           <InputSelect
             v-model="param_post.receipt"
