@@ -1,6 +1,8 @@
 import { storeToRefs } from "pinia";
 import { useStoreLogin } from "~/stores/storeLogin";
 import Swal from 'sweetalert2'
+import { useStoreCart } from "~/stores/storeCart";
+const storeCart = useStoreCart();
 
 const noLoginTestObj = {
   "shoppingCart": [
@@ -102,7 +104,10 @@ export const useShoppingCart = async () => {
     })
 
     const filteredArr = transformArray.filter(eachData => eachData._id)
-
+    console.log('filteredArr', filteredArr);
+    console.log('storeCart.cartArr.value', storeCart.cartArr.value);
+    storeCart.cartArr.value = filteredArr;
+    console.log('storeCart.cartArr.value', storeCart.cartArr.value);
     return filteredArr;
   };
 
