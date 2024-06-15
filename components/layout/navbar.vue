@@ -1,9 +1,15 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { useStoreGeneral } from "~/stores/storeGeneral";
+import { useStoreCart } from "~/stores/storeCart";
 import { useStoreLogin } from "~/stores/storeLogin";
-const { getTransformCartArray, addCart, deleteCart, addTestCartNoLogin } =
-  await useShoppingCart();
+const storeCart = useStoreCart();
+const { cartArr, threeCart } = storeToRefs(storeCart);
+const { getTransformCartArray } = storeCart;
+
+onMounted(() => {
+  getTransformCartArray();
+});
 
 const store_login = useStoreLogin();
 const { token } = storeToRefs(store_login);
@@ -32,19 +38,6 @@ const showNavbar = computed(() => {
   }
 });
 
-const showShoppingCartArr = ref([]); // 顯示的購物車內容
-const shoppingDataArr = ref([]); // 購物車內容
-
-const checkCart = async() => {
-  shoppingDataArr.value = await getTransformCartArray();
-
-  if (shoppingDataArr.value.length > 3) {
-    showShoppingCartArr.value = shoppingDataArr.value
-    showShoppingCartArr.value.length = 3
-  } else {
-    showShoppingCartArr.value = shoppingDataArr.value;
-  }
-}
 
 watchEffect(() => {});
 </script>
@@ -71,7 +64,11 @@ watchEffect(() => {});
         class="absolute right-0 top-0 z-6 min-h-568px w-375px flex flex-col gap-1rem rounded-1rem bg-second-200 pb-2rem pt-1.75rem text-1.25rem md:(relative min-h-unset w-unset flex-grow-1 flex-row bg-transparent pb-unset pt-unset text-neutral-50)"
       >
         <div class="flex justify-end px-1.5rem md:(hidden)">
-          <SvgIcon name="close" class="w-2rem cursor-pointer" @click="closeMobileNav()" />
+          <SvgIcon
+            name="close"
+            class="w-2rem cursor-pointer"
+            @click="closeMobileNav()"
+          />
         </div>
 
         <ul
@@ -91,9 +88,7 @@ watchEffect(() => {});
         <ul
           class="mb-0.5rem flex flex-grow-1 flex-col gap-1rem px-2.25rem md:(mb-unset flex-grow-1 flex-row items-center justify-end gap-1.25rem px-unset)"
         >
-          <li class="wrapper_icon md:(relative order-2)"
-                @mouseenter="checkCart"
-          >
+          <li class="wrapper_icon md:(relative order-2)">
             <NuxtLink
               :to="token ? { name: 'shopping-cart' } : null"
               class="flex gap-0.5rem"
@@ -101,7 +96,6 @@ watchEffect(() => {});
               <SvgIcon
                 class="h-1.5rem w-1.5rem cursor-pointer md:(h-2rem w-2rem)"
                 name="cart"
-
               />
 
               <p class="md:(hidden)">購物車</p>
@@ -110,23 +104,35 @@ watchEffect(() => {});
             <!-- 購物車內容 -->
             <div
               class="list_content hidden md:(absolute left-50% top-100% w-200px flex flex-col translate-x--50% gap-1.5rem rounded-0.5rem bg-neutral-50 px-1.5rem py-1rem text-neutral-600)"
-              >
+            >
               <p class="whitespace-nowrap">最近加入商品</p>
 
               <ul class="flex flex-grow-1 flex-col gap-0.5rem">
-                <template v-for="eachProduct in showShoppingCartArr" :key="eachProduct?._id">
+                <template
+                  v-for="eachProduct in threeCart"
+                  :key="eachProduct?._id"
+                >
                   <li class="w-100% flex items-center gap-0.25rem">
                     <img
                       class="h-1.75rem w-1.75rem"
                       :src="eachProduct?.imageGallery[0]?.imgUrl"
                       alt="product image"
                     >
-                    <p class="flex-nowrap text-0.875rem">{{ eachProduct?.title + eachProduct?.weight }}g</p>
-                    <p class="ml-auto text-0.75rem text-rose-500 font-bold">${{ eachProduct?.price }}</p>
+                    <p class="flex-nowrap text-0.875rem">
+                      {{ eachProduct?.title + eachProduct?.weight }}g
+                    </p>
+                    <p class="ml-auto text-0.75rem text-rose-500 font-bold">
+                      ${{ eachProduct?.price }}
+                    </p>
                   </li>
                 </template>
 
-                <li v-show="shoppingDataArr.length > 3" class="mt-0.5rem text-0.75rem text-neutral-400">{{ shoppingDataArr.length - 3}}件商品未展示</li>
+                <li
+                  v-show="cartArr.length > 3"
+                  class="mt-0.5rem text-0.75rem text-neutral-400"
+                >
+                  {{ cartArr.length - 3 }}件商品未展示
+                </li>
               </ul>
 
               <NuxtLink
@@ -160,7 +166,10 @@ watchEffect(() => {});
                 <li class="cursor-pointer whitespace-nowrap">訂單記錄</li>
                 <li class="cursor-pointer whitespace-nowrap">收藏商品</li>
                 <li class="cursor-pointer whitespace-nowrap">聊聊紀錄</li>
-                <li class="cursor-pointer whitespace-nowrap" @click="setToken(null)">
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="setToken(null)"
+                >
                   登出
                 </li>
               </template>

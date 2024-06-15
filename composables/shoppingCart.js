@@ -320,7 +320,7 @@ export const useShoppingCart = async () => {
 
     if (prevData) {
       // session storage內有購物車資訊
-     const add =  await addCart(prevData, 0);
+     await addCart(prevData, 0);
      sessionStorage.removeItem("shoppingCartNoLogin");
      
     }else {
