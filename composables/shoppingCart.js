@@ -102,7 +102,6 @@ export const useShoppingCart = async () => {
     })
 
     const filteredArr = transformArray.filter(eachData => eachData._id)
-
     return filteredArr;
   };
 
@@ -197,7 +196,7 @@ export const useShoppingCart = async () => {
         const index = prevData.shoppingCart.findIndex(eachCart => eachCart.productSpec === productSpec);
         // prevData.shoppingCart[index].quantity = prevData.shoppingCart[index].quantity + quantity > inStock ?  
         let focusQuantity;
-        if (index === -1) {
+        if (index !== -1) {
         // 如果購物車有該商品 
         
         if(addWay === 0) focusQuantity = prevData.shoppingCart[index].quantity + quantity;
@@ -321,7 +320,7 @@ export const useShoppingCart = async () => {
 
     if (prevData) {
       // session storage內有購物車資訊
-     const add =  await addCart(prevData, 0);
+     await addCart(prevData, 0);
      sessionStorage.removeItem("shoppingCartNoLogin");
      
     }else {

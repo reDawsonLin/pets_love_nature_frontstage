@@ -1,11 +1,14 @@
 <script setup>
+import Swal from "sweetalert2";
+import { useStoreCart } from "~/stores/storeCart";
+const storeCart = useStoreCart();
 const { getTransformCartArray, addCart, deleteCart, addTestCartNoLogin } =
-  await useShoppingCart();
-
+  storeCart;
+// const { addCart, deleteCart, addTestCartNoLogin } = await useShoppingCart();
 const noImgUrl = ref(
   "https://storage.googleapis.com/petstore-3a2e1.appspot.com/images/ecbb5438-43c3-4a9b-9316-f8e8aecc7d15.jpg?GoogleAccessId=firebase-adminsdk-p5zjq%40petstore-3a2e1.iam.gserviceaccount.com&Expires=16756675200&Signature=sU4UW2CPGkhBDRGf4ncTUXeN%2B5YVxIOdHuVOMxIeDg%2FtxZ6pEIuElGuz1CM14yBtyXO4BvkreykJkUuqS80Bbf%2FUJIyHESkJrNbepEbcVrZBTrX7SLdOZFrQYD86SB%2B7AoXt3JQ43%2BcRTGZki%2FAgdAmd1nqtI2b2F3PipzkWHhitUjdcruJpSsbPSTQwkUfC46B2Pv%2FzxPHrdx6kyFgoICYy21zFhxj7x3DcJq%2Ftj28gUP%2BCeTElNKUMVyWKPyvmBP76XWy8JLWGBs43uJFOuwmjxu4yfk0vc9L8GM%2Bu9PDFLRBrfBlJ30knbCIHHIBeKCDSkpgLb2ZJJhZ888r4GQ%3D%3D"
 );
-
+const storageCart = useCookie("choosedCartArr");
 const shoppingDataArr = ref([]);
 // console.log('token11', token.value);
 //   console.log('id_customer11', id_customer.value);
@@ -47,7 +50,7 @@ onMounted(async () => {
   if (sessionStorage.getItem('shoppingCartNoLogin')) checkValue()
   console.log("mounted");
   shoppingDataArr.value = await getTransformCartArray();
-  console.log("shoppingDataArr", shoppingDataArr.value);
+  // console.log("getTransformCartArray", getTransformCartArray);
 });
 
 const isChoosedProductArr = computed(() =>
@@ -101,7 +104,7 @@ const allSelectedClick = () => {
 
 const productQuantityChange = async (i, num) => {
   const calcQuantity = shoppingDataArr.value[i].quantity + num;
-  if (calcQuantity >= 0 && calcQuantity <= shoppingDataArr.value[i].inStock) {
+  if (calcQuantity > 0 && calcQuantity <= shoppingDataArr.value[i].inStock) {
     shoppingDataArr.value[i].quantity = calcQuantity;
 
     const obj = {
@@ -117,7 +120,7 @@ const productQuantityChange = async (i, num) => {
 const productQuantityInput = async (product, e) => {
   const targetNum = Number(e.target.value);
   const originQuantity = product.quantity;
-  if (targetNum >= 0 && targetNum <= product.inStock && !isNaN(targetNum)) {
+  if (targetNum > 0 && targetNum <= product.inStock && !isNaN(targetNum)) {
     product.quantity = targetNum;
   }
   console.log("product", product);
@@ -145,6 +148,22 @@ const getImage = (eachProduct) => {
     return eachProduct?.imageGallery[0].imgUrl;
   } else {
     return noImgUrl.value;
+  }
+};
+
+// 去買單 將購物車打勾的內容存到pinia
+const goPurchaseOrder = () => {
+  const choosedCartArr = shoppingDataArr.value.filter(
+    (eachProduct) => eachProduct.isChoosed
+  );
+
+  if (choosedCartArr.length > 0) {
+    // 有打勾的商品
+    storageCart.value = choosedCartArr;
+    navigateTo({ name: "checkout-step1" });
+  } else {
+    // 沒有打勾的商品
+    Swal.fire("購物車未有打勾的商品，請再確認");
   }
 };
 </script>
@@ -308,7 +327,9 @@ const getImage = (eachProduct) => {
         </div>
 
         <!-- pc -->
-        <div class="shopping_cart_list hidden max-h-[44rem] overflow-y-auto lg:block">
+        <div
+          class="shopping_cart_list hidden max-h-[44rem] overflow-y-auto lg:block"
+        >
           <div
             v-for="(eachProduct, i) in shoppingDataArr"
             :key="eachProduct.productId"
@@ -409,7 +430,7 @@ const getImage = (eachProduct) => {
               </div>
             </div>
           </div>
-          <div v-if="shoppingDataArr.length === 0" class="h-70"/>
+          <div v-if="shoppingDataArr.length === 0" class="h-70" />
         </div>
         <div
           class="bottom_block h-36 rounded pt-6 text-center lg:h-24 lg:flex lg:items-center lg:justify-end lg:bg-gray-300 lg:pt-0"
@@ -425,6 +446,7 @@ const getImage = (eachProduct) => {
           </div>
           <div
             class="go_shop mx-auto h-15 w-11/12 flex cursor-pointer items-center justify-center rounded lg:mx-0 lg:mr-4 lg:h-16 lg:w-64"
+            @click="goPurchaseOrder"
           >
             <img class="mr-3" src="/assets/img/card.png" alt="" >
             <span class="text-xl color-white">去買單</span>
