@@ -31,6 +31,7 @@ export const useTokenFetch = async (url, options) => {
 
   return await useFetch(url, {
     baseURL,
+    ...options,
     onRequest({ request, options }) {
       // Set the request headers
       options.headers = options.headers || {};

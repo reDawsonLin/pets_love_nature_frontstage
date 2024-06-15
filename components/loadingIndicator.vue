@@ -96,15 +96,15 @@ const isLoading = ref(false);
 //   isLoading.value = false;
 //   lottie_container.value.pause();
 //   console.log("finish end");
-//   // setTimeout(() => {
-//   //   isLoading.value = false;
-//   //   lottie_container.value.pause();
-//   // }, 300);
+// //   // setTimeout(() => {
+// //   //   isLoading.value = false;
+// //   //   lottie_container.value.pause();
+// //   // }, 300);
 // });
 
 // -----------
 let throttle = 200;
-let hold = 300;
+let hold = 350;
 let _throttleTimer = null;
 function clear() {
   // if(import.meta.client){}
@@ -118,9 +118,11 @@ function show() {
   if (throttle > 0) {
     _throttleTimer = setTimeout(() => {
       isLoading.value = true;
+      // lottie_container.value.play();
     }, throttle);
   } else {
     isLoading.value = true;
+    // lottie_container.value.play();
   }
 }
 
@@ -128,6 +130,7 @@ function hide() {
   clear();
   setTimeout(() => {
     isLoading.value = false;
+    // lottie_container.value.pause();
   }, hold);
 }
 
@@ -172,11 +175,7 @@ router.afterEach((_to, _from, failure) => {
 <template>
   <ClientOnly>
     <div class="loading-indicator" :class="{ show: isLoading }">
-      <Vue3Lottie
-        ref="lottie_container"
-        class="lottie"
-        :animationData="loading_pet"
-      />
+      <Vue3Lottie ref="lottie_container" class="lottie" :animationData="loading_pet" />
     </div>
   </ClientOnly>
 </template>

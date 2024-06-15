@@ -1,12 +1,16 @@
 <script setup>
 import tw_postal_code from "@/assets/json/tw_postal_code.json";
+import { useStoreCheckout } from "@/stores/storeCheckout";
 
-// route middleware -------
 definePageMeta({ middleware: "need-login" });
+
+const store_checkout = useStoreCheckout();
+const { param_post } = storeToRefs(store_checkout);
+const { intParamPost } = store_checkout;
 
 // cart -------
 const data_cart = useCookie("shopping-cart");
-console.log("data_cart.value :>> ", data_cart.value);
+// console.log("data_cart.value :>> ", data_cart.value);
 
 const totalPrice = (cart) => {
   if (!cart) return 0;
@@ -18,19 +22,29 @@ const totalPrice = (cart) => {
   return result;
 };
 
+// const param_post = ref({
+//   Email: "",
+//   Amt: 0,
+//   ItemDesc: "",
+//   deliveryUserName: "",
+//   deliveryUserPhone: "",
+//   userId: "",
+//   orderProductList: [
+//     {
+//       productId: "",
+//       price: 0,
+//       amount: 0,
+//     },
+//   ],
+//   deliveryAddress: {
+//     country: "",
+//     county: "",
+//     district: "",
+//     address: "",
+//   },
+// });
 // member -------
-const same_member = ref(false);
-const param_post = ref({
-  name: "",
-  phoneNumber: "",
-  email: "",
-  county: "",
-  district: "",
-  address: "",
-  receipt: "",
-  payment_method: "",
-});
-
+// check member store have data or not ---
 const id_customer = useCookie("id_customer");
 const {
   data: data_member,
@@ -38,90 +52,73 @@ const {
   error: error_member,
   refresh: refresh_member,
 } = await useTokenFetch(`/customer/${id_customer.value}`);
-console.log("data_member.value :>> ", data_member.value);
+// console.log("data_member.value :>> ", data_member.value);
 
 const {
-  data: { customerName: member_name, email: member_email, phone: member_phone },
-} = data_member.value;
+  deliveryAddress: { county, district, address },
+  email,
+  recipientName,
+  recipientPhone,
+} = data_member.value.data;
+
+const same_member = ref(false);
+const memberSame = () => {
+  if (same_member.value) {
+    if (email) param_post.value.Email = email;
+    if (recipientName) param_post.value.deliveryUserName = recipientName;
+    if (recipientPhone) param_post.value.deliveryUserPhone = recipientPhone;
+    if (county) param_post.value.deliveryAddress.county = county;
+    if (district) param_post.value.deliveryAddress.district = district;
+    if (address) param_post.value.deliveryAddress.address = address;
+
+    param_post.value.Amt = totalPrice(data_cart.value);
+    param_post.value.ItemDesc = data_cart.value.map((item) => item.title).join(",");
+    param_post.value.userId = id_customer.value;
+    param_post.value.orderProductList = data_cart.value.map((item) => ({
+      productId: item._id,
+      price: item.price,
+      amount: item.quantity,
+    }));
+  } else {
+    intParamPost();
+  }
+
+  // console.log("param_post.value :>> ", param_post.value);
+};
+const countyChange = () => {
+  if (!same_member.value) param_post.value.deliveryAddress.district = "";
+};
 
 // postal dropdown -------
 const current_district = computed(() => {
   const result = tw_postal_code.find(
-    (item) => item.name === param_post.value.county
+    (item) => item.name === param_post.value.deliveryAddress.county
   );
 
-  if (param_post.value.county) return result.districts;
+  if (param_post.value.deliveryAddress.county) return result.districts;
   else return null;
 });
 
 // 選擇滑窗
 const show_modal = ref(false);
 const openModal = () => {
-  console.log("in open Modal");
   document.querySelector("body").classList.add("stopScroll");
   show_modal.value = true;
 };
 
 const closeModal = () => {
-  console.log("in close Modal");
   document.querySelector("body").classList.remove("stopScroll");
   show_modal.value = false;
 };
 
 const { width: window_width } = useWindowSize();
 
-// -------
-const dummy_cart = ref([
-  {
-    id: 1,
-    imgUrl: "",
-    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
-    price: 450,
-    quantity: 1,
-  },
-  {
-    id: 2,
-    imgUrl: "",
-    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
-    price: 450,
-    quantity: 2,
-  },
-  {
-    id: 3,
-    imgUrl: "",
-    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
-    price: 450,
-    quantity: 3,
-  },
-  {
-    id: 4,
-    imgUrl: "",
-    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
-    price: 450,
-    quantity: 4,
-  },
-  {
-    id: 5,
-    imgUrl: "",
-    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
-    price: 450,
-    quantity: 4,
-  },
-  {
-    id: 6,
-    imgUrl: "",
-    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
-    price: 450,
-    quantity: 4,
-  },
-  {
-    id: 7,
-    imgUrl: "",
-    title: "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
-    price: 450,
-    quantity: 4,
-  },
-]);
+// --------
+const param_post_step1 = useCookie("param_post_step1");
+const toStep2 = () => {
+  console.log("to step 2");
+  param_post_step1.value = param_post.value;
+};
 </script>
 
 <template>
@@ -146,9 +143,7 @@ const dummy_cart = ref([
           >
             <table>
               <thead>
-                <tr
-                  class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)"
-                >
+                <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
                   <th
                     class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0.25rem text-1rem)"
                     :colspan="window_width < 1024 ? 1 : 2"
@@ -162,11 +157,7 @@ const dummy_cart = ref([
               </thead>
 
               <tbody class="">
-                <tr
-                  v-for="item in data_cart"
-                  :key="item.id"
-                  class="tbody_tr mb-1.5rem"
-                >
+                <tr v-for="item in data_cart" :key="item.id" class="tbody_tr mb-1.5rem">
                   <td class="td_img mr-1rem lg:(min-w-76px)">
                     <img
                       class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
@@ -211,9 +202,7 @@ const dummy_cart = ref([
               </tbody>
             </table>
 
-            <div
-              class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)"
-            >
+            <div class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)">
               <div
                 class="flex items-end justify-center gap-1rem border border-neutral-200 rounded-0.5rem p-1.5rem lg:(border-none bg-neutral-50 px-1.5rem py-1rem)"
               >
@@ -239,10 +228,7 @@ const dummy_cart = ref([
       class="group info_cart transition-background flex flex-col cursor-pointer gap-1.5rem rounded-1rem bg-second-400 px-1rem py-1.5rem text-neutral-600 transition-colors hover:(bg-neutral-600 text-neutral-50) lg:(px-1.75rem py-2.5rem)"
       @click="openModal()"
     >
-      <SvgIcon
-        name="cart"
-        class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)"
-      />
+      <SvgIcon name="cart" class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)" />
 
       <div class="">
         <p class="mb-0.75rem flex justify-center text-1.5rem">
@@ -266,7 +252,10 @@ const dummy_cart = ref([
       <div class="form_title">
         <p class="text-1.25rem lg:(text-1.5rem)">收件人資料</p>
 
-        <label class="box_checkbox flex cursor-pointer items-center">
+        <label
+          class="box_checkbox flex cursor-pointer items-center"
+          @change="memberSame()"
+        >
           <input
             v-model="same_member"
             type="checkbox"
@@ -289,7 +278,8 @@ const dummy_cart = ref([
       >
         <div class="flex flex-col gap-1rem lg:(flex-row gap-1.5rem)">
           <InputText
-            name="recipient"
+            name="deliveryUserName"
+            v-model="param_post.deliveryUserName"
             placeholder="請輸入姓名"
             required
             input-type="text"
@@ -298,7 +288,8 @@ const dummy_cart = ref([
           />
 
           <InputText
-            name="mobile-phone"
+            name="deliveryPhone"
+            v-model="param_post.deliveryUserPhone"
             placeholder="請輸入手機"
             required
             input-type="text"
@@ -309,6 +300,7 @@ const dummy_cart = ref([
 
         <InputText
           name="email"
+          v-model="param_post.Email"
           placeholder="請輸入電子郵件"
           required
           input-type="email"
@@ -316,16 +308,14 @@ const dummy_cart = ref([
         />
 
         <div class="flex flex-col">
-          <p class="mb-0.25rem ml-2px">
-            地址 <sup class="text-rose-500">*</sup>
-          </p>
+          <p class="mb-0.25rem ml-2px">地址 <sup class="text-rose-500">*</sup></p>
 
           <div class="mb-1rem flex gap-0.5rem">
             <InputSelect
-              v-model="param_post.county"
-              select-name="select_county"
+              v-model="param_post.deliveryAddress.county"
+              select-name="delivery_county"
               class="flex-grow-1"
-              @change="param_post.district = ''"
+              @change="countyChange()"
             >
               <option value="" selected disabled hidden>縣市</option>
               <template v-for="county in tw_postal_code" :key="county.name">
@@ -333,23 +323,19 @@ const dummy_cart = ref([
                   {{ county.name }}
                 </option>
               </template>
-
-              <!-- <option value="223" class="text-neutral-600">223</option>
-              <option value="323" class="text-neutral-600">323</option> -->
             </InputSelect>
 
             <InputSelect
-              v-model="param_post.district"
-              select-name="select_town"
+              select-name="select_district"
+              v-model="param_post.deliveryAddress.district"
               class="flex-grow-1"
-              :class="{ 'opacity-50 pointer-events-none': !param_post.county }"
+              :class="{
+                'opacity-50 pointer-events-none': !param_post.deliveryAddress.county,
+              }"
             >
               <option value="" selected disabled hidden>鄉鎮市區</option>
 
-              <template
-                v-for="district in current_district"
-                :key="district.zip"
-              >
+              <template v-for="district in current_district" :key="district.zip">
                 <option :value="district.name" class="text-neutral-600">
                   {{ district.name }}
                 </option>
@@ -358,16 +344,15 @@ const dummy_cart = ref([
           </div>
 
           <InputText
-            name="mobile-phone"
+            name="deliveryAddress"
+            v-model="param_post.deliveryAddress.address"
             placeholder="里(村)/路(街)/號/樓(室) (必填)"
             input-type="text"
           />
         </div>
 
-        <div class="box_select flex flex-col">
-          <p class="mb-0.25rem ml-2px">
-            發票<sup class="text-rose-500">*</sup>
-          </p>
+        <!-- <div class="box_select flex flex-col">
+          <p class="mb-0.25rem ml-2px">發票<sup class="text-rose-500">*</sup></p>
 
           <InputSelect
             v-model="param_post.receipt"
@@ -379,7 +364,7 @@ const dummy_cart = ref([
             <option value="223" class="text-neutral-600">223</option>
             <option value="323" class="text-neutral-600">323</option>
           </InputSelect>
-        </div>
+        </div> -->
       </form>
     </section>
 
@@ -417,6 +402,7 @@ const dummy_cart = ref([
       <NuxtLink
         :to="{ name: 'checkout-step2' }"
         class="flex items-center justify-center gap-1rem rounded-0.25rem bg-neutral-600 p-1rem text-neutral-50 lg:(px-3rem)"
+        @click="toStep2()"
       >
         下一步，結帳付款
         <SvgIcon name="arrow_right" class="w-0.5rem" />
