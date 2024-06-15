@@ -1,6 +1,44 @@
 <script setup>
+const route = useRoute()
+const { id } = route.params
 
-const productData = ref([
+const productIDData = ref({
+  "_id": "",
+  "productId": {
+    "_id": "",
+    "title": "",
+    "subtitle": "",
+    "description": "",
+    "category": [
+        
+    ],
+    "otherInfo": [
+        {
+            "infoName": "",
+            "infoValue": ""
+        }
+    ],
+    "star": "",
+    "imageGallery": [
+        {
+            "_id": "",
+            "imgUrl": "",
+            "altText": ""
+        }
+    ]
+  },
+  "productNumber": "",
+  "weight": "",
+  "price": "",
+  "inStock": "",
+  "onlineStatus": "",
+  "createdAt": "",
+  "updatedAt": ""
+})
+
+
+// for相關商品
+const productsData = ref([
   {
     _id: 11,
     price: 200,
@@ -55,22 +93,68 @@ const productData = ref([
 ]
 );
 
+const fetchData = async () => {
+  // console.log('36' ,searchValue.value);
+  try {
+  //   const params = {
+  //     ...searchValue.value,
+
+  //   }
+    // const queryString = new URLSearchParams(params).toString()
+
+    const response = await fetch(
+      // `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList?${queryString}`,
+      `https://pets-love-nature-backend-n.onrender.com/api/v1/product/${id}`,
+      {
+        method: "GET",
+      }
+
+    );
+    if (!response.ok) {
+      // throw new Error("Network response was not ok");
+      const e = new Error("請重新登入");
+      e.name = response.status;
+      throw e;
+
+    }
+    const result = await response.json();
+
+    console.log('125' , result.data);
+    productIDData.value=result.data
+
+  } catch (e) {
+    console.log(e.message)
+    console.log("err", e);
+
+  }
+};
+
 const addToCart = () => {
   console.log('add');
 }
+
+
+onMounted(() => {
+  fetchData();
+
+});
+
+const slideChange = () => {
+    console.log('slideChange');
+};
 
 </script>
 
 <template>
   <div class="bg-white">
-    <div class="mx-auto max-w-4xl px-4 py-16 lg:max-w-7xl lg:px-8 sm:px-6 sm:py-24">
+    <div class="product mx-auto max-w-4xl px-4 py-16 lg:max-w-7xl lg:px-8 sm:px-6 sm:py-24">
       <div class="header h-auto md:h-[773px]">
         <div class="product-imgs grid grid-cols-1 md:grid-cols-2">
           <div class="imgs w-[90%]">
             <div class="mb-[16px] h-[637px]">
               <img
                 class="ma h-[100%] object-contain"
-                src="https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png"
+                :src="productIDData.productId.imageGallery[0].imgUrl"
                 alt="">
             </div>
             <div class="h-[120px] w-[90%] flex justify-between">
@@ -97,13 +181,13 @@ const addToCart = () => {
 
           </div>
           <div class="product-imgs grid grid-cols-6 flex flex-col">
-            <h2 class="mb-[16px]">鮮嫩雞胸肉凍乾</h2>
-            <p class="mb-[16px] text-[#525252] font-light">新鮮雞胸肉，符合人食等級，富含高品質蛋白質，提供毛孩維持健康體愛所需的重要營養素。</p>
-            <p class="mb-[64px]">NT$ <span class="font-size-[48px] font-300">300 </span></p>
+            <h2 class="mb-[16px]">  {{ productIDData.productId.title }}</h2>
+            <p class="mb-[16px] text-[#525252] font-light"> {{ productIDData.productId.subtitle}}</p>
+            <p class="mb-[64px]">NT$ <span class="font-size-[48px] font-300">{{ productIDData.price }} </span></p>
             <div class="weight mb-[24px] flex">
               <div
                 class="mr-4 h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#F43F5E] pb-[8px] pt-[8px] text-center font-size-[24px] text-white font-200">
-                100g</div>
+                {{ productIDData.weight }}g</div>
               <div
                 class="h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#E5E5E5] font-size-[24px] text-black font-200">
                 30g</div>
@@ -138,16 +222,15 @@ const addToCart = () => {
               <div class="h-[56px] flex items-center">
                 <p class="w-[100px]">分類</p>
                 <div class="flex">
-                  <p class="mr-2 bg-[#F9F0EA] pl-[8px] pr-[8px]">凍乾</p>
-                  <p class="bg-[#F9F0EA] pl-[8px] pr-[8px]">貓貓專區</p>
+                  <p  v-for="(category,index) in productIDData.productId.category" :key="index" class="mr-2 bg-[#F9F0EA] pl-[8px] pr-[8px]">{{ category  }}</p>
                 </div>
               </div>
               <hr>
 
               <div class="h-[56px] flex items-center">
-                <p class="w-[100px]">產地</p>
+                <p class="w-[100px]"> {{  productIDData.productId.otherInfo[0].infoName}}</p>
                 <div class="flex">
-                  <p class="mr-2 pl-[8px] pr-[8px]">臺灣</p>
+                  <p class="mr-2 pl-[8px] pr-[8px]">{{  productIDData.productId.otherInfo[0].infoValue}}</p>
                 </div>
               </div>
               <hr>
@@ -155,7 +238,7 @@ const addToCart = () => {
               <div class="h-[56px] flex items-center">
                 <p class="w-[100px]">庫存</p>
                 <div class="flex">
-                  <p class="mr-2 pl-[8px] pr-[8px]">100</p>
+                  <p class="mr-2 pl-[8px] pr-[8px]">{{  productIDData.inStock}}</p>
                 </div>
               </div>
               <hr>
@@ -165,11 +248,11 @@ const addToCart = () => {
 
       </div>
 
-      <div class="content mb-[120px]">
-        <img
+      <div class="content mb-[120px] mt-[16px]">
+        <!-- <img
           class="ma"
           src="https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png"
-          alt="" >
+          alt="" > -->
 
         <p>
           24h 快速出貨🔥<br>
@@ -187,10 +270,9 @@ const addToCart = () => {
           <div class="mb-[48px] h-[50px] bg-[#E5E5E5] px-[16px] py-[8px] font-size-[24px] text-[#525252] font-200">
             評價
           </div>
-          <!-- <div class="flex "> -->
-          <div class="grid grid-cols-1 mt-6 gap-x-6 gap-y-10 md:grid-cols-2">
+          <div class="grid grid-cols-1 mt-6 gap-x-6 gap-y-10 md:grid-cols-1">
 
-            <div class="comment flex items-center">
+            <!-- <div class="comment flex items-center">
               <div class="w-[30%]">
                 <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
               </div>
@@ -202,8 +284,133 @@ const addToCart = () => {
                   <span class="text-[#A3A3A3]">2024-01-22 21:10</span>
                 </div>
               </div>
+            </div> -->
+            <div>
+              <Swiper
+                ref="mySwiper"
+                :height="300"
+                :modules="[ SwiperAutoplay, SwiperEffectCreative,SwiperPagination ]"
+                pagination
+                :slides-per-view="1"
+                :loop="true"
+                :effect="'creative'"
+                :autoplay="{
+                  delay: 3000,
+                  disableOnInteraction: true
+                }"
+                :creative-effect="{
+                  prev: {
+                    shadow: false,
+                    translate: ['100%', 0, 0]
+                  },
+                  next: {
+                    shadow: false,
+                    translate: ['100%', 0, 0]
+                  }
+                }"
+                @slide-change="slideChange()"
+              >
+    <!-- <SwiperSlide v-for="i in 3" :key="index">{{ i }}</SwiperSlide> -->
+
+    <!-- <SwiperSlide>Slide 2</SwiperSlide>
+    <SwiperSlide>Slide 3</SwiperSlide> -->
+
+      <!-- <SwiperSlide
+        v-for="(slide, idx) in slides"
+        :key="idx"
+        :style="`background-color: ${slide.bg}; color: ${slide.color}`"
+      >
+        {{ idx }}
+
+      </SwiperSlide> -->
+      <SwiperSlide 
+      :key=1
+      >
+      <div>
+         <div class="comment flex items-center">
+            <div class="min-w-[100px] w-[30%] sm:w-[15%]">
+                <img class="h-[100px] w-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+              </div>
+              <div class="w-[70%] flex items-center sm:w-[35%]">
+                <div class="triangle"/>
+                <div class="radius-square p-[48px]">
+                  <span>超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️ </span>
+                  <br >
+                  <span class="text-[#A3A3A3]">2024-04-13 10:10</span>
+                </div>
+              </div>
+              <div class="hidden w-[30%] sm:w-[15%] sm:inline-flex">
+                <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+              </div>
+              <div class="hidden w-[70%] flex items-center sm:w-[35%] sm:inline-flex">
+                <div class="triangle hidden sm:inline-flex"/>
+                <div class="radius-square hidden flex-col p-[48px] sm:flex sm:inline-flex">
+                  <span>良心商家，值得多買 </span>
+                  <br >
+                  <span class="text-[#A3A3A3]">2024-04-14 21:10</span>
+                </div>
+              </div>
+        </div>
+      </div>
+        
+
+      </SwiperSlide>
+      <SwiperSlide
+      :key=2
+      >
+      <div>
+        <div class="comment flex items-center">
+            <div class="min-w-[100px] w-[30%] sm:w-[15%]">
+                <img class="h-[100px] w-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+              </div>
+              <div class="w-[70%] flex items-center sm:w-[35%]">
+                <div class="triangle"/>
+                <div class="radius-square p-[48px]">
+                  <span>超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️ </span>
+                  <br >
+                  <span class="text-[#A3A3A3]">2024-05-13 10:10</span>
+                </div>
+              </div>
+              <div class="hidden w-[30%] sm:w-[15%] sm:inline-flex">
+                <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+              </div>
+              <div class="hidden w-[70%] flex items-center sm:w-[35%] sm:inline-flex">
+                <div class="triangle hidden sm:inline-flex"/>
+                <div class="radius-square hidden flex-col p-[48px] sm:flex sm:inline-flex">
+                  <span>乾蝦❤️乾蝦❤️乾蝦❤️乾蝦❤️ </span>
+                  <br >
+                  <span class="text-[#A3A3A3]">2024-05-14 21:10</span>
+                </div>
+              </div>
+        </div>
+      </div>
+            <!-- <div class="comment flex items-center">
+              <div class="w-[30%]">
+                <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+              </div>
+              <div class="w-[70%] flex items-center">
+                <div class="triangle"/>
+                <div class="radius-square p-[48px]">
+                  <span>乾蝦❤️ 乾蝦❤️ 乾蝦❤️ 乾蝦❤️ 乾蝦❤️ </span>
+                  <br >
+                  <span class="text-[#A3A3A3]">2024-01-22 21:10</span>
+                </div>
+              </div>
+            </div> -->
+
+      </SwiperSlide>
+      <!-- <SwiperControls /> -->
+  
+      <!-- <SwiperControls2 direction="prev"/> 
+      <SwiperControls2 direction="next"/>  -->
+
+
+    </Swiper>
+              <!-- https://stackblitz.com/github/cpreston321/nuxt-swiper/tree/main/examples/swiper-basic?file=app.vue -->
+
+              
             </div>
-            <div class="comment flex items-center">
+            <!-- <div class="comment flex items-center">
               <div class="w-[30%]">
                 <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
               </div>
@@ -215,7 +422,7 @@ const addToCart = () => {
                   <span class="text-[#A3A3A3]">2024-01-22 21:10</span>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <div>
@@ -227,7 +434,7 @@ const addToCart = () => {
           <div class="grid grid-cols-3 mt-6 gap-x-6 gap-y-10">
 
             <div
-              v-for="(product) in productData" :key="product._id"
+              v-for="(product) in productsData" :key="product._id"
               class="group product relative border b-rd-2xl pb-4 pl-2 pr-2">
               <div
                 v-if="product.productId.imageGallery.length > 0"
@@ -275,6 +482,41 @@ v-for="index in Math.floor(product.star)" :key="index" src="/assets/img/icon/ico
 </template>
 
 <style lang="scss" scoped>
+
+// .swiper-slide {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   font-size: 18px;
+//   height: 20vh;
+//   font-size: 4rem;
+//   font-weight: bold;
+//   font-family: 'Roboto', sans-serif;
+// }
+.swiper-wrapper {
+  min-width: 100vh;
+  width: 100vh;
+}
+.swiper-cards {
+  width: 240px;
+  height: 240px;
+}
+.swiper-cards .swiper-slide {
+  border-radius: 6px;
+  border: 1px solid black;
+}
+
+#__nuxt {
+  height: 100%;
+}
+.swiper {
+  width: 100%;
+  height: 100%;
+  /* width: 500px;
+  height: 500px; */
+  // border: 1px solid red;
+}
+
 .triangle {
   width: 0;
   height: 0;
