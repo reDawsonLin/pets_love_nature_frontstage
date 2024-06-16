@@ -1,8 +1,9 @@
 <script setup>
-import { useStoreCart } from "~/stores/storeCart";
+import { useStoreCart } from '~/stores/storeCart';
 
 const storeCart = useStoreCart();
 const { addCart } = storeCart;
+
 const searchValue = ref({
   searchText: "",
   sortOrder: "1",

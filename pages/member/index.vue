@@ -27,27 +27,22 @@ const data = ref({
   accountStatus: 0,
 });
 
-// const id = reactive('123');
 
 const fetchData = async () => {
   try {
-    const response = await fetch(
-      `https://pets-love-nature-backend-n.onrender.com/api/v1/customer/${id_customer.value}`,
+    // use$Fetch
+    const result = await use$Fetch(
+      `/customer/${id_customer.value}`,
       {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
       }
-    );
-    if (!response.ok) {
-      // throw new Error("Network response was not ok");
-      const e = new Error("請重新登入");
-      e.name = response.status;
-      throw e;
+    )
 
-    }
-    const result = await response.json();
+    // console.log('41' , result);
+   
     data.value = result.data;
     console.log("成功得到會員資訊");
   } catch (e) {
@@ -68,17 +63,16 @@ const saveMember = async () => {
 
 const postFetchData = async (data) => {
   try {
-    const response = await fetch(
-      `https://pets-love-nature-backend-n.onrender.com/api/v1/customer/${id_customer.value}`,
+
+      const response = await use$Fetch(`/customer/${id_customer.value}`,
       {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token.value}`,
         },
         body: JSON.stringify(data.value),
       }
-    );
+    )
     console.log(response);
     alert("儲存成功");
   } catch (e) {
@@ -95,7 +89,7 @@ onMounted(() => {
 <template>
   <div class="member mx-auto container md-flex">
     <div class="sidebar w-[100%] flex flex-col grid-justify-start grid-items-center md:mt-[100px] md-w-[30%]">
-      <ul class="w-[100%] flex flex-row justify-center text-center md-w-[80%] md:flex-col">
+      <!-- <ul class="w-[100%] flex flex-row justify-center text-center md-w-[80%] md:flex-col">
         <li class="m-2">
           <a href="#" class="block p-2 hover:bg-[#fdd8bf]">個人資訊</a>
         </li>
@@ -108,7 +102,8 @@ onMounted(() => {
         <li class="m-2">
           <a href="#" class="block p-2 hover:bg-[#fdd8bf]">聊聊紀錄</a>
         </li>
-      </ul>
+      </ul> -->
+      <SidebarOrder />
     </div>
 
     <div class="w-[100%] md-w-[70%]">
