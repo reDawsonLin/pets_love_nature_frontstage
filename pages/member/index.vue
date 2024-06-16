@@ -27,27 +27,22 @@ const data = ref({
   accountStatus: 0,
 });
 
-// const id = reactive('123');
 
 const fetchData = async () => {
   try {
-    const response = await fetch(
-      `https://pets-love-nature-backend-n.onrender.com/api/v1/customer/${id_customer.value}`,
+    // use$Fetch
+    const result = await use$Fetch(
+      `/customer/${id_customer.value}`,
       {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
       }
-    );
-    if (!response.ok) {
-      // throw new Error("Network response was not ok");
-      const e = new Error("請重新登入");
-      e.name = response.status;
-      throw e;
+    )
 
-    }
-    const result = await response.json();
+    // console.log('41' , result);
+   
     data.value = result.data;
     console.log("成功得到會員資訊");
   } catch (e) {
@@ -68,17 +63,16 @@ const saveMember = async () => {
 
 const postFetchData = async (data) => {
   try {
-    const response = await fetch(
-      `https://pets-love-nature-backend-n.onrender.com/api/v1/customer/${id_customer.value}`,
+
+      const response = await use$Fetch(`/customer/${id_customer.value}`,
       {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token.value}`,
         },
         body: JSON.stringify(data.value),
       }
-    );
+    )
     console.log(response);
     alert("儲存成功");
   } catch (e) {
