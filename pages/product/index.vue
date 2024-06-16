@@ -1,5 +1,8 @@
 <script setup>
-const { addCart } = await useShoppingCart();
+import { useStoreCart } from "~/stores/storeCart";
+
+const storeCart = useStoreCart();
+const { addCart } = storeCart;
 const searchValue = ref({
   searchText: "",
   sortOrder: "1",
