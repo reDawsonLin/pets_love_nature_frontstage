@@ -5,6 +5,12 @@ const imgsIndex = ref(0);
 const imgsGalleryStart = ref(0);
 const imgsGalleryEnd = ref(3);
 
+import { useStoreCart } from '~/stores/storeCart';
+
+const storeCart = useStoreCart();
+const { addCart } = storeCart;
+
+
 const productSpecListIndex = ref(0);
 // const imgs = ref([
 //   {
@@ -167,9 +173,16 @@ const fetchData = async () => {
   }
 };
 
-const addToCart = () => {
-  console.log('add');
+const addToCart = async(product) => {
+  const obj = {
+    productSpec: product._id,
+    quantity: 1,
+    inStock: product.inStock
+  }
+  const arr = [obj];
+  await addCart(arr, 0)
 }
+
 
 const changeImg = (index) => {
   console.log(index);
@@ -193,9 +206,8 @@ const changeImgsGallery = (val)=>{
     imgsGalleryEnd.value -= 1
   }
 }
-// 0 1 2 3 || 6
-// 1 2 3 4 || 6
-// 2 3 4 5 || 6
+
+
 
 onMounted(() => {
   fetchData();
@@ -269,7 +281,7 @@ onMounted(() => {
               <div
                 class="mx-auto mb-[12px] h-[60px] w-[100%] flex cursor-pointer items-center justify-center rounded bg-[#E5E5E5] text-black lg:mx-0 lg:mr-4 md:mb-[0] lg:h-[60px] lg:w-64 md:w-[258px]">
                 <img class="mr-3" src="/assets/img/icon/icon-cart-bgE5.svg" alt="" style="fill: red;">
-                <span class="font-size-[20px] text-[#525252]">加入購物車</span>
+                <span class="font-size-[20px] text-[#525252]" @click="addToCart(product)">加入購物車</span>
               </div>
 
               <div
