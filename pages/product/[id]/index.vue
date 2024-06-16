@@ -4,6 +4,7 @@ const { id } = route.params
 const imgsIndex = ref(0);
 const imgsGalleryStart = ref(0);
 const imgsGalleryEnd = ref(3);
+const buyAmount = ref(1);
 
 import { useStoreCart } from '~/stores/storeCart';
 
@@ -145,6 +146,7 @@ const fetchData = async () => {
 };
 
 const addToCart = async(product) => {
+  console.log('cart ' , buyAmount.value);
   const obj = {
     productSpec: product._id,
     quantity: 1,
@@ -181,6 +183,17 @@ const changeImgsGallery = (val)=>{
 }
 
 
+const buyAmountChange = (num) => {
+  if(num == 1){
+    buyAmount.value += 1;
+  }
+  else if(num == -1){
+    if(buyAmount.value==1){
+      return
+    }
+    buyAmount.value -= 1;
+  }
+}
 
 onMounted(() => {
   fetchData();
@@ -242,9 +255,11 @@ onMounted(() => {
             </div>
             <div>
               <div class="mb-[16px] w-[140px] flex justify-between b b-[#E5E5E5] b-rd-8px b-solid p-[8px]">
-                <img class="" src="/assets/img/icon/icon-remove.svg" alt="" style="fill: red;">
-                <div class="font-size-[20px]">1</div>
-                <img class="" src="/assets/img/icon/icon-add.svg" alt="" style="fill: red;">
+                <img class="" src="/assets/img/icon/icon-remove.svg" alt="" style="fill: red;" @click="buyAmountChange(-1)">
+                <div class="font-size-[20px]">
+                  <input type="text" v-model="buyAmount" class=" text-gray-900 text-sm rounded-lg  block w-full p-2.5 " />
+                </div>
+                <img class="" src="/assets/img/icon/icon-add.svg" alt="" style="fill: red;"  @click="buyAmountChange(1)">
 
               </div>
 
@@ -572,5 +587,10 @@ v-for="index in Math.floor(product.star)" :key="index" src="/assets/img/icon/ico
   height: 231px;
   background: #F9F0EA;
   border-radius: 36px;
+}
+input{
+  border: 0;
+  outline: none;
+  text-align: center;
 }
 </style>
