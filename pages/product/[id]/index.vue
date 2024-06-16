@@ -1,12 +1,12 @@
 <script setup>
+import { useStoreCart } from '~/stores/storeCart';
+
 const route = useRoute()
 const { id } = route.params
 const imgsIndex = ref(0);
 const imgsGalleryStart = ref(0);
 const imgsGalleryEnd = ref(3);
 const buyAmount = ref(1);
-
-import { useStoreCart } from '~/stores/storeCart';
 
 const storeCart = useStoreCart();
 const { addCart } = storeCart;
@@ -44,9 +44,19 @@ const productIDData = ref({
         {
           "_id": "",
           "productId": "",
-          "weight": 56,
-          "price": 59,
-          "inStock": 150,
+          "weight": '',
+          "price": '',
+          "inStock": '',
+          "onlineStatus": false,
+          "createdAt": "2024-06-03T16:11:56.046Z",
+          "updatedAt": "2024-06-03T16:11:56.046Z"
+        },
+        {
+          "_id": "",
+          "productId": "",
+          "weight": '',
+          "price": '',
+          "inStock": '',
           "onlineStatus": false,
           "createdAt": "2024-06-03T16:11:56.046Z",
           "updatedAt": "2024-06-03T16:11:56.046Z"
@@ -146,14 +156,14 @@ const fetchData = async () => {
 };
 
 const addToCart = async(product) => {
-  console.log('cart ' , buyAmount.value);
   const obj = {
-    productSpec: product._id,
-    quantity: 1,
-    inStock: product.inStock
+    productSpec: product.productSpecList[productSpecListIndex.value]._id,
+    quantity: buyAmount.value,
+    inStock: product.productSpecList[productSpecListIndex.value].inStock
   }
   const arr = [obj];
   await addCart(arr, 0)
+  buyAmount.value =1;
 }
 
 
@@ -193,6 +203,10 @@ const buyAmountChange = (num) => {
     }
     buyAmount.value -= 1;
   }
+}
+
+const changeProductSpecListIndex = (index)=>{
+  productSpecListIndex.value = index
 }
 
 onMounted(() => {
@@ -250,17 +264,27 @@ onMounted(() => {
             <p class="mb-[64px]">NT$ <span class="font-size-[48px] font-300">{{ productIDData.productSpecList[productSpecListIndex].price }} </span></p>
             <div class="weight mb-[24px] flex">
               <div
-                class="mr-4 h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#F43F5E] pb-[8px] pt-[8px] text-center font-size-[24px] text-white font-200">
-                {{ productIDData.productSpecList[0].weight }}g</div>
+                class="mr-4 h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#E5E5E5] pb-[8px] pt-[8px] text-center font-size-[24px] text-black font-200"
+                :class="{'bg-[#F43F5E] text-white': productSpecListIndex == 0}"
+                @click="changeProductSpecListIndex(0)"
+                >
+                {{ productIDData.productSpecList[0].weight }}g
+              </div>
+              <div
+                class="h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#E5E5E5] font-size-[24px] text-black font-200"
+                :class="{'bg-[#F43F5E] text-white': productSpecListIndex == 1}"
+                @click="changeProductSpecListIndex(1)"
+                >
+                {{ productIDData?.productSpecList[1]?.weight }} g
+              </div>
             </div>
             <div>
               <div class="mb-[16px] w-[140px] flex justify-between b b-[#E5E5E5] b-rd-8px b-solid p-[8px]">
                 <img class="" src="/assets/img/icon/icon-remove.svg" alt="" style="fill: red;" @click="buyAmountChange(-1)">
                 <div class="font-size-[20px]">
-                  <input type="text" v-model="buyAmount" class=" text-gray-900 text-sm rounded-lg  block w-full p-2.5 " />
+                  <input v-model="buyAmount" type="text" class="block w-full rounded-lg p-2.5 text-sm text-gray-900" >
                 </div>
                 <img class="" src="/assets/img/icon/icon-add.svg" alt="" style="fill: red;"  @click="buyAmountChange(1)">
-
               </div>
 
             </div>
@@ -269,7 +293,7 @@ onMounted(() => {
               <div
                 class="mx-auto mb-[12px] h-[60px] w-[100%] flex cursor-pointer items-center justify-center rounded bg-[#E5E5E5] text-black lg:mx-0 lg:mr-4 md:mb-[0] lg:h-[60px] lg:w-64 md:w-[258px]">
                 <img class="mr-3" src="/assets/img/icon/icon-cart-bgE5.svg" alt="" style="fill: red;">
-                <span class="font-size-[20px] text-[#525252]" @click="addToCart(product)">加入購物車</span>
+                <span class="font-size-[20px] text-[#525252]" @click="addToCart(productIDData)">加入購物車</span>
               </div>
 
               <div
@@ -322,7 +346,7 @@ onMounted(() => {
           alt="" > -->
         
         <div>
-          <p v-html="productIDData.description"></p>
+          <p v-html="productIDData.description"/>
         </div>
         <!-- <p>
           24h 快速出貨🔥<br>
