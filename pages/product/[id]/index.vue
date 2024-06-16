@@ -1,39 +1,67 @@
 <script setup>
+import { useStoreCart } from '~/stores/storeCart';
+
 const route = useRoute()
 const { id } = route.params
+const imgsIndex = ref(0);
+const imgsGalleryStart = ref(0);
+const imgsGalleryEnd = ref(3);
+const buyAmount = ref(1);
 
+const storeCart = useStoreCart();
+const { addCart } = storeCart;
+
+
+const productSpecListIndex = ref(0);
 const productIDData = ref({
   "_id": "",
-  "productId": {
-    "_id": "",
-    "title": "",
-    "subtitle": "",
-    "description": "",
-    "category": [
-        
-    ],
-    "otherInfo": [
-        {
-            "infoName": "",
-            "infoValue": ""
-        }
-    ],
-    "star": "",
-    "imageGallery": [
-        {
-            "_id": "",
-            "imgUrl": "",
-            "altText": ""
-        }
-    ]
-  },
-  "productNumber": "",
+  "title": "",
+  "subtitle": "",
+  "description": "",
+  "category": [
+  ],
+  "otherInfo": [
+      {
+          "infoName": "",
+          "infoValue": ""
+      }
+  ],
+  "star": "",
+  "imageGallery": [
+      {
+          "_id": "",
+          "imgUrl": "",
+          "altText": ""
+      }
+  ],
   "weight": "",
   "price": "",
   "inStock": "",
   "onlineStatus": "",
   "createdAt": "",
-  "updatedAt": ""
+  "updatedAt": "",
+  "productSpecList": [
+        {
+          "_id": "",
+          "productId": "",
+          "weight": '',
+          "price": '',
+          "inStock": '',
+          "onlineStatus": false,
+          "createdAt": "2024-06-03T16:11:56.046Z",
+          "updatedAt": "2024-06-03T16:11:56.046Z"
+        },
+        {
+          "_id": "",
+          "productId": "",
+          "weight": '',
+          "price": '',
+          "inStock": '',
+          "onlineStatus": false,
+          "createdAt": "2024-06-03T16:11:56.046Z",
+          "updatedAt": "2024-06-03T16:11:56.046Z"
+        }
+      ]
 })
 
 
@@ -94,7 +122,6 @@ const productsData = ref([
 );
 
 const fetchData = async () => {
-  // console.log('36' ,searchValue.value);
   try {
   //   const params = {
   //     ...searchValue.value,
@@ -118,8 +145,7 @@ const fetchData = async () => {
 
     }
     const result = await response.json();
-
-    console.log('125' , result.data);
+    console.log('152' , result.data);
     productIDData.value=result.data
 
   } catch (e) {
@@ -129,19 +155,65 @@ const fetchData = async () => {
   }
 };
 
-const addToCart = () => {
-  console.log('add');
+const addToCart = async(product) => {
+  const obj = {
+    productSpec: product.productSpecList[productSpecListIndex.value]._id,
+    quantity: buyAmount.value,
+    inStock: product.productSpecList[productSpecListIndex.value].inStock
+  }
+  const arr = [obj];
+  await addCart(arr, 0)
+  buyAmount.value =1;
 }
 
+
+const changeImg = (index) => {
+  console.log(index);
+  imgsIndex.value = index;
+}
+
+const changeImgsGallery = (val)=>{
+  if(productIDData.value.imageGallery.length < 4){
+    return
+  }
+  if(val==1){
+    if((productIDData.value.imageGallery.length -1) == imgsGalleryEnd.value){
+      return
+    }
+      imgsGalleryStart.value += 1
+      imgsGalleryEnd.value += 1
+  }
+  else{
+    if(imgsGalleryStart.value==0){
+      return
+    }
+    imgsGalleryStart.value -= 1
+    imgsGalleryEnd.value -= 1
+  }
+}
+
+
+const buyAmountChange = (num) => {
+  if(num == 1){
+    buyAmount.value += 1;
+  }
+  else if(num == -1){
+    if(buyAmount.value==1){
+      return
+    }
+    buyAmount.value -= 1;
+  }
+}
+
+const changeProductSpecListIndex = (index)=>{
+  productSpecListIndex.value = index
+}
 
 onMounted(() => {
   fetchData();
 
 });
 
-const slideChange = () => {
-    console.log('slideChange');
-};
 
 </script>
 
@@ -152,28 +224,34 @@ const slideChange = () => {
         <div class="product-imgs grid grid-cols-1 md:grid-cols-2">
           <div class="imgs w-[90%]">
             <div class="mb-[16px] h-[637px]">
-              <img
+          
+                <!-- imgsIndex -->
+                <img
                 class="ma h-[100%] object-contain"
-                :src="productIDData.productId.imageGallery[0].imgUrl"
+                :src="productIDData.imageGallery[imgsIndex].imgUrl"
                 alt="">
+                <!-- :src="imgs[imgsIndex].imgUrl" -->
             </div>
-            <div class="h-[120px] w-[90%] flex justify-between">
-              <div class="w-[24px] flex items-center bg-[#E5E5E5]">
-
+            <div class="h-[120px] w-[100%] flex justify-between">
+              <div class="w-[24px] flex items-center bg-[#E5E5E5]" @click="changeImgsGallery(-1)">
                 <img src="/assets/img/icon/icon-chevron_left.svg" alt="">
               </div>
-              <img
-                src="https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png"
-                alt="">
+          
+              <div class="w-[90%] overflow-hidden">
+                <div  v-for="(item,index) in productIDData.imageGallery" :key=index class="inline">
+                  <div v-if="index<= imgsGalleryEnd && index>=imgsGalleryStart"  class="inline-block h-[100%] w-[25%]">
+                    
+                    <img
+                    :src=item.imgUrl
+                    class="h-[100%] object-contain object-center"
+                    alt=""
+                    @click="changeImg(index)">
+                  </div>
 
-              <img
-                src="https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png"
-                alt="">
+                </div>
+              </div>
 
-              <img
-                src="https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png"
-                alt="">
-              <div class="w-[24px flex items-center bg-[#E5E5E5]">
+              <div class="w-[24px flex items-center bg-[#E5E5E5]"  @click="changeImgsGallery(1)">
 
                 <img src="/assets/img/icon/icon-chevron_right.svg" alt="">
               </div>
@@ -181,23 +259,32 @@ const slideChange = () => {
 
           </div>
           <div class="product-imgs grid grid-cols-6 flex flex-col">
-            <h2 class="mb-[16px]">  {{ productIDData.productId.title }}</h2>
-            <p class="mb-[16px] text-[#525252] font-light"> {{ productIDData.productId.subtitle}}</p>
-            <p class="mb-[64px]">NT$ <span class="font-size-[48px] font-300">{{ productIDData.price }} </span></p>
+            <h2 class="mb-[16px]">  {{ productIDData.title }}</h2>
+            <p class="mb-[16px] text-[#525252] font-light"> {{ productIDData.subtitle}}</p>
+            <p class="mb-[64px]">NT$ <span class="font-size-[48px] font-300">{{ productIDData.productSpecList[productSpecListIndex].price }} </span></p>
             <div class="weight mb-[24px] flex">
               <div
-                class="mr-4 h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#F43F5E] pb-[8px] pt-[8px] text-center font-size-[24px] text-white font-200">
-                {{ productIDData.weight }}g</div>
+                class="mr-4 h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#E5E5E5] pb-[8px] pt-[8px] text-center font-size-[24px] text-black font-200"
+                :class="{'bg-[#F43F5E] text-white': productSpecListIndex == 0}"
+                @click="changeProductSpecListIndex(0)"
+                >
+                {{ productIDData.productSpecList[0].weight }}g
+              </div>
               <div
-                class="h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#E5E5E5] font-size-[24px] text-black font-200">
-                30g</div>
+                class="h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#E5E5E5] font-size-[24px] text-black font-200"
+                :class="{'bg-[#F43F5E] text-white': productSpecListIndex == 1}"
+                @click="changeProductSpecListIndex(1)"
+                >
+                {{ productIDData?.productSpecList[1]?.weight }} g
+              </div>
             </div>
             <div>
               <div class="mb-[16px] w-[140px] flex justify-between b b-[#E5E5E5] b-rd-8px b-solid p-[8px]">
-                <img class="" src="/assets/img/icon/icon-remove.svg" alt="" style="fill: red;">
-                <div class="font-size-[20px]">1</div>
-                <img class="" src="/assets/img/icon/icon-add.svg" alt="" style="fill: red;">
-
+                <img class="" src="/assets/img/icon/icon-remove.svg" alt="" style="fill: red;" @click="buyAmountChange(-1)">
+                <div class="font-size-[20px]">
+                  <input v-model="buyAmount" type="text" class="block w-full rounded-lg p-2.5 text-sm text-gray-900" >
+                </div>
+                <img class="" src="/assets/img/icon/icon-add.svg" alt="" style="fill: red;"  @click="buyAmountChange(1)">
               </div>
 
             </div>
@@ -206,7 +293,7 @@ const slideChange = () => {
               <div
                 class="mx-auto mb-[12px] h-[60px] w-[100%] flex cursor-pointer items-center justify-center rounded bg-[#E5E5E5] text-black lg:mx-0 lg:mr-4 md:mb-[0] lg:h-[60px] lg:w-64 md:w-[258px]">
                 <img class="mr-3" src="/assets/img/icon/icon-cart-bgE5.svg" alt="" style="fill: red;">
-                <span class="font-size-[20px] text-[#525252]">加入購物車</span>
+                <span class="font-size-[20px] text-[#525252]" @click="addToCart(productIDData)">加入購物車</span>
               </div>
 
               <div
@@ -222,15 +309,19 @@ const slideChange = () => {
               <div class="h-[56px] flex items-center">
                 <p class="w-[100px]">分類</p>
                 <div class="flex">
-                  <p  v-for="(category,index) in productIDData.productId.category" :key="index" class="mr-2 bg-[#F9F0EA] pl-[8px] pr-[8px]">{{ category  }}</p>
+                  <p  v-for="(category,index) in productIDData.category" :key="index" class="mr-2 bg-[#F9F0EA] pl-[8px] pr-[8px]">
+                    <span v-if="category == 'fresh'">凍乾</span>
+                    <span v-if="category == 'cat'">貓食</span>
+                    <span v-if="category == 'dog'">狗食</span>
+                  </p>
                 </div>
               </div>
               <hr>
 
               <div class="h-[56px] flex items-center">
-                <p class="w-[100px]"> {{  productIDData.productId.otherInfo[0].infoName}}</p>
+                <p class="w-[100px]"> {{  productIDData.otherInfo[0].infoName}}</p>
                 <div class="flex">
-                  <p class="mr-2 pl-[8px] pr-[8px]">{{  productIDData.productId.otherInfo[0].infoValue}}</p>
+                  <p class="mr-2 pl-[8px] pr-[8px]">{{  productIDData.otherInfo[0].infoValue}}</p>
                 </div>
               </div>
               <hr>
@@ -238,7 +329,7 @@ const slideChange = () => {
               <div class="h-[56px] flex items-center">
                 <p class="w-[100px]">庫存</p>
                 <div class="flex">
-                  <p class="mr-2 pl-[8px] pr-[8px]">{{  productIDData.inStock}}</p>
+                  <p class="mr-2 pl-[8px] pr-[8px]">{{  productIDData.productSpecList[productSpecListIndex].inStock}}</p>
                 </div>
               </div>
               <hr>
@@ -253,15 +344,18 @@ const slideChange = () => {
           class="ma"
           src="https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png"
           alt="" > -->
-
-        <p>
+        
+        <div>
+          <p v-html="productIDData.description"/>
+        </div>
+        <!-- <p>
           24h 快速出貨🔥<br>
           😺寵物鮮食凍乾🐶<br>
           嚴選人食等級肉品，100%純天然健康、絕無添加！<br>!!照護毛孩健康是我們的本份💖我們的包裝簡約卻充滿溫暖，用心經營每一個細節，只為了將成本降至最低，讓品質卻提升至最高，將這份愛與呵護，完美呈現在毛孩的每一餐中😍
           TW台灣加工廠直售，我們與您攜手守護毛孩的健康，原料、加工到包裝一條龍作業全都在台灣在地生產製作🔥
           如有相關問題歡迎聊聊~小編竭盡所能&盡快的回覆🫶️※ 小編回覆時間為9:00~小編愛睏為止😌
           ⚠近期繁多包裹詐騙⚠突如其來的貨到付款...等手法!!請家長們再三確認訂單系統通知🔥為了預防詐騙🔥建議使用信用卡付款、轉帳付款。
-        </p>
+        </p> -->
 
       </div>
 
@@ -308,7 +402,7 @@ const slideChange = () => {
                     translate: ['100%', 0, 0]
                   }
                 }"
-                @slide-change="slideChange()"
+
               >
     <!-- <SwiperSlide v-for="i in 3" :key="index">{{ i }}</SwiperSlide> -->
 
@@ -481,18 +575,8 @@ v-for="index in Math.floor(product.star)" :key="index" src="/assets/img/icon/ico
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 
-// .swiper-slide {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   font-size: 18px;
-//   height: 20vh;
-//   font-size: 4rem;
-//   font-weight: bold;
-//   font-family: 'Roboto', sans-serif;
-// }
 .swiper-wrapper {
   min-width: 100vh;
   width: 100vh;
@@ -512,9 +596,6 @@ v-for="index in Math.floor(product.star)" :key="index" src="/assets/img/icon/ico
 .swiper {
   width: 100%;
   height: 100%;
-  /* width: 500px;
-  height: 500px; */
-  // border: 1px solid red;
 }
 
 .triangle {
@@ -530,5 +611,10 @@ v-for="index in Math.floor(product.star)" :key="index" src="/assets/img/icon/ico
   height: 231px;
   background: #F9F0EA;
   border-radius: 36px;
+}
+input{
+  border: 0;
+  outline: none;
+  text-align: center;
 }
 </style>
