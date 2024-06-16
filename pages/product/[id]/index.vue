@@ -12,34 +12,6 @@ const { addCart } = storeCart;
 
 
 const productSpecListIndex = ref(0);
-// const imgs = ref([
-//   {
-//     imgUrl: "https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//     altText: "狗鮮食"
-//   },
-//   {
-//     imgUrl: "https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png",
-//     altText: "狗鮮食"
-//   }, 
-//   {
-//     imgUrl: "https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//     altText: "狗鮮食"
-//   },
-//   {
-//     imgUrl: "https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png",
-//     altText: "狗鮮食"
-//   },
-//   {
-//     imgUrl: "https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//     altText: "狗鮮食"
-//   },
-//   {
-//     imgUrl: "https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png",
-//     altText: "狗鮮食"
-//   },
-// ])
-
-// imgs =  productIDData.imageGallery
 const productIDData = ref({
   "_id": "",
   "title": "",
@@ -139,7 +111,6 @@ const productsData = ref([
 );
 
 const fetchData = async () => {
-  // console.log('36' ,searchValue.value);
   try {
   //   const params = {
   //     ...searchValue.value,
@@ -190,9 +161,11 @@ const changeImg = (index) => {
 }
 
 const changeImgsGallery = (val)=>{
-
+  if(productIDData.value.imageGallery.length < 4){
+    return
+  }
   if(val==1){
-    if((imgs.value.length -1) == imgsGalleryEnd.value){
+    if((productIDData.value.imageGallery.length -1) == imgsGalleryEnd.value){
       return
     }
       imgsGalleryStart.value += 1
