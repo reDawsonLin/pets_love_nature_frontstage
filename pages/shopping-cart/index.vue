@@ -55,16 +55,13 @@ const isChoosedProductArr = computed(() =>
 );
 
 const totalPrice = computed(() =>
-  isChoosedProductArr.value.reduce(
-    (acc, cur) => acc + cur.quantity * cur.price,
-    0
-  )
+  isChoosedProductArr.value.reduce((acc, cur) => acc + cur.quantity * cur.price, 0)
 );
 
 const allSelected = computed(
   () =>
-    shoppingDataArr.value.filter((eachProduct) => eachProduct.isChoosed)
-      .length === shoppingDataArr.value.length
+    shoppingDataArr.value.filter((eachProduct) => eachProduct.isChoosed).length ===
+    shoppingDataArr.value.length
 );
 
 const checkValue = async () => {
@@ -90,13 +87,8 @@ const deleteProduct = async (i, eachProduct) => {
 
 const allSelectedClick = () => {
   if (allSelected.value)
-    shoppingDataArr.value.forEach(
-      (eachProduct) => (eachProduct.isChoosed = false)
-    );
-  else
-    shoppingDataArr.value.forEach(
-      (eachProduct) => (eachProduct.isChoosed = true)
-    );
+    shoppingDataArr.value.forEach((eachProduct) => (eachProduct.isChoosed = false));
+  else shoppingDataArr.value.forEach((eachProduct) => (eachProduct.isChoosed = true));
 };
 
 const productQuantityChange = async (i, num) => {
@@ -107,7 +99,7 @@ const productQuantityChange = async (i, num) => {
     const obj = {
       productSpec: shoppingDataArr.value[i]._id,
       quantity: Number(shoppingDataArr.value[i].quantity),
-      inStock: Number(shoppingDataArr.value[i].inStock)
+      inStock: Number(shoppingDataArr.value[i].inStock),
     };
     const arr = [obj];
     await addCart(arr, 1);
@@ -125,7 +117,7 @@ const productQuantityInput = async (product, e) => {
     const obj = {
       productSpec: product._id,
       quantity: Number(product.quantity),
-      inStock: product.inStock
+      inStock: product.inStock,
     };
     const arr = [obj];
     await addCart(arr, 1);
@@ -168,21 +160,16 @@ const goPurchaseOrder = () => {
 <template>
   <div class="shopping_cart grow">
     <div p="t-3.75rem" class="title mb-7.5 flex items-center justify-center">
-      <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" >
+      <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" />
       <h1 class="text-4xl">購物車</h1>
     </div>
     <div
       class="white_space m-auto mb-5 w-11/12 rounded bg-white pb-6 pl-4 pr-4 pt-6 lg:px-9"
     >
       <div class="out_block w-full">
-        <div
-          class="top_bar hidden h-14 w-full items-center rounded py-1 lg:flex"
-        >
+        <div class="top_bar hidden h-14 w-full items-center rounded py-1 lg:flex">
           <div class="top_check_box flex grow basis-0 justify-center">
-            <div
-              class="check_box_out_div cursor-pointer p-3"
-              @click="allSelectedClick"
-            >
+            <div class="check_box_out_div cursor-pointer p-3" @click="allSelectedClick">
               <div
                 class="checkbox_div box-border max-h-5 max-w-5 min-h-5 min-w-5 flex items-center justify-center border-2 rounded-sm"
               >
@@ -195,16 +182,10 @@ const goPurchaseOrder = () => {
             </div>
           </div>
           <div class="top_product flex grow-2 basis-0 justify-center">商品</div>
-          <div class="top_single_price flex grow basis-0 justify-center">
-            單價
-          </div>
+          <div class="top_single_price flex grow basis-0 justify-center">單價</div>
           <div class="top_quantity flex grow basis-0 justify-center">數量</div>
-          <div class="top_total_price flex grow basis-0 justify-center">
-            總計
-          </div>
-          <div class="product_instock flex grow basis-0 justify-center">
-            庫存
-          </div>
+          <div class="top_total_price flex grow basis-0 justify-center">總計</div>
+          <div class="product_instock flex grow basis-0 justify-center">庫存</div>
 
           <div class="top_operate flex grow basis-0 justify-center">操作</div>
         </div>
@@ -219,10 +200,7 @@ const goPurchaseOrder = () => {
             <div
               class="product_checkbox h-12 w-full flex items-center rounded-md pl-2 pr-2"
             >
-              <div
-                class="flex cursor-pointer items-center"
-                @click="selectProduct(i)"
-              >
+              <div class="flex cursor-pointer items-center" @click="selectProduct(i)">
                 <div
                   class="checkbox_div mr-2.5 box-border max-h-5 max-w-5 min-h-5 min-w-5 flex items-center justify-center border-2 rounded-sm"
                 >
@@ -239,7 +217,7 @@ const goPurchaseOrder = () => {
                 class="operate_div ml-auto h-8 w-10 flex cursor-pointer items-center justify-center rounded-sm"
                 @click="deleteProduct(i, eachProduct)"
               >
-                <img src="/assets/img/garbage_can.png" alt="" >
+                <img src="/assets/img/garbage_can.png" alt="" />
               </div>
             </div>
             <div class="product mb-6 flex items-center pl-2 pt-3">
@@ -249,7 +227,7 @@ const goPurchaseOrder = () => {
                   background-image: url('https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png');
                 "
                 :style="{
-                  backgroundImage: 'url(' + getImage(eachProduct) + ')'
+                  backgroundImage: 'url(' + getImage(eachProduct) + ')',
                 }"
               />
               <div class="name_price_div w-full px-2.5">
@@ -292,7 +270,7 @@ const goPurchaseOrder = () => {
                     class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                     @click="productQuantityChange(i, -1)"
                   >
-                    <img class="minus" src="/assets/img/minus.png" alt="" >
+                    <img class="minus" src="/assets/img/minus.png" alt="" />
                   </div>
 
                   <input
@@ -300,18 +278,16 @@ const goPurchaseOrder = () => {
                     type="number"
                     :value="eachProduct.quantity"
                     @input="productQuantityInput(eachProduct, $event)"
-                  >
+                  />
                   <div
                     class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                     @click="productQuantityChange(i, 1)"
                   >
-                    <img class="plus" src="/assets/img/plus.png" alt="" >
+                    <img class="plus" src="/assets/img/plus.png" alt="" />
                   </div>
                 </div>
               </div>
-              <div class="product_instock ml-3">
-                庫存：{{ eachProduct.inStock }}
-              </div>
+              <div class="product_instock ml-3">庫存：{{ eachProduct.inStock }}</div>
               <div class="product_total_price ml-auto">
                 總計<span class="total_price ml-1">NT$</span>
                 <span class="total_price text-2xl">{{
@@ -336,10 +312,7 @@ const goPurchaseOrder = () => {
             <div
               class="product_checkbox_pc flex grow basis-0 items-center justify-center"
             >
-              <div
-                class="check_box_out_div cursor-pointer p-3"
-                @click="selectProduct(i)"
-              >
+              <div class="check_box_out_div cursor-pointer p-3" @click="selectProduct(i)">
                 <div
                   class="checkbox_div box-border max-h-5 max-w-5 min-h-5 min-w-5 flex items-center justify-center border-2 rounded-sm"
                 >
@@ -351,16 +324,14 @@ const goPurchaseOrder = () => {
                 </div>
               </div>
             </div>
-            <div
-              class="product flex grow-2 basis-0 items-center justify-center"
-            >
+            <div class="product flex grow-2 basis-0 items-center justify-center">
               <div
                 class="product_img mr-2.5 min-h-14 min-w-14 bg-contain bg-center bg-no-repeat"
                 style="
                   background-image: url('https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png');
                 "
                 :style="{
-                  backgroundImage: 'url(' + getImage(eachProduct) + ')'
+                  backgroundImage: 'url(' + getImage(eachProduct) + ')',
                 }"
               />
               <div
@@ -376,9 +347,7 @@ const goPurchaseOrder = () => {
               <span>NT$</span>
               <span class="single_price">{{ eachProduct.price }}</span>
             </div>
-            <div
-              class="product_quantity flex grow basis-0 items-center justify-center"
-            >
+            <div class="product_quantity flex grow basis-0 items-center justify-center">
               <div
                 class="quantity_out_div h-10 w-25 flex items-center justify-around rounded bg-white px-2"
               >
@@ -386,7 +355,7 @@ const goPurchaseOrder = () => {
                   class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                   @click="productQuantityChange(i, -1)"
                 >
-                  <img class="minus" src="/assets/img/minus.png" alt="" >
+                  <img class="minus" src="/assets/img/minus.png" alt="" />
                 </div>
 
                 <input
@@ -394,12 +363,12 @@ const goPurchaseOrder = () => {
                   type="number"
                   :value="eachProduct.quantity"
                   @input="productQuantityInput(eachProduct, $event)"
-                >
+                />
                 <div
                   class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                   @click="productQuantityChange(i, 1)"
                 >
-                  <img class="plus" src="/assets/img/plus.png" alt="" >
+                  <img class="plus" src="/assets/img/plus.png" alt="" />
                 </div>
               </div>
             </div>
@@ -411,19 +380,15 @@ const goPurchaseOrder = () => {
                 eachProduct.quantity * eachProduct.price
               }}</span>
             </div>
-            <div
-              class="product_instoc flex grow basis-0 items-center justify-center"
-            >
+            <div class="product_instoc flex grow basis-0 items-center justify-center">
               {{ eachProduct.inStock }}
             </div>
-            <div
-              class="product_operate flex grow basis-0 items-center justify-center"
-            >
+            <div class="product_operate flex grow basis-0 items-center justify-center">
               <div
                 class="operate_div_pc h-8 w-10 flex cursor-pointer items-center justify-center"
                 @click="deleteProduct(i, eachProduct)"
               >
-                <img src="/assets/img/garbage_can.png" alt="" >
+                <img src="/assets/img/garbage_can.png" alt="" />
               </div>
             </div>
           </div>
@@ -437,15 +402,14 @@ const goPurchaseOrder = () => {
           >
             總金額
             <span class="total_price ml-5">NT$</span>
-            <span class="total_price text-2xl font-black">{{
-              totalPrice
-            }}</span>
+            <span class="total_price text-2xl font-black">{{ totalPrice }}</span>
           </div>
+
           <div
             class="go_shop mx-auto h-15 w-11/12 flex cursor-pointer items-center justify-center rounded lg:mx-0 lg:mr-4 lg:h-16 lg:w-64"
             @click="goPurchaseOrder"
           >
-            <img class="mr-3" src="/assets/img/card.png" alt="" >
+            <img class="mr-3" src="/assets/img/card.png" alt="" />
             <span class="text-xl color-white">去買單</span>
           </div>
         </div>

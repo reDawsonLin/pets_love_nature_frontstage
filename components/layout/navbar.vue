@@ -25,6 +25,13 @@ const closeMobileNav = () => {
 };
 
 const mobileNavShow = ref(false);
+
+// ---
+const logout = () => {
+  setToken(null);
+  closeMobileNav();
+  navigateTo({ path: "/" });
+};
 </script>
 
 <template>
@@ -46,7 +53,7 @@ const mobileNavShow = ref(false);
 
       <div
         :class="{ flex: mobileNavShow }"
-        class="hidden absolute right-0 top-0 z-6 h-100% max-w-375px flex-col gap-1rem rounded-l-1rem bg-second-200 pb-2.5rem pt-1.75rem text-1.25rem md:(relative min-h-unset w-unset max-w-unset flex-grow-1 flex-row flex bg-transparent pb-unset pt-unset text-neutral-50)"
+        class="absolute right-0 top-0 z-6 hidden h-100% max-w-375px flex-col gap-1rem rounded-l-1rem bg-second-200 pb-2.5rem pt-1.75rem text-1.25rem md:(relative max-w-unset min-h-unset w-unset flex flex-grow-1 flex-row bg-transparent pb-unset pt-unset text-neutral-50)"
       >
         <div class="flex justify-end px-1.5rem md:(hidden)">
           <SvgIcon
@@ -147,7 +154,7 @@ const mobileNavShow = ref(false);
             <ul
               class="list_content flex flex-col gap-0.75rem px-2rem text-1rem md:(absolute left-50% top-100% translate-x--50% rounded-0.5rem bg-neutral-50 px-1.5rem py-1rem text-neutral-600)"
             >
-              <li v-if="!token" class="whitespace-nowrap">
+              <li v-if="!token" class="whitespace-nowrap" @click="closeMobileNav()">
                 <NuxtLink to="/Login"> 登入 </NuxtLink>
               </li>
 
@@ -164,12 +171,7 @@ const mobileNavShow = ref(false);
                 <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
                   聊聊紀錄
                 </li>
-                <li
-                  class="cursor-pointer whitespace-nowrap"
-                  @click="setToken(null), closeMobileNav()"
-                >
-                  登出
-                </li>
+                <li class="cursor-pointer whitespace-nowrap" @click="logout">登出</li>
               </template>
             </ul>
           </li>
@@ -181,7 +183,7 @@ const mobileNavShow = ref(false);
                 type="text"
                 placeholder="請輸入關鍵字..."
                 class="search line-clamp-1 w-100% rounded-5rem bg-neutral-50 py-0.75rem pl-1rem pr-3.5rem text-1rem md:(bg-second-400 text-neutral-600) focus:(outline-2px outline-neutral-400)"
-              />
+              >
 
               <SvgIcon
                 class="absolute right-1rem top-50% h-1.5rem w-1.5rem translate-y--50% md:(right-0 h-2rem w-2rem)"

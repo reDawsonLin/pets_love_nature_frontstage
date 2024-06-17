@@ -18,7 +18,7 @@ const list_step = [
 ];
 
 const route = useRoute();
-const current_step = Number(route.fullPath.split("/").at(-1)?.at(-1));
+const current_step = computed(() => Number(route.fullPath.split("/").at(-1)?.at(-1)));
 </script>
 
 <template>

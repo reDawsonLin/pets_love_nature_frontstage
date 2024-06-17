@@ -16,7 +16,7 @@ onMounted(() => {
   //   fetchToken(code);
   // }
 
-  console.log("process.env", process);
+  // console.log("process.env", process);
 });
 
 // async function fetchToken(code) {
