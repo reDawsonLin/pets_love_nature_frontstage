@@ -9,40 +9,18 @@ const { param_post } = storeToRefs(store_checkout);
 const { intParamPost } = store_checkout;
 
 // cart -------
-const data_cart = useCookie("shopping-cart");
-// console.log("data_cart.value :>> ", data_cart.value);
+const data_cart = useCookie("checkout_cart");
 
-const totalPrice = (cart) => {
-  if (!cart) return 0;
-  let result = null;
+// const totalPrice = (cart) => {
+//   if (!cart) return 0;
+//   let result = null;
 
-  cart.forEach((item) => {
-    result += item.price * item.quantity;
-  });
-  return result;
-};
+//   cart.forEach((item) => {
+//     result += item.price * item.quantity;
+//   });
+//   return result;
+// };
 
-// const param_post = ref({
-//   Email: "",
-//   Amt: 0,
-//   ItemDesc: "",
-//   deliveryUserName: "",
-//   deliveryUserPhone: "",
-//   userId: "",
-//   orderProductList: [
-//     {
-//       productId: "",
-//       price: 0,
-//       amount: 0,
-//     },
-//   ],
-//   deliveryAddress: {
-//     country: "",
-//     county: "",
-//     district: "",
-//     address: "",
-//   },
-// });
 // member -------
 // check member store have data or not ---
 const id_customer = useCookie("id_customer");
@@ -61,6 +39,8 @@ const {
   recipientPhone,
 } = data_member.value.data;
 
+console.log("data_cart.value :>> ", data_cart.value);
+
 const same_member = ref(false);
 const memberSame = () => {
   if (same_member.value) {
@@ -76,8 +56,10 @@ const memberSame = () => {
     param_post.value.userId = id_customer.value;
     param_post.value.orderProductList = data_cart.value.map((item) => ({
       productId: item._id,
+      productTitle: item.title,
       price: item.price,
-      amount: item.quantity,
+      quantity: item.quantity,
+      coverImg: item.imageGallery[0].imgUrl,
     }));
   } else {
     intParamPost();
@@ -115,6 +97,9 @@ const { width: window_width } = useWindowSize();
 
 // --------
 const param_post_step1 = useCookie("param_post_step1");
+
+param_post_step1.value = null;
+
 const toStep2 = () => {
   console.log("to step 2");
   param_post_step1.value = param_post.value;
@@ -232,7 +217,7 @@ const toStep2 = () => {
 
       <div class="">
         <p class="mb-0.75rem flex justify-center text-1.5rem">
-          購物車（{{ data_cart.length }}件）
+          購物車（{{ data_cart?.length }}件）
         </p>
         <div
           class="flex items-end justify-center gap-1.5rem rounded-0.25rem bg-neutral-50 p-0.75rem group-hover:(bg-neutral-200)"
@@ -278,8 +263,8 @@ const toStep2 = () => {
       >
         <div class="flex flex-col gap-1rem lg:(flex-row gap-1.5rem)">
           <InputText
-            name="deliveryUserName"
             v-model="param_post.deliveryUserName"
+            name="deliveryUserName"
             placeholder="請輸入姓名"
             required
             input-type="text"
@@ -288,8 +273,8 @@ const toStep2 = () => {
           />
 
           <InputText
-            name="deliveryPhone"
             v-model="param_post.deliveryUserPhone"
+            name="deliveryPhone"
             placeholder="請輸入手機"
             required
             input-type="text"
@@ -299,8 +284,8 @@ const toStep2 = () => {
         </div>
 
         <InputText
-          name="email"
           v-model="param_post.Email"
+          name="email"
           placeholder="請輸入電子郵件"
           required
           input-type="email"
@@ -326,8 +311,8 @@ const toStep2 = () => {
             </InputSelect>
 
             <InputSelect
-              select-name="select_district"
               v-model="param_post.deliveryAddress.district"
+              select-name="select_district"
               class="flex-grow-1"
               :class="{
                 'opacity-50 pointer-events-none': !param_post.deliveryAddress.county,
@@ -344,8 +329,8 @@ const toStep2 = () => {
           </div>
 
           <InputText
-            name="deliveryAddress"
             v-model="param_post.deliveryAddress.address"
+            name="deliveryAddress"
             placeholder="里(村)/路(街)/號/樓(室) (必填)"
             input-type="text"
           />

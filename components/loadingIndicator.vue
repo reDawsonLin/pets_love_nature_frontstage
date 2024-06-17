@@ -103,8 +103,8 @@ const isLoading = ref(false);
 // });
 
 // -----------
-let throttle = 200;
-let hold = 350;
+const throttle = 200;
+const hold = 350;
 let _throttleTimer = null;
 function clear() {
   // if(import.meta.client){}
@@ -175,7 +175,7 @@ router.afterEach((_to, _from, failure) => {
 <template>
   <ClientOnly>
     <div class="loading-indicator" :class="{ show: isLoading }">
-      <Vue3Lottie ref="lottie_container" class="lottie" :animationData="loading_pet" />
+      <Vue3Lottie ref="lottie_container" class="lottie" :animation-data="loading_pet" />
     </div>
   </ClientOnly>
 </template>
