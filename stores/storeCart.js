@@ -75,12 +75,13 @@ export const useStoreCart = defineStore("cart", () => {
     tempCartArray.length = 0;
     transformArray.length = 0;
     // 整理開始
-    if((token.value && id_customer.value)) {
-      tempCartArray = getCartById?.data?.shoppingCart;
+    if ((token.value && id_customer.value)) {
+      console.log('getCartById :>> ', getCartById);
+      tempCartArray = getCartById?.data;
       console.log('tempCartArray已登入', tempCartArray);
     }
     else {
-      tempCartArray = getCartNoLogin?.data?.shoppingCart;
+      tempCartArray = getCartNoLogin?.data;
       console.log('tempCartArray未登入', tempCartArray);
       
     }
