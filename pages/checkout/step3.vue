@@ -19,25 +19,23 @@ const { width: window_width } = useWindowSize();
     class="wrapper_step1 mx-auto max-w-1076px flex flex-col gap-1rem px-0.75rem py-3rem lg:(gap-1.5rem)"
   >
     <section
-      class="group info_cart transition-background flex flex-col cursor-pointer gap-1.5rem rounded-1rem bg-second-400 px-1rem py-1.5rem text-neutral-600 transition-colors lg:(px-1.75rem py-2.5rem)"
-      @click="openModal()"
+      class="flex flex-col gap-1rem rounded-1rem bg-second-400 px-1rem py-1.5rem text-neutral-600 lg:(gap-1rem px-1.75rem py-2.5rem)"
     >
-      <div class="">
-        <p class="mb-0.75rem flex justify-center items-center gap-1.5rem text-1.5rem">
-          <SvgIcon name="shipping" class="h-2.5rem w-2.5rem lg:(h-3.5rem w-3.5rem)" />
-          感謝您的購買！
+      <p class="flex items-center justify-center gap-1.5rem text-1.5rem">
+        <SvgIcon name="shipping" class="h-2.5rem w-2.5rem lg:(h-3.5rem w-3.5rem)" />
+        感謝您的購買！
+      </p>
+
+      <div
+        class="flex items-end justify-center gap-1.5rem rounded-0.25rem bg-neutral-50 p-0.75rem"
+      >
+        <p class="text-1.25rem text-neutral-600">總金額</p>
+        <p class="text-rose-500">
+          NT$
+          <span class="ml-0.25rem text-2rem line-height-120%">{{
+            addThousandPoint(totalPrice(data_cart))
+          }}</span>
         </p>
-        <div
-          class="flex items-end justify-center gap-1.5rem rounded-0.25rem bg-neutral-50 p-0.75rem"
-        >
-          <p class="text-1.25rem text-neutral-600">總金額</p>
-          <p class="text-rose-500">
-            NT$
-            <span class="ml-0.25rem text-2rem line-height-120%">{{
-              addThousandPoint(totalPrice(data_cart))
-            }}</span>
-          </p>
-        </div>
       </div>
     </section>
 
@@ -66,7 +64,7 @@ const { width: window_width } = useWindowSize();
                 class="h-100% object-cover object-center lg:(h-5rem w-5rem)"
                 :src="item.coverImg"
                 alt="product image"
-              />
+              >
             </td>
             <td class="td_content lg:(text-1.25rem)">
               <p class="line-clamp-2">
@@ -106,7 +104,7 @@ const { width: window_width } = useWindowSize();
 
     <NuxtLink
       :to="{ name: 'index' }"
-      class="flex justify-center items-center gap-0.5rem w-100% p-1rem rounded-0.25rem bg-rose-200 text-red-500 text-1.25rem hover:(bg-rose-600 text-neutral-50) transition-colors lg:(gap-1rem p-1rem max-w-300px mx-auto)"
+      class="w-100% flex items-center justify-center gap-0.5rem rounded-0.25rem bg-rose-200 p-1rem text-1.25rem text-red-500 transition-colors lg:(mx-auto max-w-300px gap-1rem p-1rem) hover:(bg-rose-600 text-neutral-50)"
     >
       <SvgIcon name="cart" class="h-1.5rem w-1.5rem lg:(h-1.75rem w-1.75rem)" />
       <p class="">更多好物</p>

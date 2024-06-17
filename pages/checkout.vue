@@ -42,7 +42,7 @@ const current_step = computed(() => Number(route.fullPath.split("/").at(-1)?.at(
           v-if="stepper.step !== 3"
           class="line mt-1.75rem h-0.25rem flex-grow-1 bg-neutral-200 lg:(z--1 mx--1rem mt-2.125rem)"
           :class="{ active: stepper.step < current_step }"
-        />
+        >
       </template>
     </ul>
   </section>

@@ -2,13 +2,12 @@
 import Swal from "sweetalert2";
 import { useStoreCart } from "~/stores/storeCart";
 const storeCart = useStoreCart();
-const { getTransformCartArray, addCart, deleteCart, addTestCartNoLogin } =
-  storeCart;
+const { getTransformCartArray, addCart, deleteCart, addTestCartNoLogin } = storeCart;
 // const { addCart, deleteCart, addTestCartNoLogin } = await useShoppingCart();
 const noImgUrl = ref(
   "https://storage.googleapis.com/petstore-3a2e1.appspot.com/images/ecbb5438-43c3-4a9b-9316-f8e8aecc7d15.jpg?GoogleAccessId=firebase-adminsdk-p5zjq%40petstore-3a2e1.iam.gserviceaccount.com&Expires=16756675200&Signature=sU4UW2CPGkhBDRGf4ncTUXeN%2B5YVxIOdHuVOMxIeDg%2FtxZ6pEIuElGuz1CM14yBtyXO4BvkreykJkUuqS80Bbf%2FUJIyHESkJrNbepEbcVrZBTrX7SLdOZFrQYD86SB%2B7AoXt3JQ43%2BcRTGZki%2FAgdAmd1nqtI2b2F3PipzkWHhitUjdcruJpSsbPSTQwkUfC46B2Pv%2FzxPHrdx6kyFgoICYy21zFhxj7x3DcJq%2Ftj28gUP%2BCeTElNKUMVyWKPyvmBP76XWy8JLWGBs43uJFOuwmjxu4yfk0vc9L8GM%2Bu9PDFLRBrfBlJ30knbCIHHIBeKCDSkpgLb2ZJJhZ888r4GQ%3D%3D"
 );
-const storageCart = useCookie("choosedCartArr");
+const storageCart = useCookie("checkout_cart");
 const shoppingDataArr = ref([]);
 // console.log('token11', token.value);
 //   console.log('id_customer11', id_customer.value);
@@ -160,7 +159,7 @@ const goPurchaseOrder = () => {
 <template>
   <div class="shopping_cart grow">
     <div p="t-3.75rem" class="title mb-7.5 flex items-center justify-center">
-      <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" />
+      <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" >
       <h1 class="text-4xl">購物車</h1>
     </div>
     <div
@@ -217,7 +216,7 @@ const goPurchaseOrder = () => {
                 class="operate_div ml-auto h-8 w-10 flex cursor-pointer items-center justify-center rounded-sm"
                 @click="deleteProduct(i, eachProduct)"
               >
-                <img src="/assets/img/garbage_can.png" alt="" />
+                <img src="/assets/img/garbage_can.png" alt="" >
               </div>
             </div>
             <div class="product mb-6 flex items-center pl-2 pt-3">
@@ -270,7 +269,7 @@ const goPurchaseOrder = () => {
                     class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                     @click="productQuantityChange(i, -1)"
                   >
-                    <img class="minus" src="/assets/img/minus.png" alt="" />
+                    <img class="minus" src="/assets/img/minus.png" alt="" >
                   </div>
 
                   <input
@@ -278,12 +277,12 @@ const goPurchaseOrder = () => {
                     type="number"
                     :value="eachProduct.quantity"
                     @input="productQuantityInput(eachProduct, $event)"
-                  />
+                  >
                   <div
                     class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                     @click="productQuantityChange(i, 1)"
                   >
-                    <img class="plus" src="/assets/img/plus.png" alt="" />
+                    <img class="plus" src="/assets/img/plus.png" alt="" >
                   </div>
                 </div>
               </div>
@@ -300,9 +299,7 @@ const goPurchaseOrder = () => {
         </div>
 
         <!-- pc -->
-        <div
-          class="shopping_cart_list hidden max-h-[44rem] overflow-y-auto lg:block"
-        >
+        <div class="shopping_cart_list hidden max-h-[44rem] overflow-y-auto lg:block">
           <div
             v-for="(eachProduct, i) in shoppingDataArr"
             :key="eachProduct.productId"
@@ -355,7 +352,7 @@ const goPurchaseOrder = () => {
                   class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                   @click="productQuantityChange(i, -1)"
                 >
-                  <img class="minus" src="/assets/img/minus.png" alt="" />
+                  <img class="minus" src="/assets/img/minus.png" alt="" >
                 </div>
 
                 <input
@@ -363,12 +360,12 @@ const goPurchaseOrder = () => {
                   type="number"
                   :value="eachProduct.quantity"
                   @input="productQuantityInput(eachProduct, $event)"
-                />
+                >
                 <div
                   class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                   @click="productQuantityChange(i, 1)"
                 >
-                  <img class="plus" src="/assets/img/plus.png" alt="" />
+                  <img class="plus" src="/assets/img/plus.png" alt="" >
                 </div>
               </div>
             </div>
@@ -388,7 +385,7 @@ const goPurchaseOrder = () => {
                 class="operate_div_pc h-8 w-10 flex cursor-pointer items-center justify-center"
                 @click="deleteProduct(i, eachProduct)"
               >
-                <img src="/assets/img/garbage_can.png" alt="" />
+                <img src="/assets/img/garbage_can.png" alt="" >
               </div>
             </div>
           </div>
@@ -409,11 +406,12 @@ const goPurchaseOrder = () => {
             class="go_shop mx-auto h-15 w-11/12 flex cursor-pointer items-center justify-center rounded lg:mx-0 lg:mr-4 lg:h-16 lg:w-64"
             @click="goPurchaseOrder"
           >
-            <img class="mr-3" src="/assets/img/card.png" alt="" />
+            <img class="mr-3" src="/assets/img/card.png" alt="" >
             <span class="text-xl color-white">去買單</span>
           </div>
         </div>
-        <div v-show="1" class="check_btn" @click="checkValue">檢查</div>
+
+        <!-- <div v-show="1" class="check_btn" @click="checkValue">檢查</div> -->
       </div>
     </div>
   </div>
