@@ -10,6 +10,10 @@ onMounted(() => {
   getTransformCartArray();
 });
 
+onUpdated(() => {
+  getTransformCartArray();
+})
+
 const store_login = useStoreLogin();
 const { token } = storeToRefs(store_login);
 const { setToken } = store_login;

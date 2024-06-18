@@ -76,7 +76,7 @@ export const useStoreCart = defineStore("cart", () => {
     transformArray.length = 0;
     // 整理開始
     if((token.value && id_customer.value)) {
-      tempCartArray = getCartById?.data?.shoppingCart;
+      tempCartArray = getCartById?.data;
       console.log('tempCartArray已登入', tempCartArray);
     }
     else {
