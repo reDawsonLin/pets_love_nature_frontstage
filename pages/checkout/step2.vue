@@ -65,7 +65,7 @@ await useTokenFetch(`/shopping_cart`, {
 
 const form_newWeb = ref(null);
 onMounted(() => {
-  // form_newWeb.value.submit();
+  form_newWeb.value.submit();
 });
 </script>
 
