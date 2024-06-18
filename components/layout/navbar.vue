@@ -2,6 +2,8 @@
 import { storeToRefs } from "pinia";
 import { useStoreCart } from "~/stores/storeCart";
 import { useStoreLogin } from "~/stores/storeLogin";
+
+
 const storeCart = useStoreCart();
 const { cartArr, threeCart } = storeToRefs(storeCart);
 const { getTransformCartArray } = storeCart;
@@ -28,10 +30,12 @@ const closeMobileNav = () => {
 const mobileNavShow = ref(false);
 
 // ---
+const route = useRoute();
 const logout = () => {
   setToken(null);
   closeMobileNav();
-  navigateTo({ path: "/" });
+
+  if (route.name !== "index") navigateTo({ path: "/" });
 };
 </script>
 
@@ -78,7 +82,9 @@ const logout = () => {
             >
           </li>
           <li class="">
-            <NuxtLink :to="{ name: 'frequently-questions' }" @click="closeMobileNav()"
+            <NuxtLink
+              :to="{ name: 'frequently-questions' }"
+              @click="closeMobileNav()"
               >常見問題</NuxtLink
             >
           </li>
@@ -117,7 +123,7 @@ const logout = () => {
                       class="h-1.75rem w-1.75rem"
                       :src="eachProduct?.imageGallery[0]?.imgUrl"
                       alt="product image"
-                    >
+                    />
                     <p class="flex-nowrap text-0.875rem">
                       {{ eachProduct?.title + eachProduct?.weight }}g
                     </p>
@@ -155,24 +161,42 @@ const logout = () => {
             <ul
               class="list_content flex flex-col gap-0.75rem px-2rem text-1rem md:(absolute left-50% top-100% translate-x--50% rounded-0.5rem bg-neutral-50 px-1.5rem py-1rem text-neutral-600)"
             >
-              <li v-if="!token" class="whitespace-nowrap" @click="closeMobileNav()">
+              <li
+                v-if="!token"
+                class="whitespace-nowrap"
+                @click="closeMobileNav()"
+              >
                 <NuxtLink to="/Login"> 登入 </NuxtLink>
               </li>
 
               <template v-else>
-                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="closeMobileNav()"
+                >
                   <NuxtLink :to="{ name: 'member' }"> 個人資訊 </NuxtLink>
                 </li>
-                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="closeMobileNav()"
+                >
                   訂單記錄
                 </li>
-                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="closeMobileNav()"
+                >
                   收藏商品
                 </li>
-                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="closeMobileNav()"
+                >
                   聊聊紀錄
                 </li>
-                <li class="cursor-pointer whitespace-nowrap" @click="logout">登出</li>
+                <li class="cursor-pointer whitespace-nowrap" @click="logout">
+                  登出
+                </li>
               </template>
             </ul>
           </li>
@@ -184,7 +208,7 @@ const logout = () => {
                 type="text"
                 placeholder="請輸入關鍵字..."
                 class="search line-clamp-1 w-100% rounded-5rem bg-neutral-50 py-0.75rem pl-1rem pr-3.5rem text-1rem md:(bg-second-400 text-neutral-600) focus:(outline-2px outline-neutral-400)"
-              >
+              />
 
               <SvgIcon
                 class="absolute right-1rem top-50% h-1.5rem w-1.5rem translate-y--50% md:(right-0 h-2rem w-2rem)"

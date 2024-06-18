@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 
 export const useStoreGeneral = defineStore("general", () => {
-  return {};
+  const isPending = ref(false);
+
+  return { isPending };
 });

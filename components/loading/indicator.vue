@@ -104,10 +104,9 @@ const isLoading = ref(false);
 
 // -----------
 const throttle = 200;
-const hold = 350;
+const hold = 1000;
 let _throttleTimer = null;
 function clear() {
-  // if(import.meta.client){}
   clearTimeout(_throttleTimer);
   _throttleTimer = null;
 }
@@ -115,42 +114,80 @@ function clear() {
 function show() {
   clear();
 
-  if (throttle > 0) {
-    _throttleTimer = setTimeout(() => {
+  if (import.meta.client) {
+    if (throttle > 0) {
+      _throttleTimer = setTimeout(() => {
+        isLoading.value = true;
+        lottie_container.value.play();
+      }, throttle);
+    } else {
       isLoading.value = true;
-      // lottie_container.value.play();
-    }, throttle);
-  } else {
-    isLoading.value = true;
-    // lottie_container.value.play();
+      lottie_container.value.play();
+    }
   }
 }
 
 function hide() {
   clear();
-  setTimeout(() => {
-    isLoading.value = false;
-    // lottie_container.value.pause();
-  }, hold);
+
+  if (import.meta.client) {
+    setTimeout(() => {
+      isLoading.value = false;
+      lottie_container.value.pause();
+    }, hold);
+  }
 }
 
-globalMiddleware.unshift(show);
-function unsubRouterBeforeMiddleware() {
-  globalMiddleware.splice(globalMiddleware.indexOf(show, 1));
-}
+// globalMiddleware.unshift(show);
+// function unsubRouterBeforeMiddleware() {
+//   globalMiddleware.splice(globalMiddleware.indexOf(show, 1));
+// }
 
 const nuxtApp = useNuxtApp();
-const unsubPageFinish = nuxtApp.hook("page:finish", hide);
+
+nuxtApp.hook("app:created", () => console.log("app:created"));
+nuxtApp.hook("app:error	", () => console.log("app:error	"));
+nuxtApp.hook("app:error:cleared	", () => console.log("app:error:cleared	"));
+nuxtApp.hook("app:data:refresh	", () => console.log("app:data:refresh	"));
+nuxtApp.hook("vue:setup	", () => console.log("vue:setup	"));
+nuxtApp.hook("vue:error	", () => console.log("vue:error	"));
+nuxtApp.hook("app:rendered	", () => console.log("app:rendered	"));
+nuxtApp.hook("app:redirected	", () => console.log("app:redirected	"));
+nuxtApp.hook("app:beforeMount	", () => console.log("app:beforeMount	"));
+nuxtApp.hook("app:mounted	", () => console.log("app:mounted	"));
+nuxtApp.hook("app:suspense:resolve	", () => console.log("app:suspense:resolve	"));
+nuxtApp.hook("app:manifest:update	", () => console.log("app:manifest:update	"));
+nuxtApp.hook("link:prefetch	", () => console.log("link:prefetch	"));
+nuxtApp.hook("page:start", () => console.log("page:start"));
+nuxtApp.hook("page:loading:start", () => console.log("page:loading:start"));
+nuxtApp.hook("page:loading:end", () => console.log("page:loading:end"));
+nuxtApp.hook("page:transition:finish", () =>
+  console.log("page:transition:finish")
+);
+nuxtApp.hook("dev:ssr-logs", () => console.log("dev:ssr-logs"));
+nuxtApp.hook("page:view-transition:start", () =>
+  console.log("page:view-transition:start")
+);
+
+const unsubPageStart = nuxtApp.hook("page:start", () => {
+  console.log("in page:start");
+  show();
+});
+// const unsubPageStart = nuxtApp.hook("page:loading:start	", show);
+const unsubPageFinish = nuxtApp.hook("page:finish", () => {
+  console.log("in page:finish");
+  hide();
+});
 const unsubError = nuxtApp.hook("vue:error", hide);
 
 onBeforeUnmount(() => {
-  unsubRouterBeforeMiddleware();
+  // unsubRouterBeforeMiddleware();
+  unsubPageStart();
   unsubPageFinish();
   unsubError();
 });
 
 const router = useRouter();
-
 router.onError(() => {
   hide();
 });
@@ -168,14 +205,20 @@ router.beforeResolve((to, from) => {
 });
 
 router.afterEach((_to, _from, failure) => {
-  if (failure) hide();
+  if (failure) {
+    hide();
+  }
 });
 </script>
 
 <template>
   <ClientOnly>
     <div class="loading-indicator" :class="{ show: isLoading }">
-      <Vue3Lottie ref="lottie_container" class="lottie" :animation-data="loading_pet" />
+      <Vue3Lottie
+        ref="lottie_container"
+        class="lottie"
+        :animation-data="loading_pet"
+      />
     </div>
   </ClientOnly>
 </template>
