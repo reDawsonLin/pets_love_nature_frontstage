@@ -10,6 +10,7 @@ onMounted(() => {
   getTransformCartArray();
 });
 
+
 const store_login = useStoreLogin();
 const { token } = storeToRefs(store_login);
 const { setToken } = store_login;
@@ -127,10 +128,10 @@ const logout = () => {
                 </template>
 
                 <li
-                  v-show="cartArr.length > 3"
+                  v-show="cartArr?.length > 3"
                   class="mt-0.5rem text-0.75rem text-neutral-400"
                 >
-                  {{ cartArr.length - 3 }}件商品未展示
+                  {{ cartArr?.length - 3 }}件商品未展示
                 </li>
               </ul>
 
