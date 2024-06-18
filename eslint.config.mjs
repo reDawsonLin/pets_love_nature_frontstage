@@ -5,13 +5,11 @@ export default withNuxt(
   unocss,
 
   // your custom flat configs go here, for example:
-  // {
-  //   files: ['**/*.ts', '**/*.tsx'],
-  //   rules: {
-  //     'no-console': 'off' // allow console.log in TypeScript files
-  //   }
-  // },
-  // {
-  //   ...
-  // }
+  {
+    // files: ["**/*.ts", "**/*.tsx", "**/*.vue"],
+    rules: {
+      // 'no-console': 'off' // allow console.log in TypeScript files
+      "vue/no-multiple-template-root": 0,
+    },
+  }
 );

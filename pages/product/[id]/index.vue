@@ -593,9 +593,13 @@ v-for="index in Math.floor(product.star)" :key="index" src="/assets/img/icon/ico
 #__nuxt {
   height: 100%;
 }
+
 .swiper {
   width: 100%;
   height: 100%;
+  /* width: 500px;
+  height: 500px; */
+  /* border: 1px solid red; */
 }
 
 .triangle {
