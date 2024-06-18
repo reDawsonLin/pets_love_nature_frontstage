@@ -72,8 +72,8 @@ export const useStoreCart = defineStore("cart", () => {
     }
 
 
-    tempCartArray.length = 0;
-    transformArray.length = 0;
+    if(tempCartArray) tempCartArray.length = 0;
+    if(transformArray) transformArray.length = 0;
     // 整理開始
     if((token.value && id_customer.value)) {
       tempCartArray = getCartById?.data;
@@ -98,9 +98,9 @@ export const useStoreCart = defineStore("cart", () => {
         return obj
     })
 
-    const filteredArr = transformArray.filter(eachData => eachData._id)
+    const filteredArr = transformArray?.filter(eachData => eachData._id)
     cartArr.value = filteredArr;
-    threeCart.value = filteredArr.slice(0, 3);
+    threeCart.value = filteredArr?.slice(0, 3);
 
     return filteredArr;
   };
