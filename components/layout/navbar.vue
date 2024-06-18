@@ -2,6 +2,7 @@
 import { storeToRefs } from "pinia";
 import { useStoreCart } from "~/stores/storeCart";
 import { useStoreLogin } from "~/stores/storeLogin";
+
 const storeCart = useStoreCart();
 const { cartArr, threeCart } = storeToRefs(storeCart);
 const { getTransformCartArray } = storeCart;
@@ -28,10 +29,14 @@ const closeMobileNav = () => {
 const mobileNavShow = ref(false);
 
 // ---
+const route = useRoute();
+const id_customer = useCookie("id_customer");
 const logout = () => {
+  id_customer.value = null;
   setToken(null);
   closeMobileNav();
-  navigateTo({ path: "/" });
+
+  if (route.name !== "index") navigateTo({ path: "/" });
 };
 </script>
 
@@ -57,11 +62,7 @@ const logout = () => {
         class="absolute right-0 top-0 z-6 hidden h-100% max-w-375px flex-col gap-1rem rounded-l-1rem bg-second-200 pb-2.5rem pt-1.75rem text-1.25rem md:(relative max-w-unset min-h-unset w-unset flex flex-grow-1 flex-row bg-transparent pb-unset pt-unset text-neutral-50)"
       >
         <div class="flex justify-end px-1.5rem md:(hidden)">
-          <SvgIcon
-            name="close"
-            class="w-2rem cursor-pointer"
-            @click="closeMobileNav()"
-          />
+          <SvgIcon name="close" class="w-2rem cursor-pointer" @click="closeMobileNav()" />
         </div>
 
         <ul
@@ -108,16 +109,13 @@ const logout = () => {
               <p class="whitespace-nowrap">最近加入商品</p>
 
               <ul class="flex flex-grow-1 flex-col gap-0.5rem">
-                <template
-                  v-for="eachProduct in threeCart"
-                  :key="eachProduct?._id"
-                >
+                <template v-for="eachProduct in threeCart" :key="eachProduct?._id">
                   <li class="w-100% flex items-center gap-0.25rem">
                     <img
                       class="h-1.75rem w-1.75rem"
                       :src="eachProduct?.imageGallery[0]?.imgUrl"
                       alt="product image"
-                    >
+                    />
                     <p class="flex-nowrap text-0.875rem">
                       {{ eachProduct?.title + eachProduct?.weight }}g
                     </p>
@@ -172,7 +170,7 @@ const logout = () => {
                 <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
                   聊聊紀錄
                 </li>
-                <li class="cursor-pointer whitespace-nowrap" @click="logout">登出</li>
+                <li class="cursor-pointer whitespace-nowrap" @click="logout()">登出</li>
               </template>
             </ul>
           </li>
@@ -184,7 +182,7 @@ const logout = () => {
                 type="text"
                 placeholder="請輸入關鍵字..."
                 class="search line-clamp-1 w-100% rounded-5rem bg-neutral-50 py-0.75rem pl-1rem pr-3.5rem text-1rem md:(bg-second-400 text-neutral-600) focus:(outline-2px outline-neutral-400)"
-              >
+              />
 
               <SvgIcon
                 class="absolute right-1rem top-50% h-1.5rem w-1.5rem translate-y--50% md:(right-0 h-2rem w-2rem)"

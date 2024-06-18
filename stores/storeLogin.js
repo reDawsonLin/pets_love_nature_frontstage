@@ -3,7 +3,6 @@ import { defineStore } from "pinia";
 export const useStoreLogin = defineStore(
   "login",
   () => {
-    const isLogin = ref(false);
     const token = useCookie("token");
     const id_customer = useCookie("id_customer");
     const setToken = (value) => (token.value = value);
@@ -22,7 +21,7 @@ export const useStoreLogin = defineStore(
       id_customer.value = res.data.id;
     };
 
-    return { isLogin, token, id_customer, login, setToken };
+    return { token, id_customer, login, setToken };
   }
   // {
   //   persist: {
