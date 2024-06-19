@@ -1,58 +1,30 @@
 <script setup>
 const inputValue = defineModel();
 
-// defineProps({
-//   labelName: {
-//     type: String,
-//     default: "",
-//   },
-//   inputName: {
-//     type: String,
-//     default: "",
-//   },
-//   inputType: {
-//     type: String,
-//     default: "text",
-//   },
-//   placeholder: {
-//     type: String,
-//     default: "",
-//   },
-//   required: {
-//     type: Boolean,
-//     default: false,
-//   },
-//   errors: {
-//     type: Object,
-//     default: null,
-//   },
-// });
-
-
-const props = defineProps({
-  type: {
+defineProps({
+  labelName: {
     type: String,
-    default: 'text',
+    default: "",
   },
-  value: {
+  inputName: {
     type: String,
-    default: undefined,
+    default: "",
   },
-  name: {
+  inputType: {
     type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  successMessage: {
-    type: String,
-    default: '',
+    default: "text",
   },
   placeholder: {
     type: String,
-    default: '',
+    default: "",
+  },
+  required: {
+    type: Boolean,
+    default: false,
+  },
+  errors: {
+    type: Object,
+    default: null,
   },
 });
 </script>
