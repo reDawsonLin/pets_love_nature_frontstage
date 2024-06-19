@@ -7,6 +7,7 @@ const int_param_post = {
   ItemDesc: "",
   deliveryUserName: "",
   deliveryUserPhone: "",
+  deliveryUserEmail: "",
   userId: "",
   orderProductList: [
     {

@@ -1,6 +1,7 @@
 <script setup>
 import tw_postal_code from "@/assets/json/tw_postal_code.json";
 import { useStoreCheckout } from "@/stores/storeCheckout";
+import { object, string, mixed } from "yup";
 
 definePageMeta({ middleware: "need-login" });
 
@@ -52,7 +53,9 @@ const memberSame = () => {
     if (address) param_post.value.deliveryAddress.address = address;
 
     param_post.value.Amt = totalPrice(data_cart.value);
-    param_post.value.ItemDesc = data_cart.value.map((item) => item.title).join(",");
+    param_post.value.ItemDesc = data_cart.value
+      .map((item) => item.title)
+      .join(",");
     param_post.value.userId = id_customer.value;
     param_post.value.orderProductList = data_cart.value.map((item) => ({
       productId: item._id,
@@ -104,6 +107,34 @@ const toStep2 = () => {
   console.log("to step 2");
   param_post_step1.value = param_post.value;
 };
+
+// -------
+const schema = object({
+  deliveryUserName: string().required("此為必填欄位"),
+  deliveryEmail: string().email("email 格式錯誤").required("此為必填欄位"),
+  password: string()
+    .min(8, "Must be at least 8 characters")
+    .required("Required"),
+});
+
+const formSubmit = (a, b, c, d) => {
+  console.log("a :>> ", a);
+  console.log("b :>> ", b);
+  console.log("c :>> ", c);
+  console.log("d :>> ", d);
+};
+
+const onInvalidSubmit = (a, b, c, d) => {
+  console.log("a :>> ", a);
+  console.log("b :>> ", b);
+  console.log("c :>> ", c);
+  console.log("d :>> ", d);
+};
+
+onMounted(() => {
+  // param_post.value.deliveryUserName = "123123";
+  // console.log("param_post", param_post.value);
+});
 </script>
 
 <template>
@@ -128,7 +159,9 @@ const toStep2 = () => {
           >
             <table>
               <thead>
-                <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
+                <tr
+                  class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)"
+                >
                   <th
                     class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0.25rem text-1rem)"
                     :colspan="window_width < 1024 ? 1 : 2"
@@ -142,13 +175,17 @@ const toStep2 = () => {
               </thead>
 
               <tbody class="">
-                <tr v-for="item in data_cart" :key="item.id" class="tbody_tr mb-1.5rem">
+                <tr
+                  v-for="item in data_cart"
+                  :key="item.id"
+                  class="tbody_tr mb-1.5rem"
+                >
                   <td class="td_img mr-1rem lg:(min-w-76px)">
                     <img
                       class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                       src="@/assets/img/product-1.png"
                       alt="product image"
-                    >
+                    />
                   </td>
                   <td class="td_content">
                     <p class="line-clamp-2">
@@ -187,7 +224,9 @@ const toStep2 = () => {
               </tbody>
             </table>
 
-            <div class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)">
+            <div
+              class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)"
+            >
               <div
                 class="flex items-end justify-center gap-1rem border border-neutral-200 rounded-0.5rem p-1.5rem lg:(border-none bg-neutral-50 px-1.5rem py-1rem)"
               >
@@ -213,7 +252,10 @@ const toStep2 = () => {
       class="group info_cart transition-background flex flex-col cursor-pointer gap-1.5rem rounded-1rem bg-second-400 px-1rem py-1.5rem text-neutral-600 transition-colors hover:(bg-neutral-600 text-neutral-50) lg:(px-1.75rem py-2.5rem)"
       @click="openModal()"
     >
-      <SvgIcon name="cart" class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)" />
+      <SvgIcon
+        name="cart"
+        class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)"
+      />
 
       <div class="">
         <p class="mb-0.75rem flex justify-center text-1.5rem">
@@ -246,7 +288,7 @@ const toStep2 = () => {
             type="checkbox"
             name="same_member"
             class="hidden"
-          >
+          />
 
           <SvgIcon
             :name="same_member ? 'checkbox_check' : 'checkbox_empty'"
@@ -256,6 +298,52 @@ const toStep2 = () => {
           <p class="text-0.875rem lg:(text-1rem)">與個人資料相同</p>
         </label>
       </div>
+
+      <VeeForm
+        v-slot="{ errors }"
+        name="form_recipient"
+        class="flex flex-col gap-1rem px-0.75rem lg:(gap-1.5rem)"
+        :validation-schema="schema"
+        @submit="formSubmit"
+        @invalid-submit="onInvalidSubmit"
+      >
+        <InputText
+          v-model="param_post.deliveryUserName"
+          name="deliveryUserName"
+          placeholder="請輸入姓名"
+          required
+          input-type="text"
+          label-name="姓名"
+          class="flex-grow-1"
+          :errors="errors"
+        />
+
+        <label
+          class="box_input flex-grow-1"
+          :class="{ error: errors?.deliveryUserName }"
+        >
+          <p class="mb-0.25rem ml-2px">
+            姓名
+            <sup class="text-rose-500">*</sup>
+          </p>
+
+          <VeeField
+            v-model="param_post.deliveryUserName"
+            name="deliveryUserName"
+            type="text"
+            placeholder="請輸入姓名"
+            class="border border-(2px neutral-200) rounded-0.5rem p-1rem px-0.75rem pb-0.75rem text-0.875rem text-neutral-600 placeholder:(text-neutral-400) focus:(outline-neutral-400)"
+            :class="{ 'border-rose-500': errors?.deliveryUserName }"
+          />
+
+          <VeeErrorMessage
+            name="deliveryUserName"
+            class="text-rose-500 text-0.875rem mt-0.25rem ml-0.25rem"
+          />
+        </label>
+
+        <button type="submit">送出</button>
+      </VeeForm>
 
       <form
         name="form_recipient"
@@ -293,7 +381,9 @@ const toStep2 = () => {
         />
 
         <div class="flex flex-col">
-          <p class="mb-0.25rem ml-2px">地址 <sup class="text-rose-500">*</sup></p>
+          <p class="mb-0.25rem ml-2px">
+            地址 <sup class="text-rose-500">*</sup>
+          </p>
 
           <div class="mb-1rem flex gap-0.5rem">
             <InputSelect
@@ -315,12 +405,16 @@ const toStep2 = () => {
               select-name="select_district"
               class="flex-grow-1"
               :class="{
-                'opacity-50 pointer-events-none': !param_post.deliveryAddress.county,
+                'opacity-50 pointer-events-none':
+                  !param_post.deliveryAddress.county,
               }"
             >
               <option value="" selected disabled hidden>鄉鎮市區</option>
 
-              <template v-for="district in current_district" :key="district.zip">
+              <template
+                v-for="district in current_district"
+                :key="district.zip"
+              >
                 <option :value="district.name" class="text-neutral-600">
                   {{ district.name }}
                 </option>
@@ -397,6 +491,22 @@ const toStep2 = () => {
 </template>
 
 <style scoped>
+.box_input {
+  @apply flex flex-col;
+
+  &.error {
+    @apply text-rose-500;
+
+    input {
+      @apply border-rose-500 caret-rose-500;
+
+      &:focus {
+        @apply outline-rose-500;
+      }
+    }
+  }
+}
+
 .box_card {
   @apply flex flex-col gap-1.25rem px-1rem py-1.5rem bg-neutral-50 rounded-0.5rem;
   @apply lg:(px-1.75rem py-2.5rem gap-2.25rem);
