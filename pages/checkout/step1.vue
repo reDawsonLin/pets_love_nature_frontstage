@@ -9,29 +9,13 @@ const store_checkout = useStoreCheckout();
 const { param_post } = storeToRefs(store_checkout);
 const { intParamPost } = store_checkout;
 
-// cart -------
-const data_cart = useCookie("checkout_cart");
-
-// const totalPrice = (cart) => {
-//   if (!cart) return 0;
-//   let result = null;
-
-//   cart.forEach((item) => {
-//     result += item.price * item.quantity;
-//   });
-//   return result;
-// };
-
 // member -------
 // check member store have data or not ---
 const id_customer = useCookie("id_customer");
-const {
-  data: data_member,
-  pending: pending_member,
-  error: error_member,
-  refresh: refresh_member,
-} = await useTokenFetch(`/customer/${id_customer.value}`);
-// console.log("data_member.value :>> ", data_member.value);
+const { data: data_member, error: error_member } = await useTokenFetch(
+  `/customer/${id_customer.value}`
+);
+if (error_member.value) console.log("error_member.value :>> ", error_member.value);
 
 const {
   deliveryAddress: { county, district, address },
@@ -40,38 +24,44 @@ const {
   recipientPhone,
 } = data_member.value.data;
 
-console.log("data_cart.value :>> ", data_cart.value);
-
 const same_member = ref(false);
 const memberSame = () => {
   if (same_member.value) {
     if (email) param_post.value.Email = email;
     if (recipientName) param_post.value.deliveryUserName = recipientName;
-    if (recipientPhone) param_post.value.deliveryUserPhone = recipientPhone;
+    if (recipientPhone) param_post.value.deliveryPhone = recipientPhone;
     if (county) param_post.value.deliveryAddress.county = county;
     if (district) param_post.value.deliveryAddress.district = district;
     if (address) param_post.value.deliveryAddress.address = address;
-
-    param_post.value.Amt = totalPrice(data_cart.value);
-    param_post.value.ItemDesc = data_cart.value
-      .map((item) => item.title)
-      .join(",");
-    param_post.value.userId = id_customer.value;
-    param_post.value.orderProductList = data_cart.value.map((item) => ({
-      productId: item._id,
-      productTitle: item.title,
-      price: item.price,
-      quantity: item.quantity,
-      coverImg: item.imageGallery[0].imgUrl,
-    }));
   } else {
-    intParamPost();
+    param_post.value.Email = "";
+    param_post.value.deliveryUserName = "";
+    param_post.value.deliveryPhone = "";
+    param_post.value.deliveryAddress.county = "";
+    param_post.value.deliveryAddress.district = "";
+    param_post.value.deliveryAddress.address = "";
   }
-
-  // console.log("param_post.value :>> ", param_post.value);
 };
+
+// cart -------
+const data_cart = useCookie("checkout_cart");
+cartToParamPost();
+function cartToParamPost() {
+  param_post.value.Amt = totalPrice(data_cart.value);
+  param_post.value.ItemDesc = data_cart.value.map((item) => item.title).join(",");
+  param_post.value.userId = id_customer.value;
+  param_post.value.orderProductList = data_cart.value.map((item) => ({
+    productId: item._id,
+    productTitle: item.title,
+    price: item.price,
+    quantity: item.quantity,
+    coverImg: item.imageGallery[0].imgUrl,
+    weight: item.weight,
+  }));
+}
+
 const countyChange = () => {
-  if (!same_member.value) param_post.value.deliveryAddress.district = "";
+  param_post.value.deliveryAddress.district = "";
 };
 
 // postal dropdown -------
@@ -98,42 +88,39 @@ const closeModal = () => {
 
 const { width: window_width } = useWindowSize();
 
-// --------
-const param_post_step1 = useCookie("param_post_step1");
-
-param_post_step1.value = null;
-
-const toStep2 = () => {
-  console.log("to step 2");
-  param_post_step1.value = param_post.value;
-};
-
 // -------
 const schema = object({
   deliveryUserName: string().required("此為必填欄位"),
-  deliveryEmail: string().email("email 格式錯誤").required("此為必填欄位"),
-  password: string()
-    .min(8, "Must be at least 8 characters")
-    .required("Required"),
+  deliveryPhone: string().required("此為必填欄位"),
+  Email: string().email("email 格式錯誤").required("此為必填欄位"),
+  delivery_county: mixed().test(
+    "required",
+    "此為必填欄位",
+    () => param_post.value.deliveryAddress.county
+  ),
+  delivery_district: mixed().test(
+    "required",
+    "此為必填欄位",
+    () => param_post.value.deliveryAddress.district
+  ),
+  delivery_address: string().required("此為必填欄位"),
 });
 
-const formSubmit = (a, b, c, d) => {
-  console.log("a :>> ", a);
-  console.log("b :>> ", b);
-  console.log("c :>> ", c);
-  console.log("d :>> ", d);
+// --------
+const param_post_step1 = useCookie("param_post_step1");
+param_post_step1.value = null;
+
+const formSubmit = () => {
+  param_post_step1.value = param_post.value;
+  navigateTo({ name: "checkout-step2" });
 };
 
-const onInvalidSubmit = (a, b, c, d) => {
-  console.log("a :>> ", a);
-  console.log("b :>> ", b);
-  console.log("c :>> ", c);
-  console.log("d :>> ", d);
+const onInvalidSubmit = (errors) => {
+  console.log("errors :>> ", errors);
 };
 
-onMounted(() => {
-  // param_post.value.deliveryUserName = "123123";
-  // console.log("param_post", param_post.value);
+onUnmounted(() => {
+  intParamPost();
 });
 </script>
 
@@ -159,9 +146,7 @@ onMounted(() => {
           >
             <table>
               <thead>
-                <tr
-                  class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)"
-                >
+                <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
                   <th
                     class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0.25rem text-1rem)"
                     :colspan="window_width < 1024 ? 1 : 2"
@@ -175,11 +160,7 @@ onMounted(() => {
               </thead>
 
               <tbody class="">
-                <tr
-                  v-for="item in data_cart"
-                  :key="item.id"
-                  class="tbody_tr mb-1.5rem"
-                >
+                <tr v-for="item in data_cart" :key="item.id" class="tbody_tr mb-1.5rem">
                   <td class="td_img mr-1rem lg:(min-w-76px)">
                     <img
                       class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
@@ -191,6 +172,7 @@ onMounted(() => {
                     <p class="line-clamp-2">
                       {{ item.title }}
                     </p>
+                    <p class="">{{ item.weight }}g</p>
                   </td>
 
                   <td class="td_price lg:(text-center)">
@@ -224,9 +206,7 @@ onMounted(() => {
               </tbody>
             </table>
 
-            <div
-              class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)"
-            >
+            <div class="lg:(flex justify-end rounded-0.5rem bg-neutral-200 p-1rem)">
               <div
                 class="flex items-end justify-center gap-1rem border border-neutral-200 rounded-0.5rem p-1.5rem lg:(border-none bg-neutral-50 px-1.5rem py-1rem)"
               >
@@ -252,10 +232,7 @@ onMounted(() => {
       class="group info_cart transition-background flex flex-col cursor-pointer gap-1.5rem rounded-1rem bg-second-400 px-1rem py-1.5rem text-neutral-600 transition-colors hover:(bg-neutral-600 text-neutral-50) lg:(px-1.75rem py-2.5rem)"
       @click="openModal()"
     >
-      <SvgIcon
-        name="cart"
-        class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)"
-      />
+      <SvgIcon name="cart" class="mx-auto h-3.75rem w-3.75rem lg:(h-6.25rem w-6.25rem)" />
 
       <div class="">
         <p class="mb-0.75rem flex justify-center text-1.5rem">
@@ -300,6 +277,7 @@ onMounted(() => {
       </div>
 
       <VeeForm
+        id="form_recipient"
         v-slot="{ errors }"
         name="form_recipient"
         class="flex flex-col gap-1rem px-0.75rem lg:(gap-1.5rem)"
@@ -307,165 +285,171 @@ onMounted(() => {
         @submit="formSubmit"
         @invalid-submit="onInvalidSubmit"
       >
-        <InputText
-          v-model="param_post.deliveryUserName"
-          name="deliveryUserName"
-          placeholder="請輸入姓名"
-          required
-          input-type="text"
-          label-name="姓名"
-          class="flex-grow-1"
-          :errors="errors"
-        />
+        <div class="flex flex-col gap-1rem lg:(flex-row gap-1.5rem)">
+          <label
+            class="box_input flex-grow-1"
+            :class="{ error: errors?.deliveryUserName }"
+          >
+            <p class="mb-0.25rem ml-2px">
+              姓名
+              <sup class="text-rose-500">*</sup>
+            </p>
 
-        <label
-          class="box_input flex-grow-1"
-          :class="{ error: errors?.deliveryUserName }"
-        >
+            <VeeField
+              v-model="param_post.deliveryUserName"
+              name="deliveryUserName"
+              type="text"
+              placeholder="請輸入姓名"
+              class="border border-(2px neutral-200) rounded-0.5rem p-1rem px-0.75rem pb-0.75rem text-0.875rem text-neutral-600 placeholder:(text-neutral-400) focus:(outline-neutral-400)"
+              :class="{ 'border-rose-500': errors?.deliveryUserName }"
+            />
+
+            <VeeErrorMessage
+              name="deliveryUserName"
+              class="ml-0.25rem mt-0.25rem text-0.875rem text-rose-500"
+            />
+          </label>
+
+          <label class="box_input flex-grow-1" :class="{ error: errors?.deliveryPhone }">
+            <p class="mb-0.25rem ml-2px">
+              手機
+              <sup class="text-rose-500">*</sup>
+            </p>
+
+            <VeeField
+              v-model="param_post.deliveryPhone"
+              name="deliveryPhone"
+              type="text"
+              placeholder="請輸入手機"
+              class="border border-(2px neutral-200) rounded-0.5rem p-1rem px-0.75rem pb-0.75rem text-0.875rem text-neutral-600 placeholder:(text-neutral-400) focus:(outline-neutral-400)"
+              :class="{ 'border-rose-500': errors?.deliveryPhone }"
+              @keypress="numberOnly($event)"
+            />
+
+            <VeeErrorMessage
+              name="deliveryPhone"
+              class="ml-0.25rem mt-0.25rem text-0.875rem text-rose-500"
+            />
+          </label>
+        </div>
+
+        <label class="box_input flex-grow-1" :class="{ error: errors?.Email }">
           <p class="mb-0.25rem ml-2px">
-            姓名
+            電子郵件
             <sup class="text-rose-500">*</sup>
           </p>
 
           <VeeField
-            v-model="param_post.deliveryUserName"
-            name="deliveryUserName"
+            v-model="param_post.Email"
+            name="Email"
             type="text"
-            placeholder="請輸入姓名"
+            placeholder="請輸入電子郵件"
             class="border border-(2px neutral-200) rounded-0.5rem p-1rem px-0.75rem pb-0.75rem text-0.875rem text-neutral-600 placeholder:(text-neutral-400) focus:(outline-neutral-400)"
-            :class="{ 'border-rose-500': errors?.deliveryUserName }"
+            :class="{ 'border-rose-500': errors?.Email }"
           />
 
           <VeeErrorMessage
-            name="deliveryUserName"
-            class="text-rose-500 text-0.875rem mt-0.25rem ml-0.25rem"
+            name="Email"
+            class="ml-0.25rem mt-0.25rem text-0.875rem text-rose-500"
           />
         </label>
 
-        <button type="submit">送出</button>
-      </VeeForm>
-
-      <form
-        name="form_recipient"
-        class="flex flex-col gap-1rem px-0.75rem lg:(gap-1.5rem)"
-      >
-        <div class="flex flex-col gap-1rem lg:(flex-row gap-1.5rem)">
-          <InputText
-            v-model="param_post.deliveryUserName"
-            name="deliveryUserName"
-            placeholder="請輸入姓名"
-            required
-            input-type="text"
-            label-name="姓名"
-            class="flex-grow-1"
-          />
-
-          <InputText
-            v-model="param_post.deliveryUserPhone"
-            name="deliveryPhone"
-            placeholder="請輸入手機"
-            required
-            input-type="text"
-            label-name="手機"
-            class="flex-grow-1"
-          />
-        </div>
-
-        <InputText
-          v-model="param_post.Email"
-          name="email"
-          placeholder="請輸入電子郵件"
-          required
-          input-type="email"
-          label-name="電子郵件"
-        />
-
         <div class="flex flex-col">
-          <p class="mb-0.25rem ml-2px">
-            地址 <sup class="text-rose-500">*</sup>
-          </p>
+          <p class="mb-0.25rem ml-2px">地址 <sup class="text-rose-500">*</sup></p>
 
           <div class="mb-1rem flex gap-0.5rem">
-            <InputSelect
-              v-model="param_post.deliveryAddress.county"
-              select-name="delivery_county"
-              class="flex-grow-1"
-              @change="countyChange()"
-            >
-              <option value="" selected disabled hidden>縣市</option>
-              <template v-for="county in tw_postal_code" :key="county.name">
-                <option :value="county.name" class="text-neutral-600">
-                  {{ county.name }}
-                </option>
-              </template>
-            </InputSelect>
+            <div class="wrapper_select flex-grow-1">
+              <div class="box_select relative flex flex-col">
+                <VeeField
+                  v-model="param_post.deliveryAddress.county"
+                  as="select"
+                  name="delivery_county"
+                  class="select border border-(2px neutral-200) rounded-0.5rem p-1rem pb-0.75rem pr-2.25rem text-0.875rem placeholder:(text-neutral-400) focus:(outline-neutral-400)"
+                  :class="{
+                    'text-neutral-400': !param_post.deliveryAddress.county,
+                    'border-rose-500': errors?.delivery_county,
+                  }"
+                  @change="countyChange()"
+                >
+                  <option value="" selected disabled hidden>縣市</option>
+                  <template v-for="county in tw_postal_code" :key="county.name">
+                    <option :value="county.name" class="text-neutral-600">
+                      {{ county.name }}
+                    </option>
+                  </template>
+                </VeeField>
 
-            <InputSelect
-              v-model="param_post.deliveryAddress.district"
-              select-name="select_district"
-              class="flex-grow-1"
+                <SvgIcon
+                  name="arrow_down"
+                  class="absolute right-1rem top-45% w-1rem text-neutral-600"
+                />
+              </div>
+
+              <VeeErrorMessage
+                name="delivery_county"
+                class="ml-0.25rem mt-0.25rem text-0.875rem text-rose-500"
+              />
+            </div>
+
+            <div
+              class="wrapper_select flex-grow-1"
               :class="{
-                'opacity-50 pointer-events-none':
-                  !param_post.deliveryAddress.county,
+                'opacity-50 pointer-events-none': !param_post.deliveryAddress.county,
               }"
             >
-              <option value="" selected disabled hidden>鄉鎮市區</option>
+              <div class="box_select relative flex flex-col">
+                <VeeField
+                  v-model="param_post.deliveryAddress.district"
+                  as="select"
+                  name="delivery_district"
+                  class="select border border-(2px neutral-200) rounded-0.5rem p-1rem pb-0.75rem pr-2.25rem text-0.875rem placeholder:(text-neutral-400) focus:(outline-neutral-400)"
+                  :class="{
+                    'text-neutral-400': !param_post.deliveryAddress.district,
+                    'border-rose-500': errors?.delivery_district,
+                  }"
+                >
+                  <option value="" selected disabled hidden>鄉鎮市區</option>
+                  <template v-for="dist in current_district" :key="dist.zip">
+                    <option :value="dist.name" class="text-neutral-600">
+                      {{ dist.name }}
+                    </option>
+                  </template>
+                </VeeField>
 
-              <template
-                v-for="district in current_district"
-                :key="district.zip"
-              >
-                <option :value="district.name" class="text-neutral-600">
-                  {{ district.name }}
-                </option>
-              </template>
-            </InputSelect>
+                <SvgIcon
+                  name="arrow_down"
+                  class="absolute right-1rem top-45% w-1rem text-neutral-600"
+                />
+              </div>
+
+              <VeeErrorMessage
+                name="delivery_county"
+                class="ml-0.25rem mt-0.25rem text-0.875rem text-rose-500"
+              />
+            </div>
           </div>
 
-          <InputText
-            v-model="param_post.deliveryAddress.address"
-            name="deliveryAddress"
-            placeholder="里(村)/路(街)/號/樓(室) (必填)"
-            input-type="text"
-          />
-        </div>
-
-        <!-- <div class="box_select flex flex-col">
-          <p class="mb-0.25rem ml-2px">發票<sup class="text-rose-500">*</sup></p>
-
-          <InputSelect
-            v-model="param_post.receipt"
-            select-name="select_town"
-            class="flex-grow-1"
+          <label
+            class="box_input flex-grow-1"
+            :class="{ error: errors?.delivery_address }"
           >
-            <option value="" selected disabled hidden>發票類型</option>
-            <option value="123" class="text-neutral-600">123</option>
-            <option value="223" class="text-neutral-600">223</option>
-            <option value="323" class="text-neutral-600">323</option>
-          </InputSelect>
-        </div> -->
-      </form>
+            <VeeField
+              v-model="param_post.deliveryAddress.address"
+              name="delivery_address"
+              type="text"
+              placeholder="里(村)/路(街)/號/樓(室) (必填)"
+              class="border border-(2px neutral-200) rounded-0.5rem p-1rem px-0.75rem pb-0.75rem text-0.875rem text-neutral-600 placeholder:(text-neutral-400) focus:(outline-neutral-400)"
+              :class="{ 'border-rose-500': errors?.delivery_address }"
+            />
+
+            <VeeErrorMessage
+              name="delivery_address"
+              class="ml-0.25rem mt-0.25rem text-0.875rem text-rose-500"
+            />
+          </label>
+        </div>
+      </VeeForm>
     </section>
-
-    <!-- <section class="box_card info_payment">
-      <div class="form_title">
-        <p class="text-1.25rem lg:(text-1.5rem)">付款方式</p>
-      </div>
-
-      <div class="flex flex-col gap-1rem px-0.75rem text-1.25rem lg:(gap-1.5rem)">
-        <InputRadio v-model="param_post.payment_method" radio-name="payment_method"
-          >信用卡</InputRadio
-        >
-
-        <InputRadio v-model="param_post.payment_method" radio-name="payment_method"
-          >Line Pay</InputRadio
-        >
-
-        <InputRadio v-model="param_post.payment_method" radio-name="payment_method"
-          >街口支付</InputRadio
-        >
-      </div>
-    </section> -->
 
     <div
       class="box_btn flex flex-col gap-1.5rem text-1.25rem lg:(flex-row justify-between gap-1rem)"
@@ -478,14 +462,14 @@ onMounted(() => {
         返回購物車
       </NuxtLink>
 
-      <NuxtLink
-        :to="{ name: 'checkout-step2' }"
-        class="flex items-center justify-center gap-1rem rounded-0.25rem bg-neutral-600 p-1rem text-neutral-50 lg:(px-3rem)"
-        @click="toStep2()"
+      <button
+        type="submit"
+        form="form_recipient"
+        class="flex items-center justify-center gap-1rem rounded-0.25rem p-1rem text-neutral-50 !bg-neutral-600 lg:(px-3rem)"
       >
         下一步，結帳付款
         <SvgIcon name="arrow_right" class="w-0.5rem" />
-      </NuxtLink>
+      </button>
     </div>
   </div>
 </template>
@@ -505,6 +489,10 @@ onMounted(() => {
       }
     }
   }
+}
+
+.select {
+  appearance: none;
 }
 
 .box_card {

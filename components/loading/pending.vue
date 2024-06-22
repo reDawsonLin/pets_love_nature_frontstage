@@ -1,7 +1,14 @@
-<script setup></script>
+<script setup>
+defineProps({
+  show: {
+    type: Boolean,
+    default: false,
+  },
+});
+</script>
 
 <template>
-  <div class="loading-indicator show">
+  <div class="loading-indicator" :class="{ show: show }">
     <img class="gif_loading" src="/assets/gif/loading-pet3.gif" alt="loading gif" />
   </div>
 </template>

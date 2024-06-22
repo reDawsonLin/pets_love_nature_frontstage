@@ -15,3 +15,12 @@ export const totalPrice = (cart_array) => {
   });
   return result;
 };
+
+export const numberOnly = async (event) => {
+  const result = Number(event.key);
+  if (result || result === 0) return;
+
+  return event.preventDefault();
+};
+
+
