@@ -11,7 +11,6 @@ onMounted(() => {
   getTransformCartArray();
 });
 
-
 const store_login = useStoreLogin();
 const { token } = storeToRefs(store_login);
 const { setToken } = store_login;
@@ -35,6 +34,9 @@ const logout = () => {
   id_customer.value = null;
   setToken(null);
   closeMobileNav();
+  threeCart.value = [];
+  sessionStorage.removeItem("shoppingCartNoLogin");
+
 
   if (route.name !== "index") navigateTo({ path: "/" });
 };
