@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     "nuxt-swiper",
     "@unocss/nuxt",
     "@nuxt/eslint",
+    "@vee-validate/nuxt",
   ],
   // 直接放在 app.vue 裡面 -------
   // css: ["~/assets/main.css"],
@@ -19,5 +20,15 @@ export default defineNuxtConfig({
     host: "localhost",
     // host: "127.0.0.1",
     port: 5173,
+  },
+  veeValidate: {
+    autoImports: true,
+
+    componentNames: {
+      Form: "VeeForm",
+      Field: "VeeField",
+      FieldArray: "VeeFieldArray",
+      ErrorMessage: "VeeErrorMessage",
+    },
   },
 });

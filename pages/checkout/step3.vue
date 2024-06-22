@@ -21,10 +21,10 @@ const { width: window_width } = useWindowSize();
     <section
       class="flex flex-col gap-1rem rounded-1rem bg-second-400 px-1rem py-1.5rem text-neutral-600 lg:(gap-1rem px-1.75rem py-2.5rem)"
     >
-      <p class="flex items-center justify-center gap-1.5rem text-1.5rem">
+      <div class="flex items-center justify-center gap-1.5rem text-1.5rem">
         <SvgIcon name="shipping" class="h-2.5rem w-2.5rem lg:(h-3.5rem w-3.5rem)" />
-        感謝您的購買！
-      </p>
+        <p class="">感謝您的購買！</p>
+      </div>
 
       <div
         class="flex items-end justify-center gap-1.5rem rounded-0.25rem bg-neutral-50 p-0.75rem"
@@ -46,7 +46,7 @@ const { width: window_width } = useWindowSize();
         <thead>
           <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
             <th
-              class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0.25rem text-1rem)"
+              class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0.25rem rounded-r-0 text-1rem)"
               :colspan="window_width < 1024 ? 1 : 2"
             >
               商品
@@ -64,12 +64,13 @@ const { width: window_width } = useWindowSize();
                 class="h-100% object-cover object-center lg:(h-5rem w-5rem)"
                 :src="item.coverImg"
                 alt="product image"
-              >
+              />
             </td>
             <td class="td_content lg:(text-1.25rem)">
               <p class="line-clamp-2">
                 {{ item.productTitle }}
               </p>
+              <p>{{ item.weight }}g</p>
             </td>
 
             <td class="td_price lg:(text-center)">

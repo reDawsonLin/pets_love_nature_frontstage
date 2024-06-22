@@ -16,7 +16,7 @@ if (import.meta.client) {
 </script>
 
 <template>
-  <LoadingPending />
+  <LoadingPending show />
 </template>
 
 <style scoped></style>
