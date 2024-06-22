@@ -4,12 +4,13 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: [
-    "@pinia/nuxt",
-    "@vueuse/nuxt",
-    "nuxt-swiper",
-    "@unocss/nuxt",
     "@nuxt/eslint",
+    "@pinia/nuxt",
+    "@unocss/nuxt",
     "@vee-validate/nuxt",
+    "@vueuse/nuxt",
+    "dayjs-nuxt",
+    "nuxt-swiper",
   ],
   // 直接放在 app.vue 裡面 -------
   // css: ["~/assets/main.css"],
