@@ -9,7 +9,7 @@ defineProps({
 
 <template>
   <div class="loading-indicator" :class="{ show: show }">
-    <img class="gif_loading" src="/assets/gif/loading-pet3.gif" alt="loading gif" />
+    <img class="gif_loading" src="/assets/gif/loading-pet3.gif" alt="loading gif" >
   </div>
 </template>
 

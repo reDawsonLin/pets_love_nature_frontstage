@@ -148,7 +148,7 @@ onUnmounted(() => {
               <thead>
                 <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
                   <th
-                    class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0.25rem text-1rem)"
+                    class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0 rounded-l-0.25rem text-1rem)"
                     :colspan="window_width < 1024 ? 1 : 2"
                   >
                     商品
@@ -166,7 +166,7 @@ onUnmounted(() => {
                       class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                       src="@/assets/img/product-1.png"
                       alt="product image"
-                    />
+                    >
                   </td>
                   <td class="td_content">
                     <p class="line-clamp-2">
@@ -265,7 +265,7 @@ onUnmounted(() => {
             type="checkbox"
             name="same_member"
             class="hidden"
-          />
+          >
 
           <SvgIcon
             :name="same_member ? 'checkbox_check' : 'checkbox_empty'"

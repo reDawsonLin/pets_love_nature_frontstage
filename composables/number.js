@@ -1,4 +1,6 @@
 export const addThousandPoint = (num) => {
+  if (!Number(num)) return 0;
+
   const result = Number(num)
     ?.toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -16,11 +18,9 @@ export const totalPrice = (cart_array) => {
   return result;
 };
 
-export const numberOnly = async (event) => {
+export const numberOnly = (event) => {
   const result = Number(event.key);
   if (result || result === 0) return;
 
   return event.preventDefault();
 };
-
-

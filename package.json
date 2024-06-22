@@ -38,6 +38,7 @@
     "@unocss/eslint-config": "^0.59.4",
     "@unocss/nuxt": "^0.59.4",
     "@unocss/preset-web-fonts": "^0.59.4",
+    "dayjs-nuxt": "^2.1.9",
     "eslint": "^8.57.0"
   }
 }
