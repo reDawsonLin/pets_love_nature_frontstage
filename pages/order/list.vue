@@ -14,7 +14,7 @@ const { data: data_orderList } = data_orders.value;
   <div class="wrapper">
     <aside class="sidebar flex">
       <ul
-        class="mx-auto flex gap-1rem overflow-x-auto px-0.75rem py-0.5rem lg:(flex-col items-center w-100%)"
+        class="mx-auto flex gap-1rem overflow-x-auto px-0.75rem py-0.5rem lg:(w-100% flex-col items-center)"
       >
         <li class="">
           <NuxtLink :to="{ name: 'member' }"> 個人資訊 </NuxtLink>

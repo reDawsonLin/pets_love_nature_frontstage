@@ -15,6 +15,7 @@ export const totalPrice = (cart_array) => {
   cart_array.forEach((item) => {
     result += item.price * item.quantity;
   });
+
   return result;
 };
 
