@@ -20,6 +20,11 @@ const comment_swiperCenteredSlide = computed(() => {
 
 watchEffect(() => {});
 
+const { data: data_commentList, error: error_commentList } = await useApiFetch(
+  "/comment"
+);
+console.log("data_commentList.value :>> ", data_commentList.value);
+
 // -------
 const data_banner = [
   {
@@ -102,7 +107,7 @@ const data_category = [
       "台灣自有工廠生產，不加任何調味料防腐劑、堅持保有最原始的營養。低脂低熱量，結構完整鬆軟，輕鬆撥小塊、壓粉，不須加水還原就可以輕鬆食用！",
     remind: "",
     bgUrl: "bg-[url(/img/home-2-1.webp)]",
-    routeUrl: "",
+    routeUrl: { name: "product", query: { searchType: "dry" } },
     gradientColor: "from-[#fde7ef]",
   },
   {
@@ -113,7 +118,7 @@ const data_category = [
       "100% 純手工製作，根據犬貓不同階段需求，虚弱、挑食、疾病調養等，客製調配最適合的鮮食。",
     remind: "*鮮食為食品，醫療仍須遵照醫囑，並請依照醫師指示食用。",
     bgUrl: "bg-[url(/img/home-2-2.webp)]",
-    routeUrl: "",
+    routeUrl: { name: "product", query: { searchType: "fresh" } },
     gradientColor: "from-[#edeef0]",
   },
 ];
@@ -124,18 +129,21 @@ const data_hotProduct = [
     product_type: "狗狗專區",
     product_type_code: "dog",
     bg_url: "bg-[url(/img/home-3-1.webp)]",
+    routeUrl: { name: "product", query: { searchType: "dog" } },
   },
   {
     id: 2,
     product_type: "貓貓專區",
     product_type_code: "cate",
     bg_url: "bg-[url(/img/home-3-2.webp)]",
+    routeUrl: { name: "product", query: { searchType: "cat" } },
   },
   {
     id: 3,
     product_type: "鮮食專區",
     product_type_code: "fresh",
     bg_url: "bg-[url(/img/home-3-3.webp)]",
+    routeUrl: { name: "product", query: { searchType: "fresh" } },
   },
 ];
 
@@ -185,14 +193,13 @@ const data_comment = [
           class="aspect-350/512 md:(aspect-1760/662 rounded-5rem)"
           rounded="t-80px b-20px"
           object="cover center"
-
         >
 
         <div
           class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600 md:(bottom-10.25rem max-w-47rem w-100% rounded-1rem bg-second-200/90)"
         >
-          <h3 class="text-2rem md:(text-3rem)" >{{ banner.title }}</h3>
-          <p class="text-balance md:(text-1.75rem)" >{{ banner.subtitle }}</p>
+          <h3 class="text-2rem md:(text-3rem)">{{ banner.title }}</h3>
+          <p class="text-balance md:(text-1.75rem)">{{ banner.subtitle }}</p>
         </div>
       </SwiperSlide>
     </Swiper>
@@ -237,7 +244,9 @@ const data_comment = [
           <p class="text-0.75rem md:(text-1.25rem)">{{ category.subtitle }}</p>
         </div>
 
-        <div
+        <!-- :to="{ name: 'product', query: { searchType: 'dry' } }" -->
+        <NuxtLink
+          :to="category.routeUrl"
           class="group relative aspect-257/358 flex-grow-1 rounded-1.5rem"
           :class="[`${category.bgUrl}`]"
           bg="center [length:auto_100%] no-repeat"
@@ -253,7 +262,7 @@ const data_comment = [
               {{ category.remind }}
             </p>
           </div>
-        </div>
+        </NuxtLink>
       </li>
     </ul>
   </section>
@@ -269,7 +278,7 @@ const data_comment = [
         <ButtonMore
           v-if="window_width >= 768"
           content="所有商品"
-          route-url="/"
+          :route-url="{ name: 'product' }"
           class="md:(mx-unset)"
           bg-color="bg-second-200"
         />
@@ -287,7 +296,7 @@ const data_comment = [
           hover:shadow-md
         >
           <NuxtLink
-            to="/"
+            :to="product.routeUrl"
             class="transition-property-background absolute bottom-3rem left-50% w-fit translate-x--50% whitespace-nowrap rounded-5rem bg-neutral-50 text-2rem transition-duration-100 transition-ease-linear transition-property-(color transform) group-hover:(translate-y--1rem bg-neutral-800 text-neutral-50)"
             p="x-3rem y-0.75rem"
           >
@@ -300,7 +309,7 @@ const data_comment = [
 
     <ButtonMore
       content="所有商品"
-      route-url="/"
+      :route-url="{ name: 'product' }"
       class="md:(hidden)"
       bg-color="bg-second-200"
     />
@@ -310,14 +319,12 @@ const data_comment = [
     <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
       <h2 class="mb-3rem text-center md:(mb-0)">熱烈好評</h2>
 
-      <ClientOnly>
-        <ButtonMore
-          v-if="window_width >= 768"
-          content="所有商品"
-          route-url="/"
-          class="md:(mx-unset)"
-        />
-      </ClientOnly>
+      <ButtonMore
+        content="所有商品"
+        :route-url="{ name: 'product' }"
+        class="md:(mx-unset) !hidden !md:flex"
+        bg-color="bg-#fff"
+      />
     </header>
 
     <Swiper
@@ -356,7 +363,12 @@ const data_comment = [
       </SwiperSlide>
     </Swiper>
 
-    <ButtonMore content="所有評論" route-url="/" bg-color="bg-#fff" class="md:(hidden)" />
+    <ButtonMore
+      content="所有商品"
+      :route-url="{ name: 'product' }"
+      bg-color="bg-#fff"
+      class="md:(hidden)"
+    />
   </section>
 
   <ClientOnly>
