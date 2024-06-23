@@ -1,4 +1,7 @@
 <script setup>
+import { useRoute } from 'vue-router';
+const route = useRoute();
+
 import { useStoreCart } from '~/stores/storeCart';
 
 const storeCart = useStoreCart();
@@ -40,7 +43,7 @@ const pageInfo = ref([]);
 
 
 const fetchData = async () => {
-  console.log('36' ,searchValue.value);
+  // console.log('36' ,searchValue.value);
   try {
     const params = {
       ...searchValue.value,
@@ -70,8 +73,8 @@ const fetchData = async () => {
     // data.value = result.data;
     productData.value = result.data.content
     pageInfo.value = result.data.page
-    console.log(result.data.page);
-    console.log("成功得到產品資訊", result.data.content);
+    // console.log(result.data.page);
+    console.log("成功得到產品資訊", result.data);
   } catch (e) {
     console.log(e.message)
     console.log("err", e);
@@ -139,7 +142,12 @@ const handlePageChange = async(e) =>{
   fetchData()
 }
 
-onMounted(() => {
+onMounted(async() => {
+  if(route.query.searchType){
+    console.log('Search type' , route.query.searchType);
+    await changeCategory(route.query.searchType);
+
+  }
   fetchData();
 });
 </script>
