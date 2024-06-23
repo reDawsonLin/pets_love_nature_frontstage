@@ -1,15 +1,17 @@
 <script setup>
 const id_order = useCookie("id_order");
-console.log("id_order.value :>> ", id_order.value);
 
 const { data: data_order, error: error_order } = await useTokenFetch(
   `/order/${id_order.value}`
 );
-
-console.log("data_order.value :>> ", data_order.value);
-console.log("error_order.value :>> ", error_order.value);
-
 const { orderProductList: data_cart } = data_order.value.data[0];
+
+
+onMounted(() => {
+  console.log("id_order.value :>> ", id_order.value);
+  console.log("data_order.value :>> ", data_order.value);
+  console.log("error_order.value :>> ", error_order.value);
+});
 
 const { width: window_width } = useWindowSize();
 </script>
@@ -64,7 +66,7 @@ const { width: window_width } = useWindowSize();
                 class="h-100% object-cover object-center lg:(h-5rem w-5rem)"
                 :src="item.coverImg"
                 alt="product image"
-              >
+              />
             </td>
             <td class="td_content lg:(text-1.25rem)">
               <p class="line-clamp-2">
