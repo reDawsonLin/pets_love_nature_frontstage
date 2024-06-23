@@ -1,8 +1,8 @@
 <script setup>
 import { useRoute } from 'vue-router';
-const route = useRoute();
 
 import { useStoreCart } from '~/stores/storeCart';
+const route = useRoute();
 
 const storeCart = useStoreCart();
 const { addCart } = storeCart;
@@ -170,6 +170,9 @@ onMounted(async() => {
         <li class="">
           <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]" @click.prevent="changeCategory('dry')">凍乾專區</a>
         </li>
+        <li class="">
+          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]" @click.prevent="changeCategory('dry')">鮮食專區</a>
+        </li>
       </ul>
     </div>
 
@@ -234,10 +237,11 @@ v-if="searchValue.sortOrder == 1 && searchValue.sortBy == 'priupdatedAtce'"
           </svg>
             時間</a>
             
+            
           </div>
           <div class="mt-2w-[226px] relative mt-3 w-[100%] inline-flex rounded-md shadow-sm sm:mt-0 sm:w-auto">
             <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center pl-3">
-              <span class="text-gray-500 sm:text-sm">O</span>
+              <img class="w-20px" src="/assets/img/icon/search.svg" alt="">
             </div>
             <input
 id="price" v-model="searchValue.searchText" type="text"
@@ -261,7 +265,7 @@ v-if="product.product.imageGallery.length > 0"
 :src="product.product.imageGallery[0].imgUrl.trim()" :alt="product.product.imageGallery[0].altText"
                 class="h-full w-full object-cover object-center lg:h-full lg:w-full">
               <div class="absolute right-2 top-2">
-                <img src="/assets/img/icon/icon-favorite.svg" alt="">
+                <!-- <img src="/assets/img/icon/icon-favorite.svg" alt=""> -->
               </div>
               <div class="absolute bottom-2 left-2 w-50px text-center">
                 <div class="border-rd-8px bg-[#525252] pl-8px pr-8px text-white"> {{ product.weight }}g</div>

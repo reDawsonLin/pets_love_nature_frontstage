@@ -264,6 +264,14 @@ onMounted(() => {
             <p class="mb-[64px]">NT$ <span class="font-size-[48px] font-300">{{ productIDData.productSpecList[productSpecListIndex].price }} </span></p>
             <div class="weight mb-[24px] flex">
               <div
+               v-for="(item,index) in productIDData.productSpecList"
+               :key=index
+               class="mr-4 h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#E5E5E5] pb-[8px] pt-[8px] text-center font-size-[24px] text-black font-200"
+                :class="{'bg-[#F43F5E] text-white': productSpecListIndex == index}"
+                @click="changeProductSpecListIndex(index)">
+                {{ productIDData.productSpecList[index].weight}}g
+              </div>
+              <!-- <div
                 class="mr-4 h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#E5E5E5] pb-[8px] pt-[8px] text-center font-size-[24px] text-black font-200"
                 :class="{'bg-[#F43F5E] text-white': productSpecListIndex == 0}"
                 @click="changeProductSpecListIndex(0)"
@@ -276,7 +284,7 @@ onMounted(() => {
                 @click="changeProductSpecListIndex(1)"
                 >
                 {{ productIDData?.productSpecList[1]?.weight }} g
-              </div>
+              </div> -->
             </div>
             <div>
               <div class="mb-[16px] w-[140px] flex justify-between b b-[#E5E5E5] b-rd-8px b-solid p-[8px]">
@@ -310,9 +318,10 @@ onMounted(() => {
                 <p class="w-[100px]">分類</p>
                 <div class="flex">
                   <p  v-for="(category,index) in productIDData.category" :key="index" class="mr-2 bg-[#F9F0EA] pl-[8px] pr-[8px]">
-                    <span v-if="category == 'fresh'">凍乾</span>
+                    <span v-if="category == 'fresh'">鮮食</span>
                     <span v-if="category == 'cat'">貓食</span>
                     <span v-if="category == 'dog'">狗食</span>
+                    <span v-if="category == 'dry'">凍乾</span>
                   </p>
                 </div>
               </div>
