@@ -1,16 +1,22 @@
 <script setup>
 const id_order = useCookie("id_order");
 
-const { data: data_order, error: error_order } = await useTokenFetch(
-  `/order/${id_order.value}`
-);
-const { orderProductList: data_cart } = data_order.value.data[0];
+onMounted(async () => {
+  const { data: data_order, error: error_order } = await useTokenFetch(
+    `/order/${id_order.value}`
+  );
 
-
-onMounted(() => {
   console.log("id_order.value :>> ", id_order.value);
   console.log("data_order.value :>> ", data_order.value);
   console.log("error_order.value :>> ", error_order.value);
+
+  const { orderProductList } = data_order.value.data[0];
+  data_cart.value = orderProductList;
+});
+
+const data_cart = ref([]);
+onUnmounted(() => {
+  id_order.value = null;
 });
 
 const { width: window_width } = useWindowSize();
