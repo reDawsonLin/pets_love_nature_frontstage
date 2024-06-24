@@ -179,8 +179,13 @@ const data_comment = [
     <Swiper
       class="md:(max-w-1760px w-100%)"
       space-between="12"
-      :modules="[SwiperPagination]"
-      :pagination="{ dynamicBullets: false }"
+      loop
+      :modules="[SwiperPagination, SwiperAutoplay]"
+      :pagination="{ dynamicBullets: false, clickable: true }"
+      :autoplay="{
+        delay: 3000,
+        disableOnInteraction: false,
+      }"
     >
       <SwiperSlide
         v-for="banner in data_banner"
@@ -193,7 +198,7 @@ const data_comment = [
           class="aspect-350/512 md:(aspect-1760/662 rounded-5rem)"
           rounded="t-80px b-20px"
           object="cover center"
-        >
+        />
 
         <div
           class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600 md:(bottom-10.25rem max-w-47rem w-100% rounded-1rem bg-second-200/90)"
@@ -357,7 +362,7 @@ const data_comment = [
             :src="comment.avatarUrl"
             alt="avatar"
             class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center md:(w-6.25rem)"
-          >
+          />
           <p>{{ comment.accountName }}</p>
         </div>
       </SwiperSlide>
@@ -371,7 +376,7 @@ const data_comment = [
     />
   </section>
 
-  <ClientOnly>
+  <!-- <ClientOnly>
     <div
       class="chat_icon bottom-5rem right-0.75rem z-10 h-3.5rem w-3.5rem flex cursor-pointer items-center justify-center rounded-50% bg-rose-500 opacity-0 transition-opacity md:(right-3vw)"
       :class="[
@@ -389,7 +394,7 @@ const data_comment = [
         >{{ chatCount > 9 ? "9+" : chatCount }}
       </span>
     </div>
-  </ClientOnly>
+  </ClientOnly> -->
 </template>
 
 <style scoped>
