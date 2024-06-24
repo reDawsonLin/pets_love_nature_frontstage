@@ -1,19 +1,47 @@
 <script setup>
 const id_order = useCookie("id_order");
-// console.log("id_order.value :>> ", id_order.value);
+console.log("id_order.value :>> ", id_order.value);
 
+const token = useCookie("token");
 const data_cart = ref();
 if (import.meta.client) {
-  const { data: data_order, error: error_order } = await useTokenFetch(
-    `/order/${id_order.value}`
-  );
-  const { orderProductList } = data_order.value.data[0];
-  data_cart.value = orderProductList;
+  console.log("token.value :>> ", token.value);
+  // const res = await $fetch(`https://pets-love-nature-backend-n.onrender.com/api/v1/order/${id_order.value}`, {
+  //   onRequest({ request, options }) {
+  //     // 設定請求時的 headers
+  //     options.headers = options.headers || {};
+  //     options.headers.authorization = `Bearer ${token.value}`;
+  //   },
+  //   onRequestError({ request, options, error }) {
+  //     // 捕捉請求時發生的錯誤
+  //   },
+  //   onResponse({ request, response, options }) {
+  //     // 處理請求回覆資料
+  //     console.log('response :>> ', response);
+  //     return response._data;
+  //   },
+  //   onResponseError({ request, response, options }) {
+  //     // 捕捉請求回覆時發生的錯誤
+  //   },
+  // });
+
+  const res = await useToken$Fetch(`/order/${id_order.value}`);
+  console.log("res :>> ", res);
+  data_cart.value = res.data[0].orderProductList;
+  // -------------------
+
+  // const { data: data_order, error: error_order  = await use$Fetch(
+  //   `/order/${id_order.value}`
+  // );
+
+  // console.log("data_order.value :>> ", data_order.value);
+  // console.log("error_order.value :>> ", error_order.value);
+  // const { orderProductList } = data_order.value.data[0];
+  // data_cart.value = orderProductList;
 }
 
 // console.log("data_order.value :>> ", data_order.value);
 // console.log("error_order.value :>> ", error_order.value);
-
 
 const { width: window_width } = useWindowSize();
 </script>
@@ -68,7 +96,7 @@ const { width: window_width } = useWindowSize();
                 class="h-100% object-cover object-center lg:(h-5rem w-5rem)"
                 :src="item.coverImg"
                 alt="product image"
-              >
+              />
             </td>
             <td class="td_content lg:(text-1.25rem)">
               <p class="line-clamp-2">
