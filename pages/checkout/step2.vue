@@ -1,10 +1,15 @@
 <script setup>
+definePageMeta({ middleware: "need-login" });
+
+
+
 const param_post_step1 = useCookie("param_post_step1");
 
 const { data: data_3pay } = await useTokenFetch(`/payment`, {
   method: "POST",
   body: param_post_step1.value,
 });
+param_post_step1.value = null;
 
 const {
   MerchantID,
@@ -27,7 +32,6 @@ const param_post_3pay = ref({
   Version: "",
 });
 const id_order = useCookie("id_order");
-
 
 // "Order validation failed: orderProductList.0.amount: 購買商品清單amount未填寫, orderProductList.1.amount: 購買商品清單amount未填寫"
 // 6670462c99b40923c5ec7b01
