@@ -1,10 +1,12 @@
 <script setup>
-definePageMeta({ middleware: "need-login" });
+// definePageMeta({ middleware: "need-login" });
 
 const id_order = useCookie("id_order");
 
 const data_cart = ref([]);
 onMounted(async () => {
+  if (!id_order.value) navigateTo({ name: "index" });
+  
   const { data: data_order, error: error_order } = await useTokenFetch(
     `/order/${id_order.value}`
   );
@@ -15,6 +17,7 @@ onMounted(async () => {
 
   const { orderProductList } = data_order.value.data[0];
   data_cart.value = orderProductList;
+  id_order.value = null;
 });
 
 const { width: window_width } = useWindowSize();
