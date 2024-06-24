@@ -13,6 +13,36 @@ export const use$Fetch = (url, options) => {
   });
 };
 
+export const useToken$Fetch = async (url, options) => {
+  const token = useCookie("token");
+  if (!token.value)  console.log("cookie 無 token");
+
+  return await $fetch(url, {
+    baseURL,
+    ...options,
+    onRequest({ request, options }) {
+      // Set the request headers
+      options.headers = options.headers || {};
+      // 暫時把快取關掉
+      options.initialCache = false;
+      options.headers.authorization = `Bearer ${token.value}`;
+    },
+    onRequestError({ request, options, error }) {
+      console.log("on request error :>> ", error);
+    },
+    onResponse({ request, response, options }) {
+      // Process the response data
+      // console.log("on response");
+      // console.log("response :>> ", response);
+    },
+    onResponseError({ request, response, options }) {
+      console.log("on response error :>> ", response);
+    },
+  });
+}
+
+
+
 // for pre fetching data -------
 export const useApiFetch = (url, options) => {
   // console.log("url :>> ", url);
@@ -23,6 +53,7 @@ export const useApiFetch = (url, options) => {
     ...options,
   });
 };
+
 
 // for need token data -------
 export const useTokenFetch = async (url, options) => {
