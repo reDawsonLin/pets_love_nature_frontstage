@@ -465,7 +465,7 @@ onUnmounted(() => {
       <button
         type="submit"
         form="form_recipient"
-        class="order-1 flex items-center justify-center gap-1rem rounded-0.25rem p-1rem text-neutral-50 !bg-neutral-600 lg:(order-2 px-3rem)"
+        class="order-1 flex items-center justify-center gap-1rem rounded-0.25rem p-1rem text-neutral-50 lg:(order-2 px-3rem) !bg-neutral-600"
       >
         下一步，結帳付款
         <SvgIcon name="arrow_right" class="w-0.5rem" />
