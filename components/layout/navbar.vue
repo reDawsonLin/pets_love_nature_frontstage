@@ -35,6 +35,7 @@ const logout = () => {
   setToken(null);
   closeMobileNav();
   threeCart.value = [];
+  cartArr.value = [];
   sessionStorage.removeItem("shoppingCartNoLogin");
 
   if (route.name !== "index") navigateTo({ path: "/" });
