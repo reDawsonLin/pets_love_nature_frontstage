@@ -1,8 +1,9 @@
 <script setup>
 import { useRoute } from 'vue-router';
-
 import { useStoreCart } from '~/stores/storeCart';
+
 const route = useRoute();
+
 
 const storeCart = useStoreCart();
 const { addCart } = storeCart;

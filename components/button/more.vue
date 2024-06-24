@@ -5,8 +5,10 @@ defineProps({
     default: "",
   },
   routeUrl: {
-    type: String,
-    default: "/",
+    type: Object,
+    default() {
+      return { name: "index" };
+    },
   },
   bgColor: {
     type: String,
@@ -16,6 +18,7 @@ defineProps({
 </script>
 
 <template>
+  <!-- <pre>{{ routeUrl }}</pre> -->
   <NuxtLink :to="routeUrl" class="group relative mx-auto h-3rem w-233px flex">
     <p
       class="absolute left-0 top-50% z-3 h-100% flex translate-y--50% items-center pr-1rem transition-left"
