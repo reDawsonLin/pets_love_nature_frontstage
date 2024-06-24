@@ -20,10 +20,10 @@ const comment_swiperCenteredSlide = computed(() => {
 
 watchEffect(() => {});
 
-const { data: data_commentList, error: error_commentList } = await useApiFetch(
-  "/comment"
-);
-console.log("data_commentList.value :>> ", data_commentList.value);
+// const { data: data_commentList, error: error_commentList } = await useApiFetch(
+//   "/comment"
+// );
+// console.log("data_commentList.value :>> ", data_commentList.value);
 
 // -------
 const data_banner = [
