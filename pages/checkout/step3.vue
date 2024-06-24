@@ -1,6 +1,9 @@
 <script setup>
+definePageMeta({ middleware: "need-login" });
+
 const id_order = useCookie("id_order");
 
+const data_cart = ref([]);
 onMounted(async () => {
   const { data: data_order, error: error_order } = await useTokenFetch(
     `/order/${id_order.value}`
@@ -12,11 +15,6 @@ onMounted(async () => {
 
   const { orderProductList } = data_order.value.data[0];
   data_cart.value = orderProductList;
-});
-
-const data_cart = ref([]);
-onUnmounted(() => {
-  id_order.value = null;
 });
 
 const { width: window_width } = useWindowSize();

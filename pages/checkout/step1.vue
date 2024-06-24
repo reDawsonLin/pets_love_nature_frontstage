@@ -456,7 +456,7 @@ onUnmounted(() => {
     >
       <NuxtLink
         :to="{ name: 'shopping-cart' }"
-        class="flex items-center justify-center gap-1rem rounded-0.25rem bg-neutral-50 p-1rem text-neutral-600 lg:(px-3rem)"
+        class="order-2 flex items-center justify-center gap-1rem rounded-0.25rem bg-neutral-50 p-1rem text-neutral-600 lg:(order-1 px-3rem)"
       >
         <SvgIcon name="arrow_left" class="w-0.5rem" />
         返回購物車
@@ -465,7 +465,7 @@ onUnmounted(() => {
       <button
         type="submit"
         form="form_recipient"
-        class="flex items-center justify-center gap-1rem rounded-0.25rem p-1rem text-neutral-50 !bg-neutral-600 lg:(px-3rem)"
+        class="order-1 flex items-center justify-center gap-1rem rounded-0.25rem p-1rem text-neutral-50 !bg-neutral-600 lg:(order-2 px-3rem)"
       >
         下一步，結帳付款
         <SvgIcon name="arrow_right" class="w-0.5rem" />

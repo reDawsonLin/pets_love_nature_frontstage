@@ -1,10 +1,15 @@
 <script setup>
+definePageMeta({ middleware: "need-login" });
+
+
+
 const param_post_step1 = useCookie("param_post_step1");
 
 const { data: data_3pay } = await useTokenFetch(`/payment`, {
   method: "POST",
   body: param_post_step1.value,
 });
+param_post_step1.value = null;
 
 const {
   MerchantID,
@@ -28,6 +33,26 @@ const param_post_3pay = ref({
 });
 const id_order = useCookie("id_order");
 
+// "Order validation failed: orderProductList.0.amount: 購買商品清單amount未填寫, orderProductList.1.amount: 購買商品清單amount未填寫"
+// 6670462c99b40923c5ec7b01
+
+dataTrans();
+function dataTrans() {
+  param_post_3pay.value.MerchantID = MerchantID;
+  param_post_3pay.value.Amt = Amt;
+  param_post_3pay.value.Email = Email;
+  param_post_3pay.value.ItemDesc = ItemDesc;
+  param_post_3pay.value.MerchantOrderNo = MerchantOrderNo;
+  // param_post_3pay.value.NotifyUrl = NotifyUrl;
+  // param_post_3pay.value.ReturnUrl = ReturnUrl;
+  param_post_3pay.value.TimeStamp = TimeStamp;
+  param_post_3pay.value.TradeInfo = aesEncrypt;
+  param_post_3pay.value.TradeSha = shaEncrypt;
+  param_post_3pay.value.Version = Version;
+
+  id_order.value = MerchantOrderNo;
+}
+
 // ------
 const cart_checkout = useCookie("checkout_cart");
 const id_customer = useCookie("id_customer");
@@ -44,28 +69,8 @@ await useTokenFetch(`/shopping_cart`, {
 
 const form_newWeb = ref(null);
 onMounted(() => {
-  param_post_step1.value = null;
-  cart_checkout.value = null;
-  dataTrans();
-
   form_newWeb.value.submit();
 });
-
-function dataTrans() {
-  param_post_3pay.value.MerchantID = MerchantID;
-  param_post_3pay.value.Amt = Amt;
-  param_post_3pay.value.Email = Email;
-  param_post_3pay.value.ItemDesc = ItemDesc;
-  param_post_3pay.value.MerchantOrderNo = MerchantOrderNo;
-  // param_post_3pay.value.NotifyUrl = NotifyUrl;
-  // param_post_3pay.value.ReturnUrl = ReturnUrl;
-  param_post_3pay.value.TimeStamp = TimeStamp;
-  param_post_3pay.value.TradeInfo = aesEncrypt;
-  param_post_3pay.value.TradeSha = shaEncrypt;
-  param_post_3pay.value.Version = Version;
-
-  id_order.value = MerchantOrderNo;
-}
 </script>
 
 <template>
