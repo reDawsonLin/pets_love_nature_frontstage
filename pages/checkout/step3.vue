@@ -4,6 +4,8 @@ console.log("id_order.value :>> ", id_order.value);
 
 const token = useCookie("token");
 const data_cart = ref();
+
+const pending = ref(true);
 if (import.meta.client) {
   console.log("token.value :>> ", token.value);
   // const res = await $fetch(`https://pets-love-nature-backend-n.onrender.com/api/v1/order/${id_order.value}`, {
@@ -28,6 +30,7 @@ if (import.meta.client) {
   const res = await useToken$Fetch(`/order/${id_order.value}`);
   console.log("res :>> ", res);
   data_cart.value = res.data[0].orderProductList;
+  pending.value = false;
   // -------------------
 
   // const { data: data_order, error: error_order  = await use$Fetch(
@@ -47,6 +50,8 @@ const { width: window_width } = useWindowSize();
 </script>
 
 <template>
+  <!-- {{ pending }}
+  <LoadingPending :show="pending" /> -->
   <div
     class="wrapper_step1 mx-auto max-w-1076px flex flex-col gap-1rem px-0.75rem py-3rem lg:(gap-1.5rem)"
   >
