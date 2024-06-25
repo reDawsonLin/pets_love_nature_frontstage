@@ -27,6 +27,13 @@ const closeMobileNav = () => {
 
 const mobileNavShow = ref(false);
 
+const { width: window_width } = useWindowSize();
+watchEffect(() => {
+  if (window_width.value > 768 && mobileNavShow.value) {
+    closeMobileNav();
+  }
+});
+
 // ---
 const route = useRoute();
 const id_customer = useCookie("id_customer");
@@ -64,7 +71,11 @@ const logout = () => {
         class="absolute right-0 top-0 z-6 hidden h-100% max-w-375px flex-col gap-1rem rounded-l-1rem bg-second-200 pb-2.5rem pt-1.75rem text-1.25rem md:(relative max-w-unset min-h-unset w-unset flex flex-grow-1 flex-row bg-transparent pb-unset pt-unset text-neutral-50)"
       >
         <div class="flex justify-end px-1.5rem md:(hidden)">
-          <SvgIcon name="close" class="w-2rem cursor-pointer" @click="closeMobileNav()" />
+          <SvgIcon
+            name="close"
+            class="w-2rem cursor-pointer"
+            @click="closeMobileNav()"
+          />
         </div>
 
         <ul
@@ -81,7 +92,9 @@ const logout = () => {
             >
           </li>
           <li class="">
-            <NuxtLink :to="{ name: 'frequently-questions' }" @click="closeMobileNav()"
+            <NuxtLink
+              :to="{ name: 'frequently-questions' }"
+              @click="closeMobileNav()"
               >常見問題</NuxtLink
             >
           </li>
@@ -111,13 +124,16 @@ const logout = () => {
               <p class="whitespace-nowrap">最近加入商品</p>
 
               <ul class="flex flex-grow-1 flex-col gap-0.5rem">
-                <template v-for="eachProduct in threeCart" :key="eachProduct?._id">
+                <template
+                  v-for="eachProduct in threeCart"
+                  :key="eachProduct?._id"
+                >
                   <li class="w-100% flex items-center gap-0.25rem">
                     <img
                       class="h-1.75rem w-1.75rem"
                       :src="eachProduct?.imageGallery[0]?.imgUrl"
                       alt="product image"
-                    >
+                    />
                     <p class="flex-nowrap text-0.875rem">
                       {{ eachProduct?.title + eachProduct?.weight }}g
                     </p>
@@ -155,29 +171,47 @@ const logout = () => {
             <ul
               class="list_content flex flex-col gap-0.75rem px-2rem text-1rem md:(absolute left-50% top-100% translate-x--50% rounded-0.5rem bg-neutral-50 px-1.5rem py-1rem text-neutral-600)"
             >
-              <li v-if="!token" class="whitespace-nowrap" @click="closeMobileNav()">
+              <li
+                v-if="!token"
+                class="whitespace-nowrap"
+                @click="closeMobileNav()"
+              >
                 <NuxtLink to="/Login"> 登入 </NuxtLink>
               </li>
 
               <template v-else>
-                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="closeMobileNav()"
+                >
                   <NuxtLink :to="{ name: 'member' }"> 個人資訊 </NuxtLink>
                 </li>
-                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="closeMobileNav()"
+                >
                   <NuxtLink :to="{ name: 'order-list' }"> 訂單記錄 </NuxtLink>
                 </li>
-                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="closeMobileNav()"
+                >
                   收藏商品
                 </li>
-                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                <li
+                  class="cursor-pointer whitespace-nowrap"
+                  @click="closeMobileNav()"
+                >
                   聊聊紀錄
                 </li>
-                <li class="cursor-pointer whitespace-nowrap" @click="logout()">登出</li>
+                <li class="cursor-pointer whitespace-nowrap" @click="logout()">
+                  登出
+                </li>
               </template>
             </ul>
           </li>
 
-          <li class="wrapper_search mt-auto md:(order-1 mt-unset)">
+          <!-- <li class="wrapper_search mt-auto md:(order-1 mt-unset)">
             <label class="box_search md:() relative flex">
               <input
                 name="search-bar"
@@ -191,7 +225,7 @@ const logout = () => {
                 name="search"
               />
             </label>
-          </li>
+          </li> -->
         </ul>
 
         <ul class="flex gap-1.5rem px-2.25rem md:(hidden)">
