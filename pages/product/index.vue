@@ -9,6 +9,7 @@ const storeCart = useStoreCart();
 const { addCart } = storeCart;
 
 const searchValue = ref({
+  onlineStatus: true,
   searchText: "",
   sortOrder: "1",
   sortBy: "",
@@ -20,25 +21,7 @@ const searchValue = ref({
 })
 
 const productData = ref([
-  // {
-  //   _id: 11,
-  //   price: 200,
-  //   weight: "100g",
-  //   star: 4.5,
-  //   inStock: 50,
-  //   productId: {
-  //     prductNumber: "A001",
-  //     title: "鮮嫩雞胸肉鮮食罐頭",
-  //     imageGallery: [
-  //       {
-  //         imgUrl: "https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  //         altText: "狗鮮食"
-  //       }
-  //     ]
-  //   },
-  // },
-]
-);
+]);
 
 const pageInfo = ref([]);
 
@@ -53,10 +36,7 @@ const fetchData = async () => {
     const queryString = new URLSearchParams(params).toString()
 
     const response = await fetch(
-      // `https://pets-love-nature-backend-n.onrender.com/api/v1/product?${queryString}`,
       `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList?${queryString}`,
-      // `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList`,
-
       {
         method: "GET",
       }
