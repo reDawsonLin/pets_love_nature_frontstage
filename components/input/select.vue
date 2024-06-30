@@ -4,9 +4,11 @@ const selectValue = defineModel();
 defineProps({
   selectName: {
     type: String,
+    default: "",
   },
   labelName: {
     type: String,
+    default: "",
   },
   required: {
     type: Boolean,

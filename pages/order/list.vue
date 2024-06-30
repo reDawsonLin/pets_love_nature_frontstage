@@ -6,6 +6,7 @@ const id_customer = useCookie("id_customer");
 const { data: data_orders, error: error_orders } = await useTokenFetch(
   `/orders/${id_customer.value}`
 );
+if (error_orders.value) console.log("error_orders.value :>> ", error_orders.value);
 
 const { data: data_orderList } = data_orders.value;
 </script>

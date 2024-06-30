@@ -372,9 +372,9 @@ onUnmounted(() => {
                   @change="countyChange()"
                 >
                   <option value="" selected disabled hidden>縣市</option>
-                  <template v-for="county in tw_postal_code" :key="county.name">
-                    <option :value="county.name" class="text-neutral-600">
-                      {{ county.name }}
+                  <template v-for="item in tw_postal_code" :key="item.name">
+                    <option :value="item.name" class="text-neutral-600">
+                      {{ item.name }}
                     </option>
                   </template>
                 </VeeField>

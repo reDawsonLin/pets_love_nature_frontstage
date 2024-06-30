@@ -25,3 +25,12 @@ export const numberOnly = (event) => {
 
   return event.preventDefault();
 };
+
+// built a composable function get a mobile number and return replace center five number to '*' character
+export const hideMobileNumber = (mobile) => {
+  if (!mobile) return;
+
+  const result = mobile.replace(/(\d{3})(\d{5})(\d{2})/, "$1*****$3");
+
+  return result;
+};
