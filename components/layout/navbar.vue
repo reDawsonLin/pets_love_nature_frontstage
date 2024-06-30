@@ -133,7 +133,7 @@ const logout = () => {
                       class="h-1.75rem w-1.75rem"
                       :src="eachProduct?.imageGallery[0]?.imgUrl"
                       alt="product image"
-                    />
+                    >
                     <p class="flex-nowrap text-0.875rem">
                       {{ eachProduct?.title + eachProduct?.weight }}g
                     </p>

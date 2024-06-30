@@ -3,22 +3,29 @@ import { useCookie } from "nuxt/app";
 
 const route = useRoute();
 const id_order = route.params.id;
-
 const { data: data_order, error: error_order } = await useTokenFetch(
   `/order/${id_order}`
 );
+if (error_order.value) console.log("error_order.value :>> ", error_order.value);
 
-console.log("data_order :>> ", data_order.value);
 const detail_order = data_order.value.data[0];
 
+console.log("data_order :>> ", data_order.value);
 console.log("detail_order :>> ", detail_order);
+
+const id_customer = useCookie("id_customer");
+const { data: data_member, error: error_member } = await useTokenFetch(
+  `/customer/${id_customer.value}`
+);
+if (error_member.value) console.log("error_member.value :>> ", error_member.value);
+const detail_member = data_member.value.data;
 
 // --------------------------------------------
 const { width: window_width } = useWindowSize();
 </script>
 
 <template>
-  <div class="wrapper">
+  <div class="wrapper mx-auto mb-2rem max-w-1296px w-100%">
     <aside class="sidebar flex">
       <ul
         class="mx-auto flex gap-1rem overflow-x-auto px-0.75rem py-0.5rem lg:(w-100% flex-col items-center)"
@@ -39,7 +46,7 @@ const { width: window_width } = useWindowSize();
     </h1>
 
     <section
-      class="content_order h-100% flex flex-col overflow-y-auto rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(px-2rem py-2.25rem)"
+      class="content_order mx-1rem mb-2rem h-100% flex flex-col overflow-y-auto rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(mb-0 px-1.25rem pb-1rem pt-2.25rem)"
     >
       <table>
         <thead>
@@ -120,7 +127,7 @@ const { width: window_width } = useWindowSize();
       </div>
 
       <div
-        class="mb-2rem mt-2rem flex flex-col gap-1rem lg:(mb-0 mt-1.5rem flex-row items-start justify-between)"
+        class="mt-2rem flex flex-col gap-1rem lg:(mb-0 mt-1.5rem flex-row items-start justify-between)"
       >
         <button
           type="button"
@@ -141,6 +148,39 @@ const { width: window_width } = useWindowSize();
         </div>
       </div>
     </section>
+
+    <section
+      class="info_order mx-1rem flex flex-col rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(items-center px-1.5rem py-2rem)"
+    >
+      <ul
+        class="list_info flex flex-col gap-1.5rem lg:(max-w-1200px w-100% flex-row justify-between gap-1rem)"
+      >
+        <li>
+          <h3>訂單資訊</h3>
+          <p>訂單編號：{{ detail_order._id }}</p>
+          <p>訂單日期：{{ $dayjs(detail_order.createdAt).format("YYYY/MM/DD HH:mm") }}</p>
+          <p>訂單狀態：{{ orderStatusTrans(detail_order.orderStatus) }}</p>
+        </li>
+
+        <li>
+          <h3>顧客資訊</h3>
+          <p>姓名：{{ detail_member.customerName }}</p>
+          <p>電話號碼：{{ hideMobileNumber(detail_member.phone) }}</p>
+        </li>
+
+        <li>
+          <h3>送貨資訊</h3>
+          <p>收件人：{{ detail_order.deliveryUserName }}</p>
+          <p>電話號碼：{{ hideMobileNumber(detail_order.deliveryPhone) }}</p>
+          <p>
+            地址：臺灣
+            {{ detail_order.deliveryAddress.county }}
+            {{ detail_order.deliveryAddress.district }}
+            {{ detail_order.deliveryAddress.address }}
+          </p>
+        </li>
+      </ul>
+    </section>
   </div>
 </template>
 
@@ -154,7 +194,7 @@ const { width: window_width } = useWindowSize();
       ". sidebar info info .";
     grid-template-columns: 1fr 1.5fr 7fr 1.5fr 1fr;
     /* grid-template-rows: auto; */
-    gap: 0rem 1rem;
+    gap: 1rem 1rem;
   }
 }
 
@@ -190,6 +230,17 @@ const { width: window_width } = useWindowSize();
 .info_order {
   @media screen and (min-width: 1024px) {
     grid-area: info;
+  }
+
+  .list_info {
+    > li {
+      > h3 {
+        @apply text-1.25rem font-600;
+
+        @media screen and (min-width: 1024px) {
+        }
+      }
+    }
   }
 }
 

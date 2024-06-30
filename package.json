@@ -22,17 +22,19 @@
     "@pinia/nuxt": "^0.5.1",
     "@unocss/reset": "^0.59.4",
     "@vee-validate/nuxt": "^4.13.1",
+    "@vee-validate/yup": "^4.13.1",
     "@vueuse/core": "^10.9.0",
     "@vueuse/nuxt": "^10.9.0",
     "jsdoc": "^4.0.3",
     "nuxt": "^3.11.2",
     "nuxt-swiper": "^1.2.2",
     "pinia": "^2.1.7",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
     "sweetalert2": "^11.6.13",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
-    "vue3-lottie": "^3.3.0",
-    "yup": "^1.4.0"
+    "vue3-lottie": "^3.3.0"
   },
   "devDependencies": {
     "@unocss/eslint-config": "^0.59.4",

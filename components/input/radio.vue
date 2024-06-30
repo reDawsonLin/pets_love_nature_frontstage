@@ -4,6 +4,7 @@ const inputValue = defineModel();
 defineProps({
   radioName: {
     type: String,
+    default: "",
   },
 });
 </script>

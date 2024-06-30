@@ -49,4 +49,9 @@ export default defineNuxtConfig({
       ErrorMessage: "VeeErrorMessage",
     },
   },
+  // nitro: {
+  //   experimental: {
+  //     websocket: true,
+  //   },
+  // },
 });
