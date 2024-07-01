@@ -9,6 +9,7 @@ const storeCart = useStoreCart();
 const { addCart } = storeCart;
 
 const searchValue = ref({
+  onlineStatus: true,
   searchText: "",
   sortOrder: "1",
   sortBy: "",
@@ -20,25 +21,8 @@ const searchValue = ref({
 })
 
 const productData = ref([
-  // {
-  //   _id: 11,
-  //   price: 200,
-  //   weight: "100g",
-  //   star: 4.5,
-  //   inStock: 50,
-  //   productId: {
-  //     prductNumber: "A001",
-  //     title: "鮮嫩雞胸肉鮮食罐頭",
-  //     imageGallery: [
-  //       {
-  //         imgUrl: "https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  //         altText: "狗鮮食"
-  //       }
-  //     ]
-  //   },
-  // },
-]
-);
+]);
+
 
 const pageInfo = ref([]);
 
@@ -53,10 +37,7 @@ const fetchData = async () => {
     const queryString = new URLSearchParams(params).toString()
 
     const response = await fetch(
-      // `https://pets-love-nature-backend-n.onrender.com/api/v1/product?${queryString}`,
       `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList?${queryString}`,
-      // `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList`,
-
       {
         method: "GET",
       }
@@ -74,6 +55,7 @@ const fetchData = async () => {
     // data.value = result.data;
     productData.value = result.data.content
     pageInfo.value = result.data.page
+      
     // console.log(result.data.page);
     console.log("成功得到產品資訊", result.data);
   } catch (e) {
@@ -82,6 +64,8 @@ const fetchData = async () => {
 
   }
 };
+
+
 
 const changeSort = (sortValue) => {
   if(sortValue == searchValue.value.sortBy){
@@ -149,7 +133,8 @@ onMounted(async() => {
     await changeCategory(route.query.searchType);
 
   }
-  fetchData();
+   fetchData();
+
 });
 </script>
 
@@ -159,20 +144,20 @@ onMounted(async() => {
     <div class="sidebar menu w-[100%] flex flex-col grid-justify-start grid-items-center md:mt-[100px] md-w-[30%]">
       <ul
         class="bg_orange_primary w-[100%] flex flex-row justify-center overflow-scroll text-center md-w-[80%] md:flex-col">
-        <li class="">
+        <li :class="{'active': searchValue.filterCategory === ''}">
           <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]" @click.prevent="changeCategory('')">所有商品</a>
         </li>
-        <li class="">
+        <li  :class="{'active': searchValue.filterCategory === 'cat'}">
           <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]" @click.prevent="changeCategory('cat')">貓貓專區</a>
         </li>
-        <li class="">
+        <li  :class="{'active': searchValue.filterCategory === 'dog'}">
           <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]" @click.prevent="changeCategory('dog')">狗狗專區</a>
         </li>
-        <li class="">
+        <li  :class="{'active': searchValue.filterCategory === 'dry'}">
           <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]" @click.prevent="changeCategory('dry')">凍乾專區</a>
         </li>
-        <li class="">
-          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]" @click.prevent="changeCategory('dry')">鮮食專區</a>
+        <li  :class="{'active': searchValue.filterCategory === 'fresh'}">
+          <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]" @click.prevent="changeCategory('fresh')">鮮食專區</a>
         </li>
       </ul>
     </div>
@@ -289,7 +274,7 @@ v-for="index in Math.floor(product.product.star)" :key="index"
                     src="/assets/img/icon/icon-star.svg" alt="Star">
                   <img v-if="product.product.star % 1 === 0.5" src="/assets/img/icon/icon-star_half.svg" alt="">
                 </div>
-                <div @click="addToCart(product)">
+                <div class="hover-effect" @click="addToCart(product)"> 
                   <img src="/assets/img/icon/icon-cart.svg" alt="">
                 </div>
               </div>
@@ -392,5 +377,17 @@ button{
 }
 svg {
   pointer-events: none;
+}
+
+.hover-effect img {
+  transition: transform 0.3s ease;
+}
+
+.hover-effect img:hover {
+  transform: scale(1.1); 
+  filter: brightness(0.8); 
+}
+.active a {
+  background-color: #f9d4bc; 
 }
 </style>

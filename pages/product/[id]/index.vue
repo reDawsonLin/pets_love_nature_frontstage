@@ -11,6 +11,11 @@ const buyAmount = ref(1);
 const storeCart = useStoreCart();
 const { addCart } = storeCart;
 
+const relatedData = ref([
+]);
+
+const relatedCategory = ref("");
+
 
 const productSpecListIndex = ref(0);
 const productIDData = ref({
@@ -67,68 +72,62 @@ const productIDData = ref({
 
 // for相關商品
 const productsData = ref([
-  {
-    _id: 11,
-    price: 200,
-    weight: "100",
-    star: 4.5,
-    inStock: 50,
-    productId: {
-      prductNumber: "A001",
-      title: "鮮嫩雞胸肉鮮食罐頭1",
-      imageGallery: [
-        {
-          imgUrl: "https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          altText: "狗鮮食"
-        }
-      ]
-    },
-  },
-  {
-    _id: 11,
-    price: 200,
-    weight: "100",
-    star: 4.5,
-    inStock: 50,
-    productId: {
-      prductNumber: "A001",
-      title: "鮮嫩雞胸肉鮮食罐頭2",
-      imageGallery: [
-        {
-          imgUrl: "https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          altText: "狗鮮食"
-        }
-      ]
-    },
-  },
-  {
-    _id: 11,
-    price: 200,
-    weight: "10",
-    star: 4.5,
-    inStock: 50,
-    productId: {
-      prductNumber: "A001",
-      title: "鮮嫩雞胸肉鮮食罐頭",
-      imageGallery: [
-        {
-          imgUrl: "https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          altText: "狗鮮食"
-        }
-      ]
-    },
-  },
+  // {
+  //   _id: 11,
+  //   price: 200,
+  //   weight: "100",
+  //   star: 4.5,
+  //   inStock: 50,
+  //   productId: {
+  //     prductNumber: "A001",
+  //     title: "",
+  //     imageGallery: [
+  //       {
+  //         imgUrl: "https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  //         altText: "狗鮮食"
+  //       }
+  //     ]
+  //   },
+  // },
+  // {
+  //   _id: 11,
+  //   price: 200,
+  //   weight: "100",
+  //   star: 4.5,
+  //   inStock: 50,
+  //   productId: {
+  //     prductNumber: "A001",
+  //     title: "鮮嫩雞胸肉鮮食罐頭2",
+  //     imageGallery: [
+  //       {
+  //         imgUrl: "https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  //         altText: "狗鮮食"
+  //       }
+  //     ]
+  //   },
+  // },
+  // {
+  //   _id: 11,
+  //   price: 200,
+  //   weight: "10",
+  //   star: 4.5,
+  //   inStock: 50,
+  //   productId: {
+  //     prductNumber: "A001",
+  //     title: "鮮嫩雞胸肉鮮食罐頭",
+  //     imageGallery: [
+  //       {
+  //         imgUrl: "https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  //         altText: "狗鮮食"
+  //       }
+  //     ]
+  //   },
+  // },
 ]
 );
 
 const fetchData = async () => {
   try {
-  //   const params = {
-  //     ...searchValue.value,
-
-  //   }
-    // const queryString = new URLSearchParams(params).toString()
-
     const response = await fetch(
       // `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList?${queryString}`,
       `https://pets-love-nature-backend-n.onrender.com/api/v1/product/${id}`,
@@ -147,6 +146,8 @@ const fetchData = async () => {
     const result = await response.json();
     console.log('152' , result.data);
     productIDData.value=result.data
+    relatedCategory.value=result.data.category[0]
+
 
   } catch (e) {
     console.log(e.message)
@@ -154,6 +155,36 @@ const fetchData = async () => {
 
   }
 };
+
+const getRelatedData = async() =>{
+  try {
+    const response = await fetch(
+      `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList?filterCategory=${relatedCategory.value}`,
+      {
+        method: "GET",
+      }
+
+    );
+    if (!response.ok) {
+      // throw new Error("Network response was not ok");
+      const e = new Error("請重新登入");
+      e.name = response.status;
+      throw e;
+
+    }
+    const result = await response.json();
+    console.log('170' , result.data);
+    relatedData.value=result.data
+    
+    productsData.value=result.data.content.slice(0, 3);
+  } catch (e) {
+    console.log(e.message)
+    console.log("err", e);
+
+  }
+
+
+}
 
 const addToCart = async(product) => {
   const obj = {
@@ -209,9 +240,9 @@ const changeProductSpecListIndex = (index)=>{
   productSpecListIndex.value = index
 }
 
-onMounted(() => {
-  fetchData();
-
+onMounted(async() => {
+  await fetchData();
+  getRelatedData();
 });
 
 
@@ -267,7 +298,9 @@ onMounted(() => {
                v-for="(item,index) in productIDData.productSpecList"
                :key=index
                class="mr-4 h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#E5E5E5] pb-[8px] pt-[8px] text-center font-size-[24px] text-black font-200"
-                :class="{'bg-[#F43F5E] text-white': productSpecListIndex == index}"
+                :class="{'bg-[#F43F5E] text-white': productSpecListIndex == index,
+                        'hover:transform hover:scale-110 hover:bg-opacity-80 transition duration-300': true
+                }"
                 @click="changeProductSpecListIndex(index)">
                 {{ productIDData.productSpecList[index].weight}}g
               </div>
@@ -540,14 +573,14 @@ onMounted(() => {
               v-for="(product) in productsData" :key="product._id"
               class="group product relative border b-rd-2xl pb-4 pl-2 pr-2">
               <div
-                v-if="product.productId.imageGallery.length > 0"
+                v-if="product.product.imageGallery.length > 0"
                 class="aspect-h-1 aspect-w-1 lg:aspect-none relative w-full overflow-hidden rounded-md bg-gray-200 lg:h-80 group-hover:opacity-75">
                 <img
-                  :src="product.productId.imageGallery[0].imgUrl.trim()"
-                  :alt="product.productId.imageGallery[0].altText"
+                  :src="product.product.imageGallery[0].imgUrl.trim()"
+                  :alt="product.product.imageGallery[0].altText"
                   class="h-full w-full object-cover object-center lg:h-full lg:w-full">
                 <div class="absolute right-2 top-2">
-                  <img src="/assets/img/icon/icon-favorite.svg" alt="">
+                  <!-- <img src="/assets/img/icon/icon-favorite.svg" alt=""> -->
                 </div>
                 <div class="absolute bottom-2 left-2 w-50px text-center">
                   <div class="border-rd-8px bg-[#525252] pl-8px pr-8px text-white"> {{ product.weight }}g</div>
@@ -557,20 +590,20 @@ onMounted(() => {
                 <div>
                   <h3 class="text-sm text-gray-700">
                     <a href="">
-                        {{ product.productId.title }}
+                        {{ product.product.title }}
                     </a>
 
                   </h3>
                   <p class="mt-1 text-sm text-gray-500">NT$ {{ product.price }}</p>
                 </div>
                 <div class="flex flex-col grid-justify-end flex-items-end">
-                  <div v-if="product.star > 0" class="flex">
+                  <div v-if="product.product.star > 0" class="flex">
                     <img
-v-for="index in Math.floor(product.star)" :key="index" src="/assets/img/icon/icon-star.svg"
+v-for="index in Math.floor(product.product.star)" :key="index" src="/assets/img/icon/icon-star.svg"
                       alt="Star">
-                    <img v-if="product.star % 1 === 0.5" src="/assets/img/icon/icon-star_half.svg" alt="">
+                    <img v-if="product.product.star % 1 === 0.5" src="/assets/img/icon/icon-star_half.svg" alt="">
                   </div>
-                  <div @click="addToCart(product)">
+                  <div class="hover-effect" @click="addToCart(product)">
                     <img src="/assets/img/icon/icon-cart.svg" alt="">
                   </div>
                 </div>
@@ -629,5 +662,12 @@ input{
   border: 0;
   outline: none;
   text-align: center;
+}
+.hover-effect img {
+  transition: transform 0.3s ease;
+}
+.hover-effect img:hover {
+  transform: scale(1.1); 
+  filter: brightness(0.8); 
 }
 </style>
