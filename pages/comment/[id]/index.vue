@@ -1,115 +1,223 @@
 <script setup>
-const hoverStarIndex = ref(0);
+// -------------
 
-const startIndex = ref(0);
+const route = useRoute();
+const id_order = route.params.id;
+const id_customer = useCookie("id_customer");
 
-const hoverStar = (index) => {
-    console.log(index);
-    hoverStarIndex.value = index
+const { data: data_unRateList, error: error_unRateList } = await useTokenFetch(
+  `/comment/getNoCommentOrderIdList/${id_customer.value}`
+);
+
+// console.log("data_unRateList :>> ", data_unRateList.value);
+// console.log("error_unRateList :>> ", error_unRateList.value);
+
+// -------------
+const currentOrder = ref({});
+const { data: data_order, error: error_order } = await useTokenFetch(
+  `/comment/getNoComment/${id_customer.value}/${id_order}`
+);
+
+currentOrder.value = data_order.value.data[0];
+orderTrans();
+// console.log("data_order :>> ", data_order.value);
+// console.log("error_order :>> ", error_order.value);
+console.log("currentOrder.value :>> ", currentOrder.value);
+
+const getOrderDetail = async (id) => {
+  console.log("id :>> ", id);
+  console.log("id_customer.value :>> ", id_customer.value);
+  const { data, error } = await useToken$Fetch(
+    `/comment/getNoComment/${id_customer.value}/${id}`
+  );
+
+  // console.log("data :>> ", data);
+  currentOrder.value = data[0];
+  orderTrans();
+};
+
+function orderTrans() {
+  currentOrder.value.orderProductList.forEach((item) => {
+    item.star = 0;
+    item.hoverStar = 0;
+    item.comment = "";
+  });
 }
+
+// --------------------------------------------
+const { data: data_member, error: error_member } = await useTokenFetch(
+  `/customer/${id_customer.value}`
+);
+if (error_member.value) console.log("error_member.value :>> ", error_member.value);
+const detail_member = data_member.value.data;
+
+// const { data: data_order, error: error_order } = await useTokenFetch(
+//   `/order/${id_order}`
+// );
+
+// console.log("data_order.value :>> ", data_order.value);
+// --------------------------------------------
+const { width: window_width } = useWindowSize();
+
+// -------------
+// const hoverStarIndex = ref(0);
+
+// const startIndex = ref(0);
+
+const hoverStar = (index, item) => {
+  console.log(index);
+  item.hoverStar = index;
+};
 </script>
 
 <template>
-    <div class="evaluate mx-auto container md-flex">
-        <div class="sidebar w-[100%] flex flex-col grid-justify-start grid-items-center md:mt-[100px] md-w-[30%]">
-            <ul class="w-[100%] flex flex-row justify-center b border-1px b-solid text-start md-w-[80%] md:flex-col">
-                <li class="border-b-1px b-b-solid">
-                <a href="#" class="block p-2 hover:bg-[#fdd8bf]">待評價訂單</a>
-                </li>
-                <li class="m-2">
-                    <!-- <span class="block p-2">訂單編號:
-                    </span> -->
-                    <a href="#" class="block p-2 hover:bg-[#fdd8bf]">訂單編號</a>
-                    <a href="#" class="block p-2 hover:bg-[#fdd8bf]">20240615001</a>
-                    <a href="#" class="block p-2 hover:bg-[#fdd8bf]">20240616002</a> 
-                </li>
-               
-            </ul>
-        </div>
-        <div class="w-[100%] md-w-[70%]">
-            <div class="title mb-7.5 mt-[16px] flex items-center justify-center md:mt-[32px]">
-            <!-- <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" /> -->
-                <h1 class="text-2xl">給予評價</h1>
-            </div>
-            <form>
-                <table class="mb-[32px] w-[100%] table-fixed">
-                    <thead>
-                        <tr>
-                        <th>商品資料</th>
-                        <th>評分</th>
-                        <th>內容</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>控味健康肉棒 - 寵物的健康小吃</td>
-                            <td >
-                                <div v-if="startIndex==0" class="flex justify-center flex-items-center">
-                                    <img
-                                    v-for="index in hoverStarIndex" :key="index"
-                                    src="/assets/img/icon/icon-star.svg" alt=""
-                                    @mouseover="hoverStar(index)"
-                                    @click="startIndex=index"
-                                    >
-                                    <img
-                                    v-for="index in (5 - hoverStarIndex)" :key="index"
-                                     src="/assets/img/icon/icon-star-hollow.svg" alt="" 
-                                    @mouseover="hoverStar(index
-                                     + hoverStarIndex)"
-                                    @click="startIndex=(index + hoverStarIndex)">
+  <div class="wrapper mx-auto mb-2rem max-w-1296px w-100%">
+    <aside class="hidden sidebar flex-col items-center lg:(flex)">
+      <p class="">待評價訂單</p>
 
-                                    <!-- <img src="/assets/img/icon/icon-star-hollow.svg" alt="">
-                                    <img src="/assets/img/icon/icon-star-hollow.svg" alt="">
-                                    <img src="/assets/img/icon/icon-star-hollow.svg" alt="">
-                                    <img src="/assets/img/icon/icon-star-hollow.svg" alt="">
-                                    <img src="/assets/img/icon/icon-star-hollow.svg" alt=""> -->
-                                </div>
-                                <div v-else class="flex justify-center flex-items-center">                                    
-                                    <img
-v-for="index in startIndex" :key="index"
-                                        src="/assets/img/icon/icon-star.svg" alt="Star"
-                                        @click="startIndex=index">
-                                    <img
-v-for="index in (5-startIndex)" :key="index"
-                                        src="/assets/img/icon/icon-star-hollow.svg" alt=""
-                                        @click="startIndex=(index+startIndex)"
-                                        >
-                                </div>
-                            </td>
-                            <td>
-                                <textarea id="message" rows="4" class="block w-full border border-gray-300 rounded-lg bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 focus:border-blue-500 dark:bg-gray-700 dark:text-white focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 dark:placeholder-gray-400" placeholder="(選填)請跟我們分享你的評價!"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>GOODIES耐咬型潔</td>
-                            <td >
-                                <div class="flex justify-center flex-items-center">
-                                    <img src="/assets/img/icon/icon-star.svg" alt="">
-                                    <img src="/assets/img/icon/icon-star.svg" alt="">
-                                    <img src="/assets/img/icon/icon-star-hollow.svg" alt="">
-                                </div>
-                            </td>
-                            <td>
-                                <textarea id="message" rows="4" class="block w-full border border-gray-300 rounded-lg bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 focus:border-blue-500 dark:bg-gray-700 dark:text-white focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 dark:placeholder-gray-400" placeholder="(選填)請跟我們分享你的評價!"/>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+      <ul
+        class="mx-auto flex gap-1rem overflow-x-auto px-0.75rem py-0.5rem lg:(w-100% flex-col items-center)"
+      >
+        <template v-for="item in data_unRateList.data" :key="item">
+          <li class="hover:()" @click="getOrderDetail(item)">{{ item }}</li>
+        </template>
+      </ul>
+    </aside>
 
-          <div class="mb-4 flex grid-justify-end grid-items-center">
-            <a
-href="#"
-              class="w-[100px] w-full inline-flex justify-center rounded-md bg-[#191919] px-3 py-2 text-sm text-white font-semibold shadow-sm ring-1 ring-gray-300 ring-inset sm:mt-0 hover:bg-[#484848]"
-              @click.prevent="saveMember">發佈</a>
-          </div>
-            </form>
-        </div>
-    </div>
+    <h1 class="title_h1 mx-auto my-1rem flex justify-center lg:(my-2rem)">給予評價</h1>
+
+    <section
+      class="content_order mx-1rem mb-2rem h-100% flex flex-col overflow-y-auto rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(mb-0 px-1.25rem pb-1rem pt-2.25rem)"
+    >
+      <table>
+        <thead>
+          <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
+            <th
+              class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0 rounded-l-0.25rem text-1rem)"
+              :colspan="window_width < 1024 ? 1 : 2"
+            >
+              商品
+            </th>
+            <th class="hidden lg:(table-cell)">評分</th>
+            <!-- <th class="hidden lg:(table-cell)"></th> -->
+            <th class="hidden lg:(table-cell rounded-r-0.25rem)">內容</th>
+          </tr>
+        </thead>
+
+        <tbody class="">
+          <tr
+            v-for="item in currentOrder.orderProductList"
+            :key="item.productId"
+            class="tbody_tr"
+          >
+            <td class="td_img mr-1rem lg:(min-w-76px)">
+              <img
+                class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
+                :src="item.coverImg"
+                alt="product image"
+              />
+            </td>
+            <td class="td_content">
+              <p class="line-clamp-2">
+                {{ item.productTitle }}
+              </p>
+              <p class="">{{ item.weight }}g</p>
+            </td>
+
+            <td class="td_price flex items-end lg:(table-cell)">
+              <div v-if="!item.star" class="flex justify-center flex-items-center">
+                <img
+                  v-for="index in item.hoverStar"
+                  :key="index"
+                  src="/assets/img/icon/icon-star.svg"
+                  alt=""
+                  @mouseover="hoverStar(index, item)"
+                  @click="item.star = index"
+                />
+                <img
+                  v-for="index in 5 - item.hoverStar"
+                  :key="index"
+                  src="/assets/img/icon/icon-star-hollow.svg"
+                  alt=""
+                  @mouseover="hoverStar(index + item.hoverStar)"
+                  @click="item.star = index + item.hoverStar"
+                />
+              </div>
+              <div v-else class="flex justify-center flex-items-center">
+                <img
+                  v-for="index in item.star"
+                  :key="index"
+                  src="/assets/img/icon/icon-star.svg"
+                  alt="Star"
+                  @click="item.star = index"
+                />
+                <img
+                  v-for="index in 5 - item.star"
+                  :key="index"
+                  src="/assets/img/icon/icon-star-hollow.svg"
+                  alt=""
+                  @click="item.star = index + item.star"
+                />
+              </div>
+            </td>
+
+            <td class="">
+              <textarea
+                rows="4"
+                class="block w-full border border-gray-300 rounded-lg bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 focus:border-blue-500 dark:bg-gray-700 dark:text-white focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 dark:placeholder-gray-400"
+                placeholder="(選填)請跟我們分享你的評價!"
+                maxlength="500"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <button
+      type="button"
+      class="btn_comment ml-auto mr-1rem w-200px transition-[background-color] flex cursor-pointer items-center justify-center rounded-0.25rem px-1rem py-0.75rem font-bold lg:(w-200px) !bg-orange-200 !hover:bg-orange-300"
+    >
+      評價
+    </button>
+
+    <section
+      class="info_order mx-1rem flex flex-col rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(items-center px-1.5rem py-2rem)"
+    >
+      <ul
+        class="list_info flex flex-col gap-1.5rem lg:(max-w-1200px w-100% flex-row justify-between gap-1rem)"
+      >
+        <li>
+          <h3>訂單資訊</h3>
+          <p>訂單編號：{{ currentOrder._id }}</p>
+          <p>訂單日期：{{ $dayjs(currentOrder.createdAt).format("YYYY/MM/DD HH:mm") }}</p>
+          <p>訂單狀態：{{ orderStatusTrans(currentOrder.orderStatus) }}</p>
+        </li>
+
+        <li>
+          <h3>顧客資訊</h3>
+          <p>姓名：{{ detail_member.customerName }}</p>
+          <p>電話號碼：{{ hideMobileNumber(detail_member.phone) }}</p>
+        </li>
+
+        <li>
+          <h3>送貨資訊</h3>
+          <p>收件人：{{ currentOrder.deliveryUserName }}</p>
+          <p>電話號碼：{{ hideMobileNumber(currentOrder.deliveryPhone) }}</p>
+          <p>
+            地址：臺灣
+            {{ currentOrder.deliveryAddress.county }}
+            {{ currentOrder.deliveryAddress.district }}
+            {{ currentOrder.deliveryAddress.address }}
+          </p>
+        </li>
+      </ul>
+    </section>
+  </div>
 </template>
 
 <style scoped>
-
-@media only screen and (max-width: 760px),
+/* @media only screen and (max-width: 760px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
   table,
   thead,
@@ -160,7 +268,150 @@ href="#"
     content: "內容";
     color: #525252;
   }
+} */
+
+.wrapper {
+  @media screen and (min-width: 1024px) {
+    display: grid;
+    grid-template-areas:
+      ". title title title ."
+      ". sidebar content content ."
+      ". sidebar . button ."
+      ". sidebar info info .";
+    grid-template-columns: 1fr 1.5fr 7fr 1.5fr 1fr;
+    /* grid-template-rows: auto; */
+    gap: 1rem 1rem;
+  }
 }
 
+.sidebar {
+  @media screen and (min-width: 1024px) {
+    grid-area: sidebar;
+  }
 
+  > ul {
+    > li {
+      @apply whitespace-nowrap cursor-pointer;
+      @apply hover:(bg-second-200)
+      @apply lg:(flex justify-center w-100% py-0.5rem px-1rem);
+      @apply transition-[background];
+    }
+  }
+}
+
+.title_h1 {
+  font-size: clamp(1.75rem, 7vw, 2.5rem);
+
+  @media screen and (min-width: 1024px) {
+    grid-area: title;
+  }
+}
+
+.content_order {
+  @media screen and (min-width: 1024px) {
+    grid-area: content;
+  }
+}
+
+.info_order {
+  @media screen and (min-width: 1024px) {
+    grid-area: info;
+  }
+
+  .list_info {
+    > li {
+      > h3 {
+        @apply text-1.25rem font-600;
+
+        @media screen and (min-width: 1024px) {
+        }
+      }
+    }
+  }
+}
+
+.btn_comment {
+  @media screen and (min-width: 1024px) {
+    grid-area: button;
+  }
+}
+
+.thead_tr {
+  > th {
+    @apply font-400 pt-1rem pb-0.625rem;
+  }
+}
+
+.tbody_tr {
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "img content content"
+    "img price quantity";
+
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 1rem 0.5rem;
+
+  &:first-of-type {
+    &::before {
+      content: none;
+    }
+  }
+
+  &::before {
+    @apply bg-neutral-200;
+    content: "";
+    position: absolute;
+    top: -0.75rem;
+    left: 0;
+    display: flex;
+    width: 100%;
+    height: 2px;
+  }
+
+  @media screen and (min-width: 640px) {
+    grid-template-areas:
+      "img content content"
+      "img price quantity"
+      "img total total";
+  }
+
+  @media screen and (min-width: 1024px) {
+    display: table-row;
+
+    &::before {
+      content: none;
+    }
+
+    &:not(&:first-of-type) {
+      border-top: 2px solid;
+
+      @apply border-t-neutral-200;
+    }
+  }
+
+  > td {
+    @apply lg:([&:nth-child(1)]-pr-0 px-1rem py-4.5rem);
+  }
+}
+
+.td_img {
+  grid-area: img;
+}
+
+.td_content {
+  grid-area: content;
+}
+
+.td_price {
+  grid-area: price;
+}
+
+.td_amount {
+  grid-area: quantity;
+}
+
+.td_total {
+  grid-area: total;
+}
 </style>

@@ -145,9 +145,12 @@ const goPurchaseOrder = () => {
     (eachProduct) => eachProduct.isChoosed
   );
 
+  console.log("choosedCartArr :>> ", choosedCartArr);
+
   if (choosedCartArr.length > 0) {
     // 有打勾的商品
     storageCart.value = choosedCartArr;
+    console.log("storageCart.value :>> ", storageCart.value);
     navigateTo({ name: "checkout-step1" });
   } else {
     // 沒有打勾的商品

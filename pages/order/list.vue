@@ -69,7 +69,7 @@ const { data: data_orderList } = data_orders.value;
               </p>
             </td>
             <td class="p-0">
-              <NuxtLink :to="`/order/${item._id}`" class="button">操作</NuxtLink>
+              <NuxtLink :to="`/order/${item._id}`" class="button">檢視</NuxtLink>
             </td>
           </tr>
         </tbody>

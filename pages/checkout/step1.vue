@@ -1,7 +1,7 @@
 <script setup>
-import tw_postal_code from "@/assets/json/tw_postal_code.json";
 import { useStoreCheckout } from "@/stores/storeCheckout";
 import { object, string, mixed } from "yup";
+import tw_postal_code from "@/assets/json/tw_postal_code.json";
 
 definePageMeta({ middleware: "need-login" });
 
@@ -45,6 +45,7 @@ const memberSame = () => {
 
 // cart -------
 const data_cart = useCookie("checkout_cart");
+
 cartToParamPost();
 function cartToParamPost() {
   param_post.value.Amt = totalPrice(data_cart.value);
@@ -166,7 +167,7 @@ onUnmounted(() => {
                       class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                       src="@/assets/img/product-1.png"
                       alt="product image"
-                    />
+                    >
                   </td>
                   <td class="td_content">
                     <p class="line-clamp-2">
@@ -265,7 +266,7 @@ onUnmounted(() => {
             type="checkbox"
             name="same_member"
             class="hidden"
-          />
+          >
 
           <SvgIcon
             :name="same_member ? 'checkbox_check' : 'checkbox_empty'"
@@ -372,9 +373,9 @@ onUnmounted(() => {
                   @change="countyChange()"
                 >
                   <option value="" selected disabled hidden>縣市</option>
-                  <template v-for="item in tw_postal_code" :key="item.name">
-                    <option :value="item.name" class="text-neutral-600">
-                      {{ item.name }}
+                  <template v-for="county in tw_postal_code" :key="county.name">
+                    <option :value="county.name" class="text-neutral-600">
+                      {{ county.name }}
                     </option>
                   </template>
                 </VeeField>

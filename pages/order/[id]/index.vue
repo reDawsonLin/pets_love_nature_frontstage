@@ -1,5 +1,5 @@
 <script setup>
-// import { useCookie } from "nuxt/app";
+import { useCookie } from "nuxt/app";
 import Swal from "sweetalert2";
 
 const route = useRoute();
@@ -95,7 +95,7 @@ const { width: window_width } = useWindowSize();
                 class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.coverImg"
                 alt="product image"
-              />
+              >
             </td>
             <td class="td_content">
               <p class="line-clamp-2">
@@ -160,7 +160,7 @@ const { width: window_width } = useWindowSize();
         </button>
 
         <div class="order-1 flex flex-col justify-between gap-1rem lg:(flex-row)">
-          <p class="">喜歡之前購買的商品嗎？<br />給我們一個好評吧！</p>
+          <p class="">喜歡之前購買的商品嗎？<br >給我們一個好評吧！</p>
           <!-- :to="`/evaluate/${detail_order._id}`" -->
           <NuxtLink
             :to="`/comment/${detail_order._id}`"
