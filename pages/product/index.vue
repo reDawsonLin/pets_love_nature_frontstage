@@ -143,7 +143,7 @@ onMounted(async() => {
 
     <div class="sidebar menu w-[100%] flex flex-col grid-justify-start grid-items-center md:mt-[100px] md-w-[30%]">
       <ul
-        class="bg_orange_primary w-[100%] flex flex-row justify-center overflow-scroll text-center md-w-[80%] md:flex-col">
+        class="bg_orange_primary w-[100%] flex flex-row justify-center overflow-y-auto text-center md-w-[80%] md:flex-col">
         <li :class="{'active': searchValue.filterCategory === ''}">
           <a href="#" class="block p-2 text-nowrap hover:bg-[#fdd8bf]" @click.prevent="changeCategory('')">所有商品</a>
         </li>
@@ -239,11 +239,11 @@ id="price" v-model="searchValue.searchText" type="text"
 
         </div>
         <!-- products section -->
-        <div class="grid grid-cols-1 mt-6 gap-x-6 gap-y-10 lg:grid-cols-4 sm:grid-cols-2 xl:gap-x-8">
+        <div class="grid grid-cols-1 mt-6 mb-[36px] gap-x-6 gap-y-10 lg:grid-cols-4 sm:grid-cols-2 xl:gap-x-8">
 
           <div
 v-for="(product) in productData" :key="product._id"
-            class="group product relative border b-rd-2xl pb-4 pl-2 md:pr-2">
+            class="group product relative border b-rd-2xl pb-4 ">
             <div
 v-if="product.product.imageGallery.length > 0"
               class="aspect-h-1 aspect-w-1 lg:aspect-none relative w-full overflow-hidden rounded-md bg-gray-200 lg:h-80 group-hover:opacity-75">
@@ -257,7 +257,7 @@ v-if="product.product.imageGallery.length > 0"
                 <div class="border-rd-8px bg-[#525252] pl-8px pr-8px text-white"> {{ product.weight }}g</div>
               </div>
             </div>
-            <div class="mt-4 flex justify-between">
+            <div class="mt-4 flex justify-between pl-2 pr-2">
               <div>
                 <h3 class="text-sm text-gray-700">
                   <a :href="`/product/${product._id}`">
@@ -274,7 +274,7 @@ v-for="index in Math.floor(product.product.star)" :key="index"
                     src="/assets/img/icon/icon-star.svg" alt="Star">
                   <img v-if="product.product.star % 1 === 0.5" src="/assets/img/icon/icon-star_half.svg" alt="">
                 </div>
-                <div class="hover-effect" @click="addToCart(product)"> 
+                <div class="hover-effect mt-2" @click="addToCart(product)"> 
                   <img src="/assets/img/icon/icon-cart.svg" alt="">
                 </div>
               </div>
@@ -389,5 +389,13 @@ svg {
 }
 .active a {
   background-color: #f9d4bc; 
+}
+::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+body {
+    -ms-overflow-style: none;  /* IE 和 Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 </style>
