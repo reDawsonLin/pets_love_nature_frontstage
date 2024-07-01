@@ -1,5 +1,6 @@
 <script setup>
-import { useCookie } from "nuxt/app";
+// import { useCookie } from "nuxt/app";
+import Swal from "sweetalert2";
 
 const route = useRoute();
 const id_order = route.params.id;
@@ -19,6 +20,26 @@ const { data: data_member, error: error_member } = await useTokenFetch(
 );
 if (error_member.value) console.log("error_member.value :>> ", error_member.value);
 const detail_member = data_member.value.data;
+
+// --------------------------------------------
+const returnOrder = async () => {
+  const result = await Swal.fire({
+    title: "是否確定將此訂單進行退貨處理？",
+    showDenyButton: true,
+    confirmButtonText: "是",
+    denyButtonText: "否",
+  });
+
+  if (result.isConfirmed) {
+    await useToken$Fetch(`/orderStatus`, {
+      method: "PATCH",
+      body: { orderId: id_order, orderStatus: -1 },
+    });
+
+    Swal.fire("退貨申請已送出", "", "success");
+    navigateTo({ name: "order-list" });
+  }
+};
 
 // --------------------------------------------
 const { width: window_width } = useWindowSize();
@@ -74,7 +95,7 @@ const { width: window_width } = useWindowSize();
                 class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.coverImg"
                 alt="product image"
-              >
+              />
             </td>
             <td class="td_content">
               <p class="line-clamp-2">
@@ -127,20 +148,22 @@ const { width: window_width } = useWindowSize();
       </div>
 
       <div
+        v-if="detail_order.orderStatus === 4"
         class="mt-2rem flex flex-col gap-1rem lg:(mb-0 mt-1.5rem flex-row items-start justify-between)"
       >
         <button
           type="button"
           class="transition-[border-color, text-color] order-2 hidden border border-neutral-300 rounded-0.25rem px-1rem pb-0.5rem pt-0.75rem text-neutral-400 lg:(order-1 flex) hover:(border-neutral-400 text-neutral-600)"
+          @click="returnOrder()"
         >
           退貨
         </button>
 
         <div class="order-1 flex flex-col justify-between gap-1rem lg:(flex-row)">
-          <p class="">喜歡之前購買的商品嗎？<br >給我們一個好評吧！</p>
+          <p class="">喜歡之前購買的商品嗎？<br />給我們一個好評吧！</p>
           <!-- :to="`/evaluate/${detail_order._id}`" -->
           <NuxtLink
-            :to="`/evaluate`"
+            :to="`/comment/${detail_order._id}`"
             class="transition-[background-color] flex cursor-pointer items-center justify-center rounded-0.25rem px-1rem py-0.75rem font-bold lg:(w-200px) !bg-orange-200 !hover:bg-orange-300"
           >
             評價

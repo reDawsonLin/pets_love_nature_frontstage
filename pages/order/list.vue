@@ -1,6 +1,8 @@
 <script setup>
 import { useCookie } from "nuxt/app";
 
+definePageMeta({ middleware: "need-login" });
+
 const id_customer = useCookie("id_customer");
 
 const { data: data_orders, error: error_orders } = await useTokenFetch(

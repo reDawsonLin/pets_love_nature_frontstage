@@ -166,7 +166,7 @@ onUnmounted(() => {
                       class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                       src="@/assets/img/product-1.png"
                       alt="product image"
-                    >
+                    />
                   </td>
                   <td class="td_content">
                     <p class="line-clamp-2">
@@ -265,7 +265,7 @@ onUnmounted(() => {
             type="checkbox"
             name="same_member"
             class="hidden"
-          >
+          />
 
           <SvgIcon
             :name="same_member ? 'checkbox_check' : 'checkbox_empty'"
