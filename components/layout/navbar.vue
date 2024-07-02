@@ -79,7 +79,7 @@ const logout = () => {
         </div>
 
         <ul
-          class="flex flex-col gap-1rem px-2.25rem md:(flex-grow-1 flex-row items-center justify-end gap-3rem px-unset)"
+          class="nav_top flex flex-col gap-1rem px-2.25rem md:(flex-grow-1 flex-row items-center justify-end gap-3rem px-unset)"
         >
           <li class="">
             <NuxtLink :to="{ name: 'product' }" @click="closeMobileNav()"
@@ -133,7 +133,7 @@ const logout = () => {
                       class="h-1.75rem w-1.75rem"
                       :src="eachProduct?.imageGallery[0]?.imgUrl"
                       alt="product image"
-                    >
+                    />
                     <p class="flex-nowrap text-0.875rem">
                       {{ eachProduct?.title + eachProduct?.weight }}g
                     </p>
@@ -313,6 +313,17 @@ const logout = () => {
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s;
+    }
+  }
+}
+
+.nav_top {
+  > li {
+    @apply transition-opacity hover:(opacity-90);
+
+
+    .router-link-active {
+      @apply text-rose-400 font-700;
     }
   }
 }
