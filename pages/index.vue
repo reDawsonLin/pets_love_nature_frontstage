@@ -1,6 +1,4 @@
 <script setup>
-
-
 const { width: window_width } = useWindowSize();
 const comment_swiperPerView = computed(() => {
   if (window_width.value < 768) return 1;
@@ -18,52 +16,9 @@ watchEffect(() => {});
 // );
 // console.log("data_commentList.value :>> ", data_commentList.value);
 
-// -------
-const data_banner = [
-  {
-    id: 1,
-    imgUrl: "/img/banner/1.webp",
-    routeLink: "",
-    title: "原型鮮食 頂級饗宴",
-    subtitle: "全人食等級，寵物鮮食新選擇",
-  },
-  {
-    id: 2,
-    imgUrl: "/img/banner/2.webp",
-    routeLink: "",
-    title: "全人食級 寵愛每口",
-    subtitle: "原塊肉品，天然凍乾，保留原味原香",
-  },
-  {
-    id: 3,
-    imgUrl: "/img/banner/3.webp",
-    routeLink: "",
-    title: "毛孩美食 享食天然",
-    subtitle: "鮮食無負擔，原型肉品無添加，寵愛無疆界",
-  },
-  {
-    id: 4,
-    imgUrl: "/img/banner/1.webp",
-    routeLink: "",
-    title: "原型鮮食 頂級饗宴",
-    subtitle: "全人食等級，寵物鮮食新選擇",
-  },
-  {
-    id: 5,
-    imgUrl: "/img/banner/2.webp",
-    routeLink: "",
-    title: "全人食級 寵愛每口",
-    subtitle: "原塊肉品，天然凍乾，保留原味原香",
-  },
-  {
-    id: 6,
-    imgUrl: "/img/banner/3.webp",
-    routeLink: "",
-    title: "毛孩美食 享食天然",
-    subtitle: "鮮食無負擔，原型肉品無添加，寵愛無疆界",
-  },
-];
+const { data: data_banner, error: error_banner } = await useApiFetch("/banner");
 
+// --------------------------------------
 const data_feature = [
   {
     id: 1,
@@ -181,24 +136,26 @@ const data_comment = [
       }"
     >
       <SwiperSlide
-        v-for="banner in data_banner"
-        :key="banner.id"
+        v-for="banner in data_banner?.data"
+        :key="banner._id"
         class="relative pb-5.75rem md:(pb-9rem)"
       >
-        <img
-          :src="banner.imgUrl"
-          alt="banner"
-          class="aspect-350/512 md:(aspect-1760/662 rounded-5rem)"
-          rounded="t-80px b-20px"
-          object="cover center"
-        >
+        <NuxtLink :to="{ name: 'product', query: { searchType: banner.hyperlink } }">
+          <img
+            :src="banner.imgUrl"
+            alt="banner"
+            class="aspect-350/512 md:(aspect-1760/662 rounded-5rem)"
+            rounded="t-80px b-20px"
+            object="cover center"
+          />
 
-        <div
-          class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600 md:(bottom-10.25rem max-w-47rem w-100% rounded-1rem bg-second-200/90)"
-        >
-          <h3 class="text-2rem md:(text-3rem)">{{ banner.title }}</h3>
-          <p class="text-balance md:(text-1.75rem)">{{ banner.subtitle }}</p>
-        </div>
+          <div
+            class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600 md:(bottom-10.25rem max-w-47rem w-100% rounded-1rem bg-second-200/90)"
+          >
+            <h3 class="text-2rem md:(text-3rem)">{{ banner.title }}</h3>
+            <p class="text-balance md:(text-1.75rem)">{{ banner.subtitle }}</p>
+          </div>
+        </NuxtLink>
       </SwiperSlide>
     </Swiper>
   </section>
@@ -355,7 +312,7 @@ const data_comment = [
             :src="comment.avatarUrl"
             alt="avatar"
             class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center md:(w-6.25rem)"
-          >
+          />
           <p>{{ comment.accountName }}</p>
         </div>
       </SwiperSlide>
