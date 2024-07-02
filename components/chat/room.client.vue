@@ -9,13 +9,13 @@ const socket = io("https://pets-love-nature-backend-n.onrender.com/", {
   },
 });
 
-const { data } = await use$Fetch(`chat/getChatHistory/${id_customer.value}`);
 
 const list_chat = ref(null);
 const list_message = ref([]);
 onMounted(async () => {
   socket.emit("join room", { customerId: id_customer.value, role: "client" });
-
+  
+  const { data } = await use$Fetch(`chat/getChatHistory/${id_customer.value}`);
   list_message.value = data[0].messageList;
   await nextTick();
   chatScrollToBottom();

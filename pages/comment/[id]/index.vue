@@ -5,12 +5,11 @@ const route = useRoute();
 const id_order = route.params.id;
 const id_customer = useCookie("id_customer");
 
+const show_pending = ref(true);
+
 const { data: data_unRateList, error: error_unRateList } = await useTokenFetch(
   `/comment/getNoCommentOrderIdList/${id_customer.value}`
 );
-
-// console.log("data_unRateList :>> ", data_unRateList.value);
-// console.log("error_unRateList :>> ", error_unRateList.value);
 
 // -------------
 const currentOrder = ref({});
@@ -19,14 +18,13 @@ const { data: data_order, error: error_order } = await useTokenFetch(
 );
 
 currentOrder.value = data_order.value.data[0];
+
 orderTrans();
-// console.log("data_order :>> ", data_order.value);
-// console.log("error_order :>> ", error_order.value);
-console.log("currentOrder.value :>> ", currentOrder.value);
+onMounted(async () => {});
 
 const getOrderDetail = async (id) => {
-  console.log("id :>> ", id);
-  console.log("id_customer.value :>> ", id_customer.value);
+  // console.log("id :>> ", id);
+  // console.log("id_customer.value :>> ", id_customer.value);
   const { data, error } = await useToken$Fetch(
     `/comment/getNoComment/${id_customer.value}/${id}`
   );
@@ -36,43 +34,119 @@ const getOrderDetail = async (id) => {
   orderTrans();
 };
 
-function orderTrans() {
+async function orderTrans() {
+  show_pending.value = true;
+
   currentOrder.value.orderProductList.forEach((item) => {
     item.star = 0;
     item.hoverStar = 0;
     item.comment = "";
   });
+
+  // step 1 get productInfoId -------
+  for (
+    let index = 0;
+    index < currentOrder.value.orderProductList.length;
+    index++
+  ) {
+    const { data } = await useToken$Fetch(
+      `/product/${currentOrder.value.orderProductList[index].productId}`
+    );
+
+    currentOrder.value.orderProductList[index].productInfoId = data.productId;
+  }
+
+  const list_productInfoId = [];
+  const list_delete = [];
+  const target = currentOrder.value.orderProductList;
+
+  target.forEach((item, index) => {
+    if (!list_productInfoId.includes(item.productInfoId))
+      return list_productInfoId.push(item.productInfoId);
+
+    const firstItem = target.find(
+      (item2) => item2.productInfoId === item.productInfoId
+    );
+
+    firstItem.quantity += item.quantity;
+    firstItem.list_weight = [item.weight];
+    list_delete.push(index);
+  });
+
+  list_delete.sort((a, b) => b - a);
+  list_delete.forEach((num) => target.splice(num, 1));
+
+  show_pending.value = false;
 }
 
 // --------------------------------------------
 const { data: data_member, error: error_member } = await useTokenFetch(
   `/customer/${id_customer.value}`
 );
-if (error_member.value) console.log("error_member.value :>> ", error_member.value);
+if (error_member.value)
+  console.log("error_member.value :>> ", error_member.value);
 const detail_member = data_member.value.data;
 
-// const { data: data_order, error: error_order } = await useTokenFetch(
-//   `/order/${id_order}`
-// );
-
-// console.log("data_order.value :>> ", data_order.value);
 // --------------------------------------------
 const { width: window_width } = useWindowSize();
 
 // -------------
-// const hoverStarIndex = ref(0);
-
-// const startIndex = ref(0);
 
 const hoverStar = (index, item) => {
-  console.log(index);
   item.hoverStar = index;
+  commentEmpty.value = false;
 };
+
+// -------
+const commentEmpty = ref(false);
+const list_promise = ref([]);
+
+const commentSubmit = async () => {
+  list_promise.value = [];
+  // ---
+  let empty = false;
+  currentOrder.value.orderProductList.forEach((item) => {
+    if (!item.star && !item.hoverStar) return (empty = true);
+    if (!item.star && item.hoverStar) item.star = item.hoverStar;
+  });
+  if (empty) return (commentEmpty.value = true);
+
+  const id_currentOrder = currentOrder.value._id;
+
+  currentOrder.value.orderProductList.forEach((item) => {
+    list_promise.value.push(
+      postComment({
+        // productId: item.productId,
+        productId: item.productInfoId,
+        orderId: id_currentOrder,
+        customerId: id_customer.value,
+        star: item.star,
+        quantity: item.quantity,
+        comment: item.comment,
+      })
+    );
+  });
+
+  const res = await Promise.all(list_promise.value);
+  console.log("res :>> ", res);
+
+  // after fetch handle -------
+  navigateTo({ name: "order-list" });
+};
+
+async function postComment(param_post) {
+  return useToken$Fetch(`/comment`, {
+    method: "POST",
+    body: param_post,
+  });
+}
 </script>
 
 <template>
+  <LoadingPending :show="show_pending" />
+
   <div class="wrapper mx-auto mb-2rem max-w-1296px w-100%">
-    <aside class="hidden sidebar flex-col items-center lg:(flex)">
+    <aside class="sidebar hidden flex-col items-center lg:(flex)">
       <p class="">待評價訂單</p>
 
       <ul
@@ -84,14 +158,18 @@ const hoverStar = (index, item) => {
       </ul>
     </aside>
 
-    <h1 class="title_h1 mx-auto my-1rem flex justify-center lg:(my-2rem)">給予評價</h1>
+    <h1 class="title_h1 mx-auto my-1rem flex justify-center lg:(my-2rem)">
+      給予評價
+    </h1>
 
     <section
-      class="content_order mx-1rem mb-2rem h-100% flex flex-col overflow-y-auto rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(mb-0 px-1.25rem pb-1rem pt-2.25rem)"
+      class="content_order mx-1rem mb-1.5rem h-100% flex flex-col overflow-y-auto rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(mb-0 px-1.25rem pb-1rem pt-2.25rem)"
     >
       <table>
         <thead>
-          <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
+          <tr
+            class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)"
+          >
             <th
               class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0 rounded-l-0.25rem text-1rem)"
               :colspan="window_width < 1024 ? 1 : 2"
@@ -115,49 +193,63 @@ const hoverStar = (index, item) => {
                 class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.coverImg"
                 alt="product image"
-              />
+              >
             </td>
             <td class="td_content">
               <p class="line-clamp-2">
                 {{ item.productTitle }}
               </p>
-              <p class="">{{ item.weight }}g</p>
+              <p class="">
+                {{ item.weight }}g
+
+                <template v-if="item?.list_weight?.length">
+                  <span v-for="weight in item.list_weight" class=""
+                    >{{ weight }}g</span
+                  >
+                </template>
+              </p>
             </td>
 
             <td class="td_price flex items-end lg:(table-cell)">
-              <div v-if="!item.star" class="flex justify-center flex-items-center">
+              <div
+                v-if="!item.star"
+                class="box_star flex justify-center flex-items-center"
+              >
                 <img
-                  v-for="index in item.hoverStar"
+                  v-for="index in item?.hoverStar"
                   :key="index"
                   src="/assets/img/icon/icon-star.svg"
                   alt=""
                   @mouseover="hoverStar(index, item)"
                   @click="item.star = index"
-                />
+                >
                 <img
-                  v-for="index in 5 - item.hoverStar"
+                  v-for="index in 5 - item?.hoverStar"
                   :key="index"
                   src="/assets/img/icon/icon-star-hollow.svg"
                   alt=""
-                  @mouseover="hoverStar(index + item.hoverStar)"
+                  @mouseover="hoverStar(index + item.hoverStar, item)"
                   @click="item.star = index + item.hoverStar"
-                />
+                >
               </div>
-              <div v-else class="flex justify-center flex-items-center">
+              <div
+                v-else
+                class="box_star flex justify-center flex-items-center"
+              >
                 <img
                   v-for="index in item.star"
                   :key="index"
                   src="/assets/img/icon/icon-star.svg"
                   alt="Star"
                   @click="item.star = index"
-                />
+                >
                 <img
                   v-for="index in 5 - item.star"
                   :key="index"
                   src="/assets/img/icon/icon-star-hollow.svg"
                   alt=""
                   @click="item.star = index + item.star"
-                />
+                >
               </div>
             </td>
 
@@ -174,12 +266,20 @@ const hoverStar = (index, item) => {
       </table>
     </section>
 
-    <button
-      type="button"
-      class="btn_comment ml-auto mr-1rem w-200px transition-[background-color] flex cursor-pointer items-center justify-center rounded-0.25rem px-1rem py-0.75rem font-bold lg:(w-200px) !bg-orange-200 !hover:bg-orange-300"
+    <div
+      class="btn_comment mb-1.5rem mr-1rem flex flex-col items-end lg:(mb-0)"
     >
-      評價
-    </button>
+      <button
+        type="button"
+        class="transition-[background-color] w-200px flex cursor-pointer items-center justify-center rounded-0.25rem px-1rem py-0.75rem font-bold lg:(w-200px) !bg-orange-200 !hover:bg-orange-300"
+        @click="commentSubmit()"
+      >
+        評價
+      </button>
+      <p v-show="commentEmpty" class="mt-0.25rem text-0.875rem text-rose-400">
+        請點選星星評價後送出
+      </p>
+    </div>
 
     <section
       class="info_order mx-1rem flex flex-col rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(items-center px-1.5rem py-2rem)"
@@ -190,7 +290,11 @@ const hoverStar = (index, item) => {
         <li>
           <h3>訂單資訊</h3>
           <p>訂單編號：{{ currentOrder._id }}</p>
-          <p>訂單日期：{{ $dayjs(currentOrder.createdAt).format("YYYY/MM/DD HH:mm") }}</p>
+          <p>
+            訂單日期：{{
+              $dayjs(currentOrder.createdAt).format("YYYY/MM/DD HH:mm")
+            }}
+          </p>
           <p>訂單狀態：{{ orderStatusTrans(currentOrder.orderStatus) }}</p>
         </li>
 
@@ -413,5 +517,12 @@ const hoverStar = (index, item) => {
 
 .td_total {
   grid-area: total;
+}
+
+/*  */
+.box_star {
+  > img {
+    @apply w-1.75rem cursor-pointer;
+  }
 }
 </style>
