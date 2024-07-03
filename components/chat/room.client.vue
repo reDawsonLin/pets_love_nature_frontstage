@@ -9,12 +9,11 @@ const socket = io("https://pets-love-nature-backend-n.onrender.com/", {
   },
 });
 
-
 const list_chat = ref(null);
 const list_message = ref([]);
 onMounted(async () => {
   socket.emit("join room", { customerId: id_customer.value, role: "client" });
-  
+
   const { data } = await use$Fetch(`chat/getChatHistory/${id_customer.value}`);
   list_message.value = data[0].messageList;
   await nextTick();
@@ -100,6 +99,11 @@ socket.on("admin read", (data) => {
 // });
 // ----------------------------
 const chatMessage = ref("");
+const chatKeydown = (event) => {
+  const key = event.key;
+  if (key === "Enter") sendMessage();
+};
+
 const sendMessage = async () => {
   if (!chatMessage.value || !chatMessage.value.trim()) {
     console.log("empty message");
@@ -167,7 +171,10 @@ const { y: windowScroll } = useWindowScroll();
         class="list_chat h-300px flex flex-col gap-2rem overflow-y-auto p-0.75rem"
       >
         <template v-for="(item, index) in list_message" :key="index">
-          <div class="chat w-80%" :class="item.role === 'client' ? 'client' : 'admin'">
+          <div
+            class="chat w-80%"
+            :class="item.role === 'client' ? 'client' : 'admin'"
+          >
             <p class="message rounded-0.5rem p-0.75rem">
               {{ item.message }}
             </p>
@@ -183,9 +190,9 @@ const { y: windowScroll } = useWindowScroll();
       >
         <input
           v-model="chatMessage"
-          class="w-100% outline-none"
-          @keydown.enter="sendMessage()"
-        >
+          class="w-100% outline-none bg-transparent"
+          @keydown="chatKeydown($event)"
+        />
 
         <SvgIcon
           name="submit"
@@ -199,7 +206,11 @@ const { y: windowScroll } = useWindowScroll();
       class="chat_icon relative h-3.5rem w-3.5rem flex cursor-pointer items-center justify-center rounded-50% bg-rose-500"
       @click="chatRoomToggle()"
     >
-      <SvgIcon v-if="showChatRoom" name="close" class="h-2rem w-2rem text-white" />
+      <SvgIcon
+        v-if="showChatRoom"
+        name="close"
+        class="h-2rem w-2rem text-white"
+      />
       <SvgIcon v-else name="chat" class="h-2rem w-2rem text-white" />
 
       <!-- <span
