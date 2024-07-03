@@ -1,8 +1,6 @@
 <script setup>
 definePageMeta({ middleware: "need-login" });
 
-
-
 const param_post_step1 = useCookie("param_post_step1");
 
 const { data: data_3pay } = await useTokenFetch(`/payment`, {
@@ -15,7 +13,15 @@ const {
   MerchantID,
   PayGateWay,
   Version,
-  ResOrder: { Amt, Email, ItemDesc, MerchantOrderNo, TimeStamp, aesEncrypt, shaEncrypt },
+  ResOrder: {
+    Amt,
+    Email,
+    ItemDesc,
+    MerchantOrderNo,
+    TimeStamp,
+    aesEncrypt,
+    shaEncrypt,
+  },
 } = data_3pay.value.data;
 
 const param_post_3pay = ref({
@@ -24,7 +30,8 @@ const param_post_3pay = ref({
   ItemDesc: "",
   MerchantID: "",
   MerchantOrderNo: "",
-  NotifyUrl: "https://pets-love-nature-backend-n.onrender.com/api/v1/payment_notify",
+  NotifyUrl:
+    "https://pets-love-nature-backend-n.onrender.com/api/v1/payment_notify",
   ReturnUrl: "https://petslovenature-frontstage.onrender.com/checkout/step3",
   TimeStamp: "",
   TradeInfo: "",
@@ -69,6 +76,7 @@ await useTokenFetch(`/shopping_cart`, {
 
 const form_newWeb = ref(null);
 onMounted(() => {
+  cart_checkout.value = null;
   form_newWeb.value.submit();
 });
 </script>
@@ -85,7 +93,7 @@ onMounted(() => {
       class="form_step2 flex flex-col"
     >
       <template v-for="(value, key) in param_post_3pay" :key="key">
-        <input type="text" :name="key" :value="value" >
+        <input type="text" :name="key" :value="value" />
       </template>
 
       <button type="submit">Submit</button>
