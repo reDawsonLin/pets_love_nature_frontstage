@@ -11,10 +11,9 @@ const buyAmount = ref(1);
 const storeCart = useStoreCart();
 const { addCart } = storeCart;
 
-const relatedData = ref([
-]);
-
+const relatedData = ref([]);
 const relatedCategory = ref("");
+const show_pending = ref(true);
 
 
 const productSpecListIndex = ref(0);
@@ -128,23 +127,15 @@ const productsData = ref([
 
 const fetchData = async () => {
   try {
-    const response = await fetch(
-      // `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList?${queryString}`,
-      `https://pets-love-nature-backend-n.onrender.com/api/v1/product/${id}`,
+
+    const result = await use$Fetch(
+      `product/${id}`,
       {
         method: "GET",
       }
+    )
 
-    );
-    if (!response.ok) {
-      // throw new Error("Network response was not ok");
-      const e = new Error("請重新登入");
-      e.name = response.status;
-      throw e;
-
-    }
-    const result = await response.json();
-    console.log('152' , result.data);
+    show_pending.value = false;
     productIDData.value=result.data
     relatedCategory.value=result.data.category[0]
 
@@ -158,32 +149,21 @@ const fetchData = async () => {
 
 const getRelatedData = async() =>{
   try {
-    const response = await fetch(
-      `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList?filterCategory=${relatedCategory.value}`,
+
+    const result = await use$Fetch(
+      `product/getFilterProductList?filterCategory=${relatedCategory.value}`,
       {
         method: "GET",
       }
+    )
 
-    );
-    if (!response.ok) {
-      // throw new Error("Network response was not ok");
-      const e = new Error("請重新登入");
-      e.name = response.status;
-      throw e;
-
-    }
-    const result = await response.json();
-    console.log('170' , result.data);
     relatedData.value=result.data
     
     productsData.value=result.data.content.slice(0, 3);
   } catch (e) {
     console.log(e.message)
     console.log("err", e);
-
   }
-
-
 }
 
 const addToCart = async(product) => {
@@ -249,6 +229,8 @@ onMounted(async() => {
 </script>
 
 <template>
+  <LoadingPending :show="show_pending" />
+
   <div class="bg-white">
     <div class="product mx-auto max-w-4xl px-4 py-16 lg:max-w-7xl lg:px-8 sm:px-6 sm:py-24">
       <div class="header h-auto md:h-[773px]">
@@ -297,7 +279,7 @@ onMounted(async() => {
               <div
                v-for="(item,index) in productIDData.productSpecList"
                :key=index
-               class="mr-4 h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#E5E5E5] pb-[8px] pt-[8px] text-center font-size-[24px] text-black font-200"
+               class="mr-4 h-[45px] w-[100px] flex items-center justify-center b-rd-8px bg-[#E5E5E5] pb-[8px] pt-[8px] text-center font-size-[24px] font-200"
                 :class="{'bg-[#F43F5E] text-white': productSpecListIndex == index,
                         'hover:transform hover:scale-110 hover:bg-opacity-80 transition duration-300': true
                 }"
