@@ -11,9 +11,11 @@ onMounted(() => {
   getTransformCartArray();
 });
 
+
 const store_login = useStoreLogin();
 const { token } = storeToRefs(store_login);
 const { setToken } = store_login;
+const redDotNum = computed(() => cartArr.value?.length <= 99 ? cartArr.value?.length: '99+')
 
 const openMobileNav = () => {
   document.querySelector("body").classList.add("stopScroll");
@@ -105,8 +107,8 @@ const logout = () => {
         >
           <li class="wrapper_icon md:(relative order-2)">
             <NuxtLink
-              :to="token ? { name: 'shopping-cart' } : null"
-              class="flex gap-0.5rem"
+              :to="{ name: 'shopping-cart' }"
+              class="relative flex gap-0.5rem"
               @click="closeMobileNav()"
             >
               <SvgIcon
@@ -114,7 +116,10 @@ const logout = () => {
                 name="cart"
               />
 
-              <p class="md:(hidden)">購物車</p>
+              <p class="md:(hidden)">購物車
+              </p>
+              <div class="red_dot2 absolute left-[70%] h-7 w-7 flex items-center justify-center rounded-full bg-red-500 p-[3px] text-[16px] text-white md:(hidden)">{{ redDotNum }}</div>
+
             </NuxtLink>
 
             <!-- 購物車內容 -->
@@ -133,7 +138,7 @@ const logout = () => {
                       class="h-1.75rem w-1.75rem"
                       :src="eachProduct?.imageGallery[0]?.imgUrl"
                       alt="product image"
-                    />
+                    >
                     <p class="flex-nowrap text-0.875rem">
                       {{ eachProduct?.title + eachProduct?.weight }}g
                     </p>
@@ -157,6 +162,12 @@ const logout = () => {
                 >查看購物車</NuxtLink
               >
             </div>
+
+            <!-- 紅色點點 -->
+            <div class="red_dot absolute left-[60%] top-[-40%] h-7 w-7 flex items-center justify-center rounded-full bg-red-500 p-[3px] text-[16px]">
+              {{ redDotNum }}
+            </div>
+
           </li>
 
           <li class="wrapper_icon md:(relative order-3)">
