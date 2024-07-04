@@ -44,17 +44,17 @@ async function orderTrans() {
   });
 
   // step 1 get productInfoId -------
-  for (
-    let index = 0;
-    index < currentOrder.value.orderProductList.length;
-    index++
-  ) {
-    const { data } = await useToken$Fetch(
-      `/product/${currentOrder.value.orderProductList[index].productId}`
-    );
+  // for (
+  //   let index = 0;
+  //   index < currentOrder.value.orderProductList.length;
+  //   index++
+  // ) {
+  //   const { data } = await useToken$Fetch(
+  //     `/product/${currentOrder.value.orderProductList[index].productId}`
+  //   );
 
-    currentOrder.value.orderProductList[index].productInfoId = data.productId;
-  }
+  //   currentOrder.value.orderProductList[index].productInfoId = data.productId;
+  // }
 
   const list_productInfoId = [];
   const list_delete = [];
