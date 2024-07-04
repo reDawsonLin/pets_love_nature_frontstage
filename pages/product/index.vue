@@ -7,6 +7,7 @@ const route = useRoute();
 
 const storeCart = useStoreCart();
 const { addCart } = storeCart;
+const show_pending = ref(true);
 
 const searchValue = ref({
   onlineStatus: true,
@@ -28,7 +29,6 @@ const pageInfo = ref([]);
 
 
 const fetchData = async () => {
-  // console.log('36' ,searchValue.value);
   try {
     const params = {
       ...searchValue.value,
@@ -36,29 +36,23 @@ const fetchData = async () => {
     }
     const queryString = new URLSearchParams(params).toString()
 
-    const response = await fetch(
-      `https://pets-love-nature-backend-n.onrender.com/api/v1/product/getFilterProductList?${queryString}`,
+    const result = await use$Fetch(
+      `/product/getFilterProductList?${queryString}`,
       {
         method: "GET",
       }
+    )
 
-    );
-    if (!response.ok) {
-      // throw new Error("Network response was not ok");
-      const e = new Error("請重新登入");
-      e.name = response.status;
-      throw e;
-
-    }
-    const result = await response.json();
-
-    // data.value = result.data;
+    show_pending.value = false;
     productData.value = result.data.content
     pageInfo.value = result.data.page
       
-    // console.log(result.data.page);
+
+
     console.log("成功得到產品資訊", result.data);
   } catch (e) {
+    show_pending.value = false;
+
     console.log(e.message)
     console.log("err", e);
 
@@ -139,6 +133,8 @@ onMounted(async() => {
 </script>
 
 <template>
+    <LoadingPending :show="show_pending" />
+
   <div class="products_page md:flex">
 
     <div class="sidebar menu w-[100%] flex flex-col grid-justify-start grid-items-center md:mt-[100px] md-w-[30%]">
@@ -239,11 +235,11 @@ id="price" v-model="searchValue.searchText" type="text"
 
         </div>
         <!-- products section -->
-        <div class="grid grid-cols-1 mt-6 mb-[36px] gap-x-6 gap-y-10 lg:grid-cols-4 sm:grid-cols-2 xl:gap-x-8">
+        <div class="grid grid-cols-1 mb-[36px] mt-6 gap-x-6 gap-y-10 lg:grid-cols-4 sm:grid-cols-2 xl:gap-x-8">
 
           <div
 v-for="(product) in productData" :key="product._id"
-            class="group product relative border b-rd-2xl pb-4 ">
+            class="group product relative border b-rd-2xl pb-4">
             <div
 v-if="product.product.imageGallery.length > 0"
               class="aspect-h-1 aspect-w-1 lg:aspect-none relative w-full overflow-hidden rounded-md bg-gray-200 lg:h-80 group-hover:opacity-75">

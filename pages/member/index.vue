@@ -3,13 +3,16 @@ import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useStoreLogin } from "~/stores/storeLogin";
 
+
 // route middleware -------
 definePageMeta({ middleware: "need-login" });
 
 // 使用 storeLogin
 const store_login = useStoreLogin();
 const { token, id_customer } = storeToRefs(store_login);
-// const { setToken } = store_login;
+
+const show_pending = ref(true);
+
 
 const data = ref({
   customerName: "",
@@ -29,8 +32,8 @@ const data = ref({
 
 
 const fetchData = async () => {
+
   try {
-    // use$Fetch
     const result = await use$Fetch(
       `/customer/${id_customer.value}`,
       {
@@ -41,11 +44,12 @@ const fetchData = async () => {
       }
     )
 
-    // console.log('41' , result);
    
     data.value = result.data;
+    show_pending.value = false;
     console.log("成功得到會員資訊");
   } catch (e) {
+    show_pending.value = false;
     console.log(e.message)
     console.log("err", e);
 
@@ -87,29 +91,19 @@ onMounted(() => {
 </script>
 
 <template>
+  <LoadingPending :show="show_pending" />
+
   <div class="member mx-auto container md-flex">
     <div class="sidebar w-[100%] flex flex-col grid-justify-start grid-items-center md:mt-[100px] md-w-[30%]">
-      <!-- <ul class="w-[100%] flex flex-row justify-center text-center md-w-[80%] md:flex-col">
-        <li class="m-2">
-          <a href="#" class="block p-2 hover:bg-[#fdd8bf]">個人資訊</a>
-        </li>
-        <li class="m-2">
-          <a href="#" class="block p-2 hover:bg-[#fdd8bf]">訂單資訊</a>
-        </li>
-        <li class="m-2">
-          <a href="#" class="block p-2 hover:bg-[#fdd8bf]">收藏商品</a>
-        </li>
-        <li class="m-2">
-          <a href="#" class="block p-2 hover:bg-[#fdd8bf]">聊聊紀錄</a>
-        </li>
-      </ul> -->
+ 
       <SidebarOrder />
     </div>
 
     <div class="w-[100%] md-w-[70%]">
       <div class="title mb-7.5 mt-[16px] flex items-center justify-center md:mt-[32px]">
         <!-- <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" /> -->
-        <h1 class="text-4xl">編輯個人資訊</h1>
+        <h1 class="text-4xl">編輯個人資訊
+        </h1>
       </div>
       <div class="mb-7.5 flex grid-justify-center grid-items-center">
         <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
