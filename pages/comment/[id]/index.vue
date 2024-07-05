@@ -1,4 +1,6 @@
 <script setup>
+import Swal from "sweetalert2";
+
 // -------------
 
 const route = useRoute();
@@ -23,13 +25,10 @@ orderTrans();
 onMounted(async () => {});
 
 const getOrderDetail = async (id) => {
-  // console.log("id :>> ", id);
-  // console.log("id_customer.value :>> ", id_customer.value);
   const { data, error } = await useToken$Fetch(
     `/comment/getNoComment/${id_customer.value}/${id}`
   );
 
-  // console.log("data :>> ", data);
   currentOrder.value = data[0];
   orderTrans();
 };
@@ -114,21 +113,32 @@ const commentSubmit = async () => {
   const id_currentOrder = currentOrder.value._id;
 
   currentOrder.value.orderProductList.forEach((item) => {
-    list_promise.value.push(
-      postComment({
-        // productId: item.productId,
-        productId: item.productInfoId,
-        orderId: id_currentOrder,
-        customerId: id_customer.value,
-        star: item.star,
-        quantity: item.quantity,
-        comment: item.comment,
-      })
-    );
+    const param = {
+      productId: item.productInfoId,
+      orderId: id_currentOrder,
+      customerId: id_customer.value,
+      star: item.star,
+      quantity: item.quantity,
+      comment: item.comment,
+    };
+
+    list_promise.value.push(postComment(param));
   });
 
   const res = await Promise.all(list_promise.value);
-  console.log("res :>> ", res);
+
+  useToken$Fetch(`/orderStatus`, {
+    method: "PATCH",
+    body: { orderId: id_order, orderStatus: 5 },
+  });
+
+  await Swal.fire({
+    // position: "top-end",
+    icon: "success",
+    title: "評價成功!",
+    showConfirmButton: false,
+    timer: 1000,
+  });
 
   // after fetch handle -------
   navigateTo({ name: "order-list" });
@@ -193,7 +203,7 @@ async function postComment(param_post) {
                 class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.coverImg"
                 alt="product image"
-              >
+              />
             </td>
             <td class="td_content">
               <p class="line-clamp-2">
@@ -222,7 +232,7 @@ async function postComment(param_post) {
                   alt=""
                   @mouseover="hoverStar(index, item)"
                   @click="item.star = index"
-                >
+                />
                 <img
                   v-for="index in 5 - item?.hoverStar"
                   :key="index"
@@ -230,7 +240,7 @@ async function postComment(param_post) {
                   alt=""
                   @mouseover="hoverStar(index + item.hoverStar, item)"
                   @click="item.star = index + item.hoverStar"
-                >
+                />
               </div>
               <div
                 v-else
@@ -242,19 +252,20 @@ async function postComment(param_post) {
                   src="/assets/img/icon/icon-star.svg"
                   alt="Star"
                   @click="item.star = index"
-                >
+                />
                 <img
                   v-for="index in 5 - item.star"
                   :key="index"
                   src="/assets/img/icon/icon-star-hollow.svg"
                   alt=""
                   @click="item.star = index + item.star"
-                >
+                />
               </div>
             </td>
 
             <td class="">
               <textarea
+                v-model="item.comment"
                 rows="4"
                 class="block w-full border border-gray-300 rounded-lg bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 focus:border-blue-500 dark:bg-gray-700 dark:text-white focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 dark:placeholder-gray-400"
                 placeholder="(選填)請跟我們分享你的評價!"

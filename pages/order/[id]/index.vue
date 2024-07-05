@@ -4,11 +4,11 @@ import Swal from "sweetalert2";
 
 const route = useRoute();
 const id_order = route.params.id;
+
 const { data: data_order, error: error_order } = await useTokenFetch(
   `/order/${id_order}`
 );
 if (error_order.value) console.log("error_order.value :>> ", error_order.value);
-
 const detail_order = data_order.value.data[0];
 
 console.log("data_order :>> ", data_order.value);
@@ -18,7 +18,8 @@ const id_customer = useCookie("id_customer");
 const { data: data_member, error: error_member } = await useTokenFetch(
   `/customer/${id_customer.value}`
 );
-if (error_member.value) console.log("error_member.value :>> ", error_member.value);
+if (error_member.value)
+  console.log("error_member.value :>> ", error_member.value);
 const detail_member = data_member.value.data;
 
 // --------------------------------------------
@@ -42,6 +43,12 @@ const returnOrder = async () => {
 };
 
 // --------------------------------------------
+const { data: data_comment, error: error_comment } = await useTokenFetch(
+  `/comment/getCommentByOrderId/${id_order}`
+);
+console.log("data_comment.value :>> ", data_comment.value);
+console.log("error_comment.value :>> ", error_comment.value);
+
 const { width: window_width } = useWindowSize();
 </script>
 
@@ -71,9 +78,11 @@ const { width: window_width } = useWindowSize();
     >
       <table>
         <thead>
-          <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
+          <tr
+            class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)"
+          >
             <th
-              class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0 rounded-l-0.25rem text-1rem)"
+              class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-r-0 text-1rem)"
               :colspan="window_width < 1024 ? 1 : 2"
             >
               商品
@@ -95,7 +104,7 @@ const { width: window_width } = useWindowSize();
                 class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.coverImg"
                 alt="product image"
-              >
+              />
             </td>
             <td class="td_content">
               <p class="line-clamp-2">
@@ -122,7 +131,9 @@ const { width: window_width } = useWindowSize();
             </td>
 
             <td class="td_total mt-1.5rem lg:(mt-0) sm:(mt-0.5rem)">
-              <p class="flex items-end justify-end text-rose-500 lg:(justify-center)">
+              <p
+                class="flex items-end justify-end text-rose-500 lg:(justify-center)"
+              >
                 NT$
                 <span class="ml-0.25rem text-1.5rem line-height-120%">{{
                   addThousandPoint(item.price * item.quantity)
@@ -159,8 +170,10 @@ const { width: window_width } = useWindowSize();
           退貨
         </button>
 
-        <div class="order-1 flex flex-col justify-between gap-1rem lg:(flex-row)">
-          <p class="">喜歡之前購買的商品嗎？<br >給我們一個好評吧！</p>
+        <div
+          class="order-1 flex flex-col justify-between gap-1rem lg:(flex-row)"
+        >
+          <p class="">喜歡之前購買的商品嗎？<br />給我們一個好評吧！</p>
           <!-- :to="`/evaluate/${detail_order._id}`" -->
           <NuxtLink
             :to="`/comment/${detail_order._id}`"
@@ -173,6 +186,76 @@ const { width: window_width } = useWindowSize();
     </section>
 
     <section
+      class="content_comment mx-1rem mb-1.5rem h-100% flex flex-col overflow-y-auto rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(mb-0 px-1.25rem pb-1rem pt-2.25rem)"
+    >
+      <table>
+        <thead>
+          <tr
+            class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)"
+          >
+            <th
+              class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-r-0 text-1rem)"
+              :colspan="window_width < 1024 ? 1 : 2"
+            >
+              已評價商品
+            </th>
+            <th class="hidden lg:(table-cell)">評分</th>
+            <th class="hidden lg:(table-cell rounded-r-0.25rem)">內容</th>
+          </tr>
+        </thead>
+
+        <tbody class="">
+          <tr
+            v-for="item in data_comment.data"
+            :key="item.productId"
+            class="tbody_tr tr_comment"
+          >
+            <td class="td_img mr-1rem lg:(min-w-76px)">
+              <img
+                class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
+                :src="item.productId.imageGallery[0].imgUrl"
+                alt="product image"
+              />
+            </td>
+            <td class="td_content">
+              <p class="line-clamp-2">
+                {{ item.productId.title }}
+              </p>
+            </td>
+
+            <td class="td_price flex items-end lg:(table-cell)">
+              <div class="box_star flex justify-center flex-items-center">
+                <img
+                  v-for="index in item.star"
+                  :key="index"
+                  src="/assets/img/icon/icon-star.svg"
+                  alt="Star"
+                />
+                <img
+                  v-for="index in 5 - item.star"
+                  :key="index"
+                  src="/assets/img/icon/icon-star-hollow.svg"
+                  alt=""
+                />
+              </div>
+            </td>
+
+            <td class="">
+              <p class="">{{ item.comment }}</p>
+              <!-- <textarea
+                v-model="item.comment"
+                rows="4"
+                class="block w-full border border-gray-300 rounded-lg bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 focus:border-blue-500 dark:bg-gray-700 dark:text-white focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 dark:placeholder-gray-400"
+                placeholder="(選填)請跟我們分享你的評價!"
+                maxlength="500"
+              /> -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section
       class="info_order mx-1rem flex flex-col rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(items-center px-1.5rem py-2rem)"
     >
       <ul
@@ -181,7 +264,11 @@ const { width: window_width } = useWindowSize();
         <li>
           <h3>訂單資訊</h3>
           <p>訂單編號：{{ detail_order._id }}</p>
-          <p>訂單日期：{{ $dayjs(detail_order.createdAt).format("YYYY/MM/DD HH:mm") }}</p>
+          <p>
+            訂單日期：{{
+              $dayjs(detail_order.createdAt).format("YYYY/MM/DD HH:mm")
+            }}
+          </p>
           <p>訂單狀態：{{ orderStatusTrans(detail_order.orderStatus) }}</p>
         </li>
 
@@ -214,6 +301,7 @@ const { width: window_width } = useWindowSize();
     grid-template-areas:
       ". title title title ."
       ". sidebar content content ."
+      ". sidebar comment comment ."
       ". sidebar info info .";
     grid-template-columns: 1fr 1.5fr 7fr 1.5fr 1fr;
     /* grid-template-rows: auto; */
@@ -250,6 +338,12 @@ const { width: window_width } = useWindowSize();
   }
 }
 
+.content_comment {
+  @media screen and (min-width: 1024px) {
+    grid-area: comment;
+  }
+}
+
 .info_order {
   @media screen and (min-width: 1024px) {
     grid-area: info;
@@ -265,37 +359,6 @@ const { width: window_width } = useWindowSize();
       }
     }
   }
-}
-
-.thead_tr {
-  /* th {
-    @apply lg:(py-0.75rem px-0.5rem);
-  } */
-}
-
-.tbody_tr {
-  /* @apply bg-neutral-100 rounded-0.5rem flex flex-col py-1rem px-0.75rem;
-  @apply hover:(bg-neutral-200);
-  @apply transition-[background];
-
-  @apply lg:(table-row);
-
-  > td {
-    @apply lg:(py-0.75rem px-0.5rem);
-
-    > p {
-      @apply flex gap-0.5rem before:( content-[attr(data-title)]);
-      @apply lg:(justify-center before:(content-empty));
-    }
-  }
-
-  .button {
-    @apply flex justify-center pt-0.5rem pb-0.25rem px-0.5rem rounded-0.25rem bg-neutral-300 mt-0.5rem cursor-pointer;
-    @apply hover:(bg-neutral-400);
-    @apply transition-[background];
-
-    @apply lg:(w-fit  mt-0 mx-auto);
-  } */
 }
 
 .thead_tr {
@@ -350,6 +413,20 @@ const { width: window_width } = useWindowSize();
       border-top: 2px solid;
 
       @apply border-t-neutral-200;
+    }
+  }
+
+  &.tr_comment {
+    @media screen and (max-width: 1023px) {
+      grid-template-columns: 1fr 1fr 1fr;
+
+      grid-template-areas:
+        "img content quantity"
+        "img price quantity";
+    }
+
+    > td {
+      @apply lg:(py-1rem);
     }
   }
 
