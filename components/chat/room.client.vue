@@ -190,9 +190,9 @@ const { y: windowScroll } = useWindowScroll();
       >
         <input
           v-model="chatMessage"
-          class="w-100% outline-none bg-transparent"
+          class="w-100% bg-transparent outline-none"
           @keydown="chatKeydown($event)"
-        />
+        >
 
         <SvgIcon
           name="submit"

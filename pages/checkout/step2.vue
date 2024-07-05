@@ -93,7 +93,7 @@ onMounted(() => {
       class="form_step2 flex flex-col"
     >
       <template v-for="(value, key) in param_post_3pay" :key="key">
-        <input type="text" :name="key" :value="value" />
+        <input type="text" :name="key" :value="value" >
       </template>
 
       <button type="submit">Submit</button>

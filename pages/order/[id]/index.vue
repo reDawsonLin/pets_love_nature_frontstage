@@ -4,15 +4,12 @@ import Swal from "sweetalert2";
 
 const route = useRoute();
 const id_order = route.params.id;
+
 const { data: data_order, error: error_order } = await useTokenFetch(
   `/order/${id_order}`
 );
 if (error_order.value) console.log("error_order.value :>> ", error_order.value);
-
 const detail_order = data_order.value.data[0];
-
-console.log("data_order :>> ", data_order.value);
-console.log("detail_order :>> ", detail_order);
 
 const id_customer = useCookie("id_customer");
 const { data: data_member, error: error_member } = await useTokenFetch(
@@ -42,6 +39,14 @@ const returnOrder = async () => {
 };
 
 // --------------------------------------------
+const { data: data_comment, error: error_comment } = await useTokenFetch(
+  `/comment/getCommentByOrderId/${id_order}`
+);
+
+data_comment.value.data.forEach((item) => {
+  item.star = Math.round(item.star);
+});
+
 const { width: window_width } = useWindowSize();
 </script>
 
@@ -73,7 +78,7 @@ const { width: window_width } = useWindowSize();
         <thead>
           <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
             <th
-              class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-l-0 rounded-l-0.25rem text-1rem)"
+              class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-r-0 text-1rem)"
               :colspan="window_width < 1024 ? 1 : 2"
             >
               商品
@@ -95,7 +100,7 @@ const { width: window_width } = useWindowSize();
                 class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.coverImg"
                 alt="product image"
-              >
+              />
             </td>
             <td class="td_content">
               <p class="line-clamp-2">
@@ -160,8 +165,8 @@ const { width: window_width } = useWindowSize();
         </button>
 
         <div class="order-1 flex flex-col justify-between gap-1rem lg:(flex-row)">
-          <p class="">喜歡之前購買的商品嗎？<br >給我們一個好評吧！</p>
-          <!-- :to="`/evaluate/${detail_order._id}`" -->
+          <p class="">喜歡之前購買的商品嗎？<br />給我們一個好評吧！</p>
+
           <NuxtLink
             :to="`/comment/${detail_order._id}`"
             class="transition-[background-color] flex cursor-pointer items-center justify-center rounded-0.25rem px-1rem py-0.75rem font-bold lg:(w-200px) !bg-orange-200 !hover:bg-orange-300"
@@ -170,6 +175,54 @@ const { width: window_width } = useWindowSize();
           </NuxtLink>
         </div>
       </div>
+    </section>
+
+    <section
+      v-if="detail_order.orderStatus === 5 && data_comment?.data?.length"
+      class="content_comment mx-1rem mb-1.5rem h-100% flex flex-col overflow-y-auto rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(mb-0 px-1.25rem pb-1rem pt-2.25rem)"
+    >
+      <h3
+        class="text-center rounded-0.25rem bg-neutral-200 pb-0.625rem pt-1rem text-1.25rem text-neutral-600 font-400 lg:( rounded-r-0 bg-second-400 text-1rem)"
+      >
+        評價紀錄
+      </h3>
+
+      <ul class="flex flex-col gap-1rem mt-1rem">
+        <template v-for="item in data_comment.data" :key="item.productId">
+          <li class="flex gap-1rem items-center">
+            <div class="flex-shrink-0 w-30% lg:(min-w-76px w-auto pl-1rem)">
+              <img
+                class="object-cover object-center lg:(h-3.75rem w-3.75rem)"
+                :src="item.productId.imageGallery[0].imgUrl"
+                alt="product image"
+              />
+            </div>
+
+            <div class="flex flex-col gap-0.5rem lg:(flex-grow-1 flex-row )">
+              <p class="line-clamp-2 lg:(flex items-center w-100%)">
+                {{ item.productId.title }}
+              </p>
+              <div class="flex lg:(w-100%)">
+                <div class="box_star flex justify-center flex-items-center">
+                  <img
+                    v-for="index in item.star"
+                    :key="index"
+                    src="/assets/img/icon/icon-star.svg"
+                    alt="Star"
+                  />
+                  <img
+                    v-for="index in 5 - item.star"
+                    :key="index"
+                    src="/assets/img/icon/icon-star-hollow.svg"
+                    alt=""
+                  />
+                </div>
+              </div>
+              <p class="lg:(w-300%)">{{ item.comment }}</p>
+            </div>
+          </li>
+        </template>
+      </ul>
     </section>
 
     <section
@@ -214,6 +267,7 @@ const { width: window_width } = useWindowSize();
     grid-template-areas:
       ". title title title ."
       ". sidebar content content ."
+      ". sidebar comment comment ."
       ". sidebar info info .";
     grid-template-columns: 1fr 1.5fr 7fr 1.5fr 1fr;
     /* grid-template-rows: auto; */
@@ -250,6 +304,12 @@ const { width: window_width } = useWindowSize();
   }
 }
 
+.content_comment {
+  @media screen and (min-width: 1024px) {
+    grid-area: comment;
+  }
+}
+
 .info_order {
   @media screen and (min-width: 1024px) {
     grid-area: info;
@@ -265,37 +325,6 @@ const { width: window_width } = useWindowSize();
       }
     }
   }
-}
-
-.thead_tr {
-  /* th {
-    @apply lg:(py-0.75rem px-0.5rem);
-  } */
-}
-
-.tbody_tr {
-  /* @apply bg-neutral-100 rounded-0.5rem flex flex-col py-1rem px-0.75rem;
-  @apply hover:(bg-neutral-200);
-  @apply transition-[background];
-
-  @apply lg:(table-row);
-
-  > td {
-    @apply lg:(py-0.75rem px-0.5rem);
-
-    > p {
-      @apply flex gap-0.5rem before:( content-[attr(data-title)]);
-      @apply lg:(justify-center before:(content-empty));
-    }
-  }
-
-  .button {
-    @apply flex justify-center pt-0.5rem pb-0.25rem px-0.5rem rounded-0.25rem bg-neutral-300 mt-0.5rem cursor-pointer;
-    @apply hover:(bg-neutral-400);
-    @apply transition-[background];
-
-    @apply lg:(w-fit  mt-0 mx-auto);
-  } */
 }
 
 .thead_tr {

@@ -1,4 +1,6 @@
 <script setup>
+import Swal from "sweetalert2";
+
 // -------------
 
 const route = useRoute();
@@ -23,13 +25,10 @@ orderTrans();
 onMounted(async () => {});
 
 const getOrderDetail = async (id) => {
-  // console.log("id :>> ", id);
-  // console.log("id_customer.value :>> ", id_customer.value);
   const { data, error } = await useToken$Fetch(
     `/comment/getNoComment/${id_customer.value}/${id}`
   );
 
-  // console.log("data :>> ", data);
   currentOrder.value = data[0];
   orderTrans();
 };
@@ -44,17 +43,17 @@ async function orderTrans() {
   });
 
   // step 1 get productInfoId -------
-  for (
-    let index = 0;
-    index < currentOrder.value.orderProductList.length;
-    index++
-  ) {
-    const { data } = await useToken$Fetch(
-      `/product/${currentOrder.value.orderProductList[index].productId}`
-    );
+  // for (
+  //   let index = 0;
+  //   index < currentOrder.value.orderProductList.length;
+  //   index++
+  // ) {
+  //   const { data } = await useToken$Fetch(
+  //     `/product/${currentOrder.value.orderProductList[index].productId}`
+  //   );
 
-    currentOrder.value.orderProductList[index].productInfoId = data.productId;
-  }
+  //   currentOrder.value.orderProductList[index].productInfoId = data.productId;
+  // }
 
   const list_productInfoId = [];
   const list_delete = [];
@@ -114,21 +113,32 @@ const commentSubmit = async () => {
   const id_currentOrder = currentOrder.value._id;
 
   currentOrder.value.orderProductList.forEach((item) => {
-    list_promise.value.push(
-      postComment({
-        // productId: item.productId,
-        productId: item.productInfoId,
-        orderId: id_currentOrder,
-        customerId: id_customer.value,
-        star: item.star,
-        quantity: item.quantity,
-        comment: item.comment,
-      })
-    );
+    const param = {
+      productId: item.productInfoId,
+      orderId: id_currentOrder,
+      customerId: id_customer.value,
+      star: item.star,
+      quantity: item.quantity,
+      comment: item.comment,
+    };
+
+    list_promise.value.push(postComment(param));
   });
 
   const res = await Promise.all(list_promise.value);
-  console.log("res :>> ", res);
+
+  useToken$Fetch(`/orderStatus`, {
+    method: "PATCH",
+    body: { orderId: id_order, orderStatus: 5 },
+  });
+
+  await Swal.fire({
+    // position: "top-end",
+    icon: "success",
+    title: "評價成功!",
+    showConfirmButton: false,
+    timer: 1000,
+  });
 
   // after fetch handle -------
   navigateTo({ name: "order-list" });
@@ -255,6 +265,7 @@ async function postComment(param_post) {
 
             <td class="">
               <textarea
+                v-model="item.comment"
                 rows="4"
                 class="block w-full border border-gray-300 rounded-lg bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 focus:border-blue-500 dark:bg-gray-700 dark:text-white focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 dark:placeholder-gray-400"
                 placeholder="(選填)請跟我們分享你的評價!"
