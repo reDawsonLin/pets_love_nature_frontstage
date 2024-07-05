@@ -203,7 +203,7 @@ async function postComment(param_post) {
                 class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.coverImg"
                 alt="product image"
-              />
+              >
             </td>
             <td class="td_content">
               <p class="line-clamp-2">
@@ -232,7 +232,7 @@ async function postComment(param_post) {
                   alt=""
                   @mouseover="hoverStar(index, item)"
                   @click="item.star = index"
-                />
+                >
                 <img
                   v-for="index in 5 - item?.hoverStar"
                   :key="index"
@@ -240,7 +240,7 @@ async function postComment(param_post) {
                   alt=""
                   @mouseover="hoverStar(index + item.hoverStar, item)"
                   @click="item.star = index + item.hoverStar"
-                />
+                >
               </div>
               <div
                 v-else
@@ -252,14 +252,14 @@ async function postComment(param_post) {
                   src="/assets/img/icon/icon-star.svg"
                   alt="Star"
                   @click="item.star = index"
-                />
+                >
                 <img
                   v-for="index in 5 - item.star"
                   :key="index"
                   src="/assets/img/icon/icon-star-hollow.svg"
                   alt=""
                   @click="item.star = index + item.star"
-                />
+                >
               </div>
             </td>
 

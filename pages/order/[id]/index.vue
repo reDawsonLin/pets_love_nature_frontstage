@@ -11,15 +11,11 @@ const { data: data_order, error: error_order } = await useTokenFetch(
 if (error_order.value) console.log("error_order.value :>> ", error_order.value);
 const detail_order = data_order.value.data[0];
 
-console.log("data_order :>> ", data_order.value);
-console.log("detail_order :>> ", detail_order);
-
 const id_customer = useCookie("id_customer");
 const { data: data_member, error: error_member } = await useTokenFetch(
   `/customer/${id_customer.value}`
 );
-if (error_member.value)
-  console.log("error_member.value :>> ", error_member.value);
+if (error_member.value) console.log("error_member.value :>> ", error_member.value);
 const detail_member = data_member.value.data;
 
 // --------------------------------------------
@@ -46,8 +42,10 @@ const returnOrder = async () => {
 const { data: data_comment, error: error_comment } = await useTokenFetch(
   `/comment/getCommentByOrderId/${id_order}`
 );
-console.log("data_comment.value :>> ", data_comment.value);
-console.log("error_comment.value :>> ", error_comment.value);
+
+data_comment.value.data.forEach((item) => {
+  item.star = Math.round(item.star);
+});
 
 const { width: window_width } = useWindowSize();
 </script>
@@ -78,9 +76,7 @@ const { width: window_width } = useWindowSize();
     >
       <table>
         <thead>
-          <tr
-            class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)"
-          >
+          <tr class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)">
             <th
               class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-r-0 text-1rem)"
               :colspan="window_width < 1024 ? 1 : 2"
@@ -131,9 +127,7 @@ const { width: window_width } = useWindowSize();
             </td>
 
             <td class="td_total mt-1.5rem lg:(mt-0) sm:(mt-0.5rem)">
-              <p
-                class="flex items-end justify-end text-rose-500 lg:(justify-center)"
-              >
+              <p class="flex items-end justify-end text-rose-500 lg:(justify-center)">
                 NT$
                 <span class="ml-0.25rem text-1.5rem line-height-120%">{{
                   addThousandPoint(item.price * item.quantity)
@@ -170,11 +164,9 @@ const { width: window_width } = useWindowSize();
           退貨
         </button>
 
-        <div
-          class="order-1 flex flex-col justify-between gap-1rem lg:(flex-row)"
-        >
+        <div class="order-1 flex flex-col justify-between gap-1rem lg:(flex-row)">
           <p class="">喜歡之前購買的商品嗎？<br />給我們一個好評吧！</p>
-          <!-- :to="`/evaluate/${detail_order._id}`" -->
+
           <NuxtLink
             :to="`/comment/${detail_order._id}`"
             class="transition-[background-color] flex cursor-pointer items-center justify-center rounded-0.25rem px-1rem py-0.75rem font-bold lg:(w-200px) !bg-orange-200 !hover:bg-orange-300"
@@ -186,73 +178,51 @@ const { width: window_width } = useWindowSize();
     </section>
 
     <section
+      v-if="detail_order.orderStatus === 5 && data_comment?.data?.length"
       class="content_comment mx-1rem mb-1.5rem h-100% flex flex-col overflow-y-auto rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(mb-0 px-1.25rem pb-1rem pt-2.25rem)"
     >
-      <table>
-        <thead>
-          <tr
-            class="thead_tr bg-neutral-200 text-neutral-600 lg:(bg-second-400)"
-          >
-            <th
-              class="rounded-0.25rem text-1.25rem lg:(w-37% rounded-r-0 text-1rem)"
-              :colspan="window_width < 1024 ? 1 : 2"
-            >
-              已評價商品
-            </th>
-            <th class="hidden lg:(table-cell)">評分</th>
-            <th class="hidden lg:(table-cell rounded-r-0.25rem)">內容</th>
-          </tr>
-        </thead>
+      <h3
+        class="text-center rounded-0.25rem bg-neutral-200 pb-0.625rem pt-1rem text-1.25rem text-neutral-600 font-400 lg:( rounded-r-0 bg-second-400 text-1rem)"
+      >
+        評價紀錄
+      </h3>
 
-        <tbody class="">
-          <tr
-            v-for="item in data_comment.data"
-            :key="item.productId"
-            class="tbody_tr tr_comment"
-          >
-            <td class="td_img mr-1rem lg:(min-w-76px)">
+      <ul class="flex flex-col gap-1rem mt-1rem">
+        <template v-for="item in data_comment.data" :key="item.productId">
+          <li class="flex gap-1rem items-center">
+            <div class="flex-shrink-0 w-30% lg:(min-w-76px w-auto pl-1rem)">
               <img
-                class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
+                class="object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.productId.imageGallery[0].imgUrl"
                 alt="product image"
               />
-            </td>
-            <td class="td_content">
-              <p class="line-clamp-2">
+            </div>
+
+            <div class="flex flex-col gap-0.5rem lg:(flex-grow-1 flex-row )">
+              <p class="line-clamp-2 lg:(flex items-center w-100%)">
                 {{ item.productId.title }}
               </p>
-            </td>
-
-            <td class="td_price flex items-end lg:(table-cell)">
-              <div class="box_star flex justify-center flex-items-center">
-                <img
-                  v-for="index in item.star"
-                  :key="index"
-                  src="/assets/img/icon/icon-star.svg"
-                  alt="Star"
-                />
-                <img
-                  v-for="index in 5 - item.star"
-                  :key="index"
-                  src="/assets/img/icon/icon-star-hollow.svg"
-                  alt=""
-                />
+              <div class="flex lg:(w-100%)">
+                <div class="box_star flex justify-center flex-items-center">
+                  <img
+                    v-for="index in item.star"
+                    :key="index"
+                    src="/assets/img/icon/icon-star.svg"
+                    alt="Star"
+                  />
+                  <img
+                    v-for="index in 5 - item.star"
+                    :key="index"
+                    src="/assets/img/icon/icon-star-hollow.svg"
+                    alt=""
+                  />
+                </div>
               </div>
-            </td>
-
-            <td class="">
-              <p class="">{{ item.comment }}</p>
-              <!-- <textarea
-                v-model="item.comment"
-                rows="4"
-                class="block w-full border border-gray-300 rounded-lg bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 focus:border-blue-500 dark:bg-gray-700 dark:text-white focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 dark:placeholder-gray-400"
-                placeholder="(選填)請跟我們分享你的評價!"
-                maxlength="500"
-              /> -->
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              <p class="lg:(w-300%)">{{ item.comment }}</p>
+            </div>
+          </li>
+        </template>
+      </ul>
     </section>
 
     <section
@@ -264,11 +234,7 @@ const { width: window_width } = useWindowSize();
         <li>
           <h3>訂單資訊</h3>
           <p>訂單編號：{{ detail_order._id }}</p>
-          <p>
-            訂單日期：{{
-              $dayjs(detail_order.createdAt).format("YYYY/MM/DD HH:mm")
-            }}
-          </p>
+          <p>訂單日期：{{ $dayjs(detail_order.createdAt).format("YYYY/MM/DD HH:mm") }}</p>
           <p>訂單狀態：{{ orderStatusTrans(detail_order.orderStatus) }}</p>
         </li>
 
@@ -413,20 +379,6 @@ const { width: window_width } = useWindowSize();
       border-top: 2px solid;
 
       @apply border-t-neutral-200;
-    }
-  }
-
-  &.tr_comment {
-    @media screen and (max-width: 1023px) {
-      grid-template-columns: 1fr 1fr 1fr;
-
-      grid-template-areas:
-        "img content quantity"
-        "img price quantity";
-    }
-
-    > td {
-      @apply lg:(py-1rem);
     }
   }
 
