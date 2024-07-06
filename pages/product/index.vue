@@ -12,7 +12,6 @@ const show_pending = ref(true);
 const searchValue = ref({
   onlineStatus: true,
   searchText: "",
-  sortOrder: "1",
   sortBy: "",
   sortOrder: -1,
   page: 1,
@@ -64,6 +63,8 @@ const fetchData = async () => {
 const changeSort = (sortValue) => {
   if(sortValue == searchValue.value.sortBy){
     searchValue.value.dbclick= true;
+    changeOrder()
+    return
   }else{
     searchValue.value.dbclick= false;
 
@@ -96,14 +97,15 @@ const addToCart = async(product) => {
 
 
 const changeOrder = () =>{
-  console.log('changeOrder' , searchValue.value.sortOrder);
   if(searchValue.value.dbclick === true){
     if(searchValue.value.sortOrder == -1){
     searchValue.value.sortOrder = 1
   }else{
     searchValue.value.sortOrder = -1
+    }
+    fetchData()
   }
-  }
+  console.log('changeOrder' , searchValue.value.sortOrder);
  
 }
 
@@ -166,28 +168,32 @@ onMounted(async() => {
         <div class="bg_orange_primary search_section box-border p-4">
           <div class="w-[100%] flex inline-flex sm:w-[auto]">
           <a
-href="#"
+            href="#"
             class="mr-[8px] box-border w-[calc(25%-8px)] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-[113px] sm:w-auto hover:bg-gray-50"
-            @click.prevent="changeSort('star')">最熱銷</a>
+            :class="{ 'active': searchValue.sortBy === 'salesVolume'  }"
+            @click.prevent="changeSort('salesVolume')">最熱銷</a>
           <a
 href="#"
             class="mr-[8px] box-border w-[calc(25%-8px)] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-[113px] sm:w-auto hover:bg-gray-50"
-            @click.prevent="changeSort('price')">評價最高</a>
+            :class="{ 'active': searchValue.sortBy === 'star'  }"
+            @click.prevent="changeSort('star')">評價最高</a>
           <a
-href="#"
+            href="#"
             class="mr-[8px] box-border w-[calc(25%-8px)] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-[113px] sm:w-auto hover:bg-gray-50"
-            @click.prevent="changeSort('price');changeOrder()"
+            :class="{ 'active': searchValue.sortBy === 'price'  }"
+            @click.prevent="changeSort('price');"
             >
             <svg
-v-if="searchValue.sortOrder == -1 && searchValue.sortBy == 'price' ||  searchValue.sortBy != 'price'" 
+            v-if="searchValue.sortOrder == -1 && searchValue.sortBy == 'price' ||  searchValue.sortBy != 'price'" 
             class="down h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            
               <path
                   fill-rule="evenodd"
                   d="M10 14l-5-5h10l-5 5z"
                   clip-rule="evenodd" />
             </svg>
             <svg
-v-if="searchValue.sortOrder == 1 && searchValue.sortBy == 'price'" 
+            v-if="searchValue.sortOrder == 1 && searchValue.sortBy == 'price'" 
             class="up h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path
                   fill-rule="evenodd"
@@ -195,14 +201,16 @@ v-if="searchValue.sortOrder == 1 && searchValue.sortBy == 'price'"
                   clip-rule="evenodd" />
           </svg>
             價格</a>
+
           <a
-href="#"
+            href="#"
             class="mr-[8px] box-border w-[calc(25%-8px)] inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm text-gray-900 shadow-sm ring-gray-300 ring-inset sm:mt-0 sm:w-[113px] sm:w-auto hover:bg-gray-50"
-            @click.prevent="changeSort('priupdatedAtce');changeOrder()"
+            :class="{ 'active': searchValue.sortBy === 'updatedAt'  }"
+            @click.prevent="changeSort('updatedAt');"
             >
 
             <svg
-v-if="(searchValue.sortOrder == -1 && searchValue.sortBy == 'priupdatedAtce') ||  searchValue.sortBy != 'priupdatedAtce'" 
+v-if="(searchValue.sortOrder == -1 && searchValue.sortBy == 'updatedAt') ||  searchValue.sortBy != 'updatedAt'" 
             class="down h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path
                   fill-rule="evenodd"
@@ -210,7 +218,7 @@ v-if="(searchValue.sortOrder == -1 && searchValue.sortBy == 'priupdatedAtce') ||
                   clip-rule="evenodd" />
             </svg>
             <svg
-v-if="searchValue.sortOrder == 1 && searchValue.sortBy == 'priupdatedAtce'" 
+v-if="searchValue.sortOrder == 1 && searchValue.sortBy == 'updatedAt'" 
             class="up h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path
                   fill-rule="evenodd"
@@ -285,14 +293,13 @@ v-for="index in Math.floor(product.product.star)" :key="index"
           <div class="flex items-center justify-between px-4 py-3 sm:px-6">
             <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center">
               <div class="">
-                <!-- {{ pageInfo }} -->
                 <nav class="isolate inline-flex rounded-md" aria-label="Pagination">
                   <button
                     id="previousPage"
                     type="button"
                     class="relative mr-2 inline-flex items-center rounded-l-md bg-gray-50 bg-white px-2 py-2 text-black ring-gray-300 ring-inset focus:z-20 focus:outline-offset-0"
-                    :disabled="pageInfo.nowPage==1"
-                    :class="{'button_hover_color': pageInfo.nowPage==1}  "
+                    :disabled="pageInfo?.nowPage== 1 "
+                    :class="{'button_hover_color': pageInfo?.nowPage==1}  "
                     @click.prevent="handlePageChange"
                     >
                     <span class="sr-only">Previous</span>
@@ -386,6 +393,10 @@ svg {
 .active a {
   background-color: #f9d4bc; 
 }
+.active {
+  background-color: #d1d5db;
+}
+
 ::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
 }
