@@ -113,6 +113,7 @@ const logout = () => {
 
               <p class="md:(hidden)">購物車</p>
               <div
+                v-show="!!redDotNum"
                 class="red_dot2 absolute left-[70%] h-7 w-7 flex items-center justify-center rounded-full bg-red-500 p-[3px] text-[16px] text-white md:(hidden)"
               >
                 {{ redDotNum }}
@@ -132,7 +133,7 @@ const logout = () => {
                       class="h-1.75rem w-1.75rem"
                       :src="eachProduct?.imageGallery[0]?.imgUrl"
                       alt="product image"
-                    >
+                    />
                     <p class="flex-nowrap text-0.875rem">
                       {{ eachProduct?.title + eachProduct?.weight }}g
                     </p>
@@ -159,6 +160,7 @@ const logout = () => {
 
             <!-- 紅色點點 -->
             <p
+              v-show="!!redDotNum"
               class="red_dot absolute left-[60%] top-[-40%] h-1.5rem w-1.5rem flex items-center justify-center rounded-full bg-red-500 pb-3px pr-1px text-1rem"
             >
               {{ redDotNum }}
