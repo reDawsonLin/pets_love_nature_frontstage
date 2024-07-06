@@ -46,6 +46,10 @@ const shoppingDataArr = ref([]);
 // ]);
 
 onMounted(async () => {
+  //  initial clear -------
+  data_checkoutCart.value = null;
+  sessionStorage.removeItem("checkout_cart");
+
   shoppingDataArr.value = await getTransformCartArray();
 });
 
@@ -142,11 +146,20 @@ const getImage = (eachProduct) => {
 // 去買單 將購物車打勾的內容存到pinia
 const store_cart = useStoreCart();
 const { data_checkoutCart } = storeToRefs(store_cart);
-data_checkoutCart.value = null;
-sessionStorage.removeItem("checkout_cart");
 
+// check about block or not ---
+const id_customer = useCookie("id_customer");
 // const storageCart = useCookie("checkout_cart");
-const goPurchaseOrder = () => {
+const goPurchaseOrder = async () => {
+  // check member block or not --------
+  const { data } = await useToken$Fetch(`/customer/${id_customer.value}`);
+  // console.log("data.value.accountStatus :>> ", data.value.accountStatus);
+  if (!data.accountStatus) {
+    Swal.fire({ text: "無法進入結帳流程，請聯絡小編", icon: "info" });
+    return;
+  }
+
+  // normal process ---
   const choosedCartArr = shoppingDataArr.value.filter(
     (eachProduct) => eachProduct.isChoosed
   );
