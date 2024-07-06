@@ -153,9 +153,8 @@ const id_customer = useCookie("id_customer");
 const goPurchaseOrder = async () => {
   // check member block or not --------
   const { data } = await useToken$Fetch(`/customer/${id_customer.value}`);
-  console.log("data :>> ", data.accountStatus);
   // console.log("data.value.accountStatus :>> ", data.value.accountStatus);
-  if (data.accountStatus === 1) {
+  if (!data.accountStatus) {
     Swal.fire({ text: "無法進入結帳流程，請聯絡小編", icon: "info" });
     return;
   }
