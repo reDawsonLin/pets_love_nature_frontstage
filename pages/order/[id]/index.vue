@@ -100,7 +100,7 @@ const { width: window_width } = useWindowSize();
                 class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.coverImg"
                 alt="product image"
-              />
+              >
             </td>
             <td class="td_content">
               <p class="line-clamp-2">
@@ -165,7 +165,7 @@ const { width: window_width } = useWindowSize();
         </button>
 
         <div class="order-1 flex flex-col justify-between gap-1rem lg:(flex-row)">
-          <p class="">喜歡之前購買的商品嗎？<br />給我們一個好評吧！</p>
+          <p class="">喜歡之前購買的商品嗎？<br >給我們一個好評吧！</p>
 
           <NuxtLink
             :to="`/comment/${detail_order._id}`"
@@ -182,24 +182,24 @@ const { width: window_width } = useWindowSize();
       class="content_comment mx-1rem mb-1.5rem h-100% flex flex-col overflow-y-auto rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(mb-0 px-1.25rem pb-1rem pt-2.25rem)"
     >
       <h3
-        class="text-center rounded-0.25rem bg-neutral-200 pb-0.625rem pt-1rem text-1.25rem text-neutral-600 font-400 lg:( rounded-r-0 bg-second-400 text-1rem)"
+        class="rounded-0.25rem bg-neutral-200 pb-0.625rem pt-1rem text-center text-1.25rem text-neutral-600 font-400 lg:(rounded-r-0 bg-second-400 text-1rem)"
       >
         評價紀錄
       </h3>
 
-      <ul class="flex flex-col gap-1rem mt-1rem">
+      <ul class="mt-1rem flex flex-col gap-1rem">
         <template v-for="item in data_comment.data" :key="item.productId">
-          <li class="flex gap-1rem items-center">
-            <div class="flex-shrink-0 w-30% lg:(min-w-76px w-auto pl-1rem)">
+          <li class="flex items-center gap-1rem">
+            <div class="w-30% flex-shrink-0 lg:(min-w-76px w-auto pl-1rem)">
               <img
                 class="object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.productId.imageGallery[0].imgUrl"
                 alt="product image"
-              />
+              >
             </div>
 
-            <div class="flex flex-col gap-0.5rem lg:(flex-grow-1 flex-row )">
-              <p class="line-clamp-2 lg:(flex items-center w-100%)">
+            <div class="flex flex-col gap-0.5rem lg:(flex-grow-1 flex-row)">
+              <p class="line-clamp-2 lg:(w-100% flex items-center)">
                 {{ item.productId.title }}
               </p>
               <div class="flex lg:(w-100%)">
@@ -209,13 +209,13 @@ const { width: window_width } = useWindowSize();
                     :key="index"
                     src="/assets/img/icon/icon-star.svg"
                     alt="Star"
-                  />
+                  >
                   <img
                     v-for="index in 5 - item.star"
                     :key="index"
                     src="/assets/img/icon/icon-star-hollow.svg"
                     alt=""
-                  />
+                  >
                 </div>
               </div>
               <p class="lg:(w-300%)">{{ item.comment }}</p>

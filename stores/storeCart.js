@@ -325,13 +325,21 @@ export const useStoreCart = defineStore("cart", () => {
       // session storage內沒有購物車資訊
     }
   };
+
+
+  // -------
+  const data_checkoutCart = ref()
+
+
   return {
     cartArr,
+    data_checkoutCart,
     threeCart,
-    getTransformCartArray,
+
     addCart,
-    deleteCart,
     addTestCartNoLogin,
+    deleteCart,
+    getTransformCartArray,
     loginAddCart,
   };
 });

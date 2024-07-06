@@ -1,9 +1,14 @@
 <script setup>
 import tw_postal_code from "@/assets/json/tw_postal_code.json";
 import { useStoreCheckout } from "@/stores/storeCheckout";
+import { useStoreCart } from "~/stores/storeCart";
+
 import { object, string, mixed } from "yup";
 
 definePageMeta({ middleware: "need-login" });
+
+const storeCart = useStoreCart();
+const { data_checkoutCart } = storeToRefs(storeCart);
 
 const store_checkout = useStoreCheckout();
 const { param_post } = storeToRefs(store_checkout);
@@ -44,13 +49,28 @@ const memberSame = () => {
 };
 
 // cart -------
-const data_cart = useCookie("checkout_cart");
-cartToParamPost();
+const data_cart = ref();
+if (import.meta.client) cartToParamPost();
+
 function cartToParamPost() {
-  param_post.value.Amt = totalPrice(data_cart.value);
-  param_post.value.ItemDesc = data_cart.value.map((item) => item.title).join(",");
+  data_cart.value = JSON.parse(sessionStorage.getItem("checkout_cart"));
+
+  let data_source;
+
+  if (data_checkoutCart.value?.length) {
+    if (!data_cart.value) data_cart.value = data_checkoutCart.value;
+
+    data_source = data_checkoutCart.value;
+  } else if (data_cart.value?.length) {
+    data_source = data_cart.value;
+  } else {
+    navigateTo({ name: "shopping-cart" });
+  }
+
+  param_post.value.Amt = totalPrice(data_source);
+  param_post.value.ItemDesc = data_source.map((item) => item.title).join(",");
   param_post.value.userId = id_customer.value;
-  param_post.value.orderProductList = data_cart.value.map((item) => ({
+  param_post.value.orderProductList = data_source.map((item) => ({
     productId: item._id,
     productTitle: item.title,
     price: item.price,

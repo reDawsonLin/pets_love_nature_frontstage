@@ -9,7 +9,7 @@ export const addThousandPoint = (num) => {
 };
 
 export const totalPrice = (cart_array) => {
-  if (!cart_array) return 0;
+  if (!cart_array?.length) return 0;
   let result = null;
 
   cart_array.forEach((item) => {
