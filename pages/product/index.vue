@@ -139,7 +139,7 @@ onMounted(async() => {
 
   <div class="products_page md:flex">
 
-    <div class="sidebar menu w-[100%] flex flex-col grid-justify-start grid-items-center md:mt-[100px] md-w-[30%]">
+    <div class="sidebar menu w-[100%] flex flex-col grid-justify-start grid-items-center md:mt-[32px] md-w-[30%]">
       <ul
         class="bg_orange_primary w-[100%] flex flex-row justify-center overflow-y-auto text-center md-w-[80%] md:flex-col">
         <li :class="{'active': searchValue.filterCategory === ''}">
