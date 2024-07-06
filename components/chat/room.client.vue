@@ -145,7 +145,7 @@ const { y: windowScroll } = useWindowScroll();
 <template>
   <div
     class="fixed bottom-3rem right-0.75rem z-10 flex flex-col items-end gap-1rem opacity-0 transition-opacity md:(right-3vw)"
-    :class="{ 'opacity-100': windowScroll > 200 }"
+    :class="{ 'opacity-100': windowScroll >= 0 }"
   >
     <section
       v-show="showChatRoom"
@@ -171,10 +171,7 @@ const { y: windowScroll } = useWindowScroll();
         class="list_chat h-300px flex flex-col gap-2rem overflow-y-auto p-0.75rem"
       >
         <template v-for="(item, index) in list_message" :key="index">
-          <div
-            class="chat w-80%"
-            :class="item.role === 'client' ? 'client' : 'admin'"
-          >
+          <div class="chat w-80%" :class="item.role === 'client' ? 'client' : 'admin'">
             <p class="message rounded-0.5rem p-0.75rem">
               {{ item.message }}
             </p>
@@ -192,7 +189,7 @@ const { y: windowScroll } = useWindowScroll();
           v-model="chatMessage"
           class="w-100% bg-transparent outline-none"
           @keydown="chatKeydown($event)"
-        >
+        />
 
         <SvgIcon
           name="submit"
@@ -206,11 +203,7 @@ const { y: windowScroll } = useWindowScroll();
       class="chat_icon relative h-3.5rem w-3.5rem flex cursor-pointer items-center justify-center rounded-50% bg-rose-500"
       @click="chatRoomToggle()"
     >
-      <SvgIcon
-        v-if="showChatRoom"
-        name="close"
-        class="h-2rem w-2rem text-white"
-      />
+      <SvgIcon v-if="showChatRoom" name="close" class="h-2rem w-2rem text-white" />
       <SvgIcon v-else name="chat" class="h-2rem w-2rem text-white" />
 
       <!-- <span

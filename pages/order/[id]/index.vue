@@ -10,6 +10,7 @@ const { data: data_order, error: error_order } = await useTokenFetch(
 );
 if (error_order.value) console.log("error_order.value :>> ", error_order.value);
 const detail_order = data_order.value.data[0];
+console.log("detail_order :>> ", detail_order);
 
 const id_customer = useCookie("id_customer");
 const { data: data_member, error: error_member } = await useTokenFetch(
@@ -39,13 +40,19 @@ const returnOrder = async () => {
 };
 
 // --------------------------------------------
-const { data: data_comment, error: error_comment } = await useTokenFetch(
-  `/comment/getCommentByOrderId/${id_order}`
-);
+const data_comment = ref([]);
+if (detail_order.orderStatus >= 5) {
+  const { data, error: error_comment } = await useTokenFetch(
+    `/comment/getCommentByOrderId/${id_order}`
+  );
+  console.log("error_comment :>> ", error_comment.value);
 
-data_comment.value.data.forEach((item) => {
-  item.star = Math.round(item.star);
-});
+  if (data.value) data_comment.value = data.value;
+
+  data_comment.value.data.forEach((item) => {
+    item.star = Math.round(item.star);
+  });
+}
 
 const { width: window_width } = useWindowSize();
 </script>
@@ -62,8 +69,8 @@ const { width: window_width } = useWindowSize();
         <li class="">
           <NuxtLink :to="{ name: 'order-list' }"> 訂單記錄 </NuxtLink>
         </li>
-        <li class="opacity-50">收藏商品</li>
-        <li class="opacity-50">聊聊紀錄</li>
+        <!-- <li class="opacity-50">收藏商品</li>
+        <li class="opacity-50">聊聊紀錄</li> -->
       </ul>
     </aside>
 
@@ -100,7 +107,7 @@ const { width: window_width } = useWindowSize();
                 class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.coverImg"
                 alt="product image"
-              >
+              />
             </td>
             <td class="td_content">
               <p class="line-clamp-2">
@@ -165,7 +172,7 @@ const { width: window_width } = useWindowSize();
         </button>
 
         <div class="order-1 flex flex-col justify-between gap-1rem lg:(flex-row)">
-          <p class="">喜歡之前購買的商品嗎？<br >給我們一個好評吧！</p>
+          <p class="">喜歡之前購買的商品嗎？<br />給我們一個好評吧！</p>
 
           <NuxtLink
             :to="`/comment/${detail_order._id}`"
@@ -177,8 +184,8 @@ const { width: window_width } = useWindowSize();
       </div>
     </section>
 
-      v-if="detail_order.orderStatus === 5 && data_comment?.data?.length"
     <section
+      v-if="detail_order.orderStatus === 5 && data_comment?.data?.length"
       class="content_comment mx-1rem mb-1.5rem h-100% flex flex-col overflow-y-auto rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(mb-0 px-1.25rem pb-1rem pt-2.25rem)"
     >
       <h3
@@ -195,7 +202,7 @@ const { width: window_width } = useWindowSize();
                 class="object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.productId.imageGallery[0].imgUrl"
                 alt="product image"
-              >
+              />
             </div>
 
             <div class="flex flex-col gap-0.5rem lg:(flex-grow-1 flex-row)">
@@ -209,13 +216,13 @@ const { width: window_width } = useWindowSize();
                     :key="index"
                     src="/assets/img/icon/icon-star.svg"
                     alt="Star"
-                  >
+                  />
                   <img
                     v-for="index in 5 - item.star"
                     :key="index"
                     src="/assets/img/icon/icon-star-hollow.svg"
                     alt=""
-                  >
+                  />
                 </div>
               </div>
               <p class="lg:(w-300%)">{{ item.comment }}</p>

@@ -190,12 +190,12 @@ const logout = () => {
                 <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
                   <NuxtLink :to="{ name: 'order-list' }"> 訂單記錄 </NuxtLink>
                 </li>
-                <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
+                <!-- <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
                   收藏商品
                 </li>
                 <li class="cursor-pointer whitespace-nowrap" @click="closeMobileNav()">
                   聊聊紀錄
-                </li>
+                </li> -->
                 <li class="cursor-pointer whitespace-nowrap" @click="logout()">登出</li>
               </template>
             </ul>

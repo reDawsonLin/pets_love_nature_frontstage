@@ -25,8 +25,8 @@ const { data: data_orderList } = data_orders.value;
         <li class="">
           <NuxtLink :to="{ name: 'order-list' }"> 訂單記錄 </NuxtLink>
         </li>
-        <li class="opacity-50">收藏商品</li>
-        <li class="opacity-50">聊聊紀錄</li>
+        <!-- <li class="opacity-50">收藏商品</li>
+        <li class="opacity-50">聊聊紀錄</li> -->
       </ul>
     </aside>
 
