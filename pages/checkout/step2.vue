@@ -1,4 +1,6 @@
 <script setup>
+import { useStoreCart } from "~/stores/storeCart";
+
 definePageMeta({ middleware: "need-login" });
 
 const param_post_step1 = useCookie("param_post_step1");
@@ -13,15 +15,7 @@ const {
   MerchantID,
   PayGateWay,
   Version,
-  ResOrder: {
-    Amt,
-    Email,
-    ItemDesc,
-    MerchantOrderNo,
-    TimeStamp,
-    aesEncrypt,
-    shaEncrypt,
-  },
+  ResOrder: { Amt, Email, ItemDesc, MerchantOrderNo, TimeStamp, aesEncrypt, shaEncrypt },
 } = data_3pay.value.data;
 
 const param_post_3pay = ref({
@@ -30,8 +24,7 @@ const param_post_3pay = ref({
   ItemDesc: "",
   MerchantID: "",
   MerchantOrderNo: "",
-  NotifyUrl:
-    "https://pets-love-nature-backend-n.onrender.com/api/v1/payment_notify",
+  NotifyUrl: "https://pets-love-nature-backend-n.onrender.com/api/v1/payment_notify",
   ReturnUrl: "https://petslovenature-frontstage.onrender.com/checkout/step3",
   TimeStamp: "",
   TradeInfo: "",
@@ -61,22 +54,34 @@ function dataTrans() {
 }
 
 // ------
-const cart_checkout = useCookie("checkout_cart");
+// const cart_checkout = useCookie("checkout_cart");
+
+const storeCart = useStoreCart();
+const { data_checkoutCart } = storeToRefs(storeCart);
+
 const id_customer = useCookie("id_customer");
-await useTokenFetch(`/shopping_cart`, {
-  method: "PATCH",
-  body: {
-    customerId: id_customer.value,
-    shoppingCart: cart_checkout.value.map((item) => ({
-      productSpec: item._id,
-      isChoosed: true,
-    })),
-  },
-});
+
+if (import.meta.client) {
+  let shoppingCart;
+  if (data_checkoutCart.value?.length) shoppingCart = data_checkoutCart.value;
+  else shoppingCart = JSON.parse(sessionStorage.getItem("checkout_cart"));
+
+  await useTokenFetch(`/shopping_cart`, {
+    method: "PATCH",
+    body: {
+      customerId: id_customer.value,
+      shoppingCart: shoppingCart.map((item) => ({
+        productSpec: item._id,
+        isChoosed: true,
+      })),
+    },
+  });
+}
 
 const form_newWeb = ref(null);
 onMounted(() => {
-  cart_checkout.value = null;
+  // cart_checkout.value = null;
+  sessionStorage.removeItem("checkout_cart");
   form_newWeb.value.submit();
 });
 </script>
@@ -93,7 +98,7 @@ onMounted(() => {
       class="form_step2 flex flex-col"
     >
       <template v-for="(value, key) in param_post_3pay" :key="key">
-        <input type="text" :name="key" :value="value" >
+        <input type="text" :name="key" :value="value" />
       </template>
 
       <button type="submit">Submit</button>
