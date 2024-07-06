@@ -14,7 +14,7 @@
         >訂單資訊</NuxtLink
       >
     </li>
-    <li class="pointer-events-none m-2 opacity-50">
+    <!-- <li class="pointer-events-none m-2 opacity-50">
       <NuxtLink :to="{ name: 'member' }" class="block p-2 hover:bg-[#fdd8bf]"
         >收藏收品</NuxtLink
       >
@@ -23,6 +23,6 @@
       <NuxtLink :to="{ name: 'member' }" class="block p-2 hover:bg-[#fdd8bf]"
         >聊聊紀錄</NuxtLink
       >
-    </li>
+    </li> -->
   </ul>
 </template>

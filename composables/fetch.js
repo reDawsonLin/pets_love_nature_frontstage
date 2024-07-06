@@ -29,14 +29,16 @@ export const useToken$Fetch = async (url, options) => {
     },
     onRequestError({ error }) {
       console.log("on request error :>> ", error);
+      return 
     },
     onResponse() {
       // Process the response data
       // console.log("on response");
       // console.log("response :>> ", response);
     },
-    onResponseError({ response }) {
-      console.log("on response error :>> ", response);
+    onResponseError(error) {
+      console.log("on response error :>> ", error);
+      return error
     },
   });
 };
