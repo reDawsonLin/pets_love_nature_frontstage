@@ -133,7 +133,7 @@ const logout = () => {
                       class="h-1.75rem w-1.75rem"
                       :src="eachProduct?.imageGallery[0]?.imgUrl"
                       alt="product image"
-                    />
+                    >
                     <p class="flex-nowrap text-0.875rem">
                       {{ eachProduct?.title + eachProduct?.weight }}g
                     </p>
@@ -167,7 +167,7 @@ const logout = () => {
             </p>
           </li>
 
-          <li class="wrapper_icon md:rel5tive md:(order-3)">
+          <li class="wrapper_icon md:(relative order-3)">
             <div class="mb-0.75rem flex gap-0.5rem md:(mb-unset)">
               <SvgIcon
                 class="h-1.5rem w-1.5rem md:(h-2rem w-2rem cursor-pointer)"

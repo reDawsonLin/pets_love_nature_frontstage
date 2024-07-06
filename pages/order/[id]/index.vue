@@ -177,8 +177,8 @@ const { width: window_width } = useWindowSize();
       </div>
     </section>
 
-    <section
       v-if="detail_order.orderStatus === 5 && data_comment?.data?.length"
+    <section
       class="content_comment mx-1rem mb-1.5rem h-100% flex flex-col overflow-y-auto rounded-0.5rem bg-neutral-50 px-1rem py-1.5rem lg:(mb-0 px-1.25rem pb-1rem pt-2.25rem)"
     >
       <h3
