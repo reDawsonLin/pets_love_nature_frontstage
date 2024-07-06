@@ -7,7 +7,7 @@ const { getTransformCartArray, addCart, deleteCart, addTestCartNoLogin } = store
 const noImgUrl = ref(
   "https://storage.googleapis.com/petstore-3a2e1.appspot.com/images/ecbb5438-43c3-4a9b-9316-f8e8aecc7d15.jpg?GoogleAccessId=firebase-adminsdk-p5zjq%40petstore-3a2e1.iam.gserviceaccount.com&Expires=16756675200&Signature=sU4UW2CPGkhBDRGf4ncTUXeN%2B5YVxIOdHuVOMxIeDg%2FtxZ6pEIuElGuz1CM14yBtyXO4BvkreykJkUuqS80Bbf%2FUJIyHESkJrNbepEbcVrZBTrX7SLdOZFrQYD86SB%2B7AoXt3JQ43%2BcRTGZki%2FAgdAmd1nqtI2b2F3PipzkWHhitUjdcruJpSsbPSTQwkUfC46B2Pv%2FzxPHrdx6kyFgoICYy21zFhxj7x3DcJq%2Ftj28gUP%2BCeTElNKUMVyWKPyvmBP76XWy8JLWGBs43uJFOuwmjxu4yfk0vc9L8GM%2Bu9PDFLRBrfBlJ30knbCIHHIBeKCDSkpgLb2ZJJhZ888r4GQ%3D%3D"
 );
-const storageCart = useCookie("checkout_cart");
+
 const shoppingDataArr = ref([]);
 // console.log('token11', token.value);
 //   console.log('id_customer11', id_customer.value);
@@ -140,17 +140,23 @@ const getImage = (eachProduct) => {
 };
 
 // 去買單 將購物車打勾的內容存到pinia
+const store_cart = useStoreCart();
+const { data_checkoutCart } = storeToRefs(store_cart);
+data_checkoutCart.value = null;
+sessionStorage.removeItem("checkout_cart");
+
+// const storageCart = useCookie("checkout_cart");
 const goPurchaseOrder = () => {
   const choosedCartArr = shoppingDataArr.value.filter(
     (eachProduct) => eachProduct.isChoosed
   );
 
-  console.log("choosedCartArr :>> ", choosedCartArr);
-
   if (choosedCartArr.length > 0) {
     // 有打勾的商品
-    storageCart.value = choosedCartArr;
-    console.log("storageCart.value :>> ", storageCart.value);
+
+    sessionStorage.setItem("checkout_cart", JSON.stringify(choosedCartArr));
+    data_checkoutCart.value = choosedCartArr;
+
     navigateTo({ name: "checkout-step1" });
   } else {
     // 沒有打勾的商品
