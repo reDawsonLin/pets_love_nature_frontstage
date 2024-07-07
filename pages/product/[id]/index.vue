@@ -484,7 +484,7 @@ onMounted(async() => {
               <div class="w-[70%] flex items-center sm:w-[35%]">
                 <div class="triangle"/>
                 <div class="radius-square p-[48px]">
-                  <span>超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️ </span>
+                  <span>出貨速度很快，包裝很完整 </span>
                   <br >
                   <span class="text-[#A3A3A3]">2024-05-13 10:10</span>
                 </div>
@@ -495,7 +495,7 @@ onMounted(async() => {
               <div class="hidden w-[70%] flex items-center sm:w-[35%] sm:inline-flex">
                 <div class="triangle hidden sm:inline-flex"/>
                 <div class="radius-square hidden flex-col p-[48px] sm:flex sm:inline-flex">
-                  <span>乾蝦❤️乾蝦❤️乾蝦❤️乾蝦❤️ </span>
+                  <span>乾蝦❤️乾蝦❤️ </span>
                   <br >
                   <span class="text-[#A3A3A3]">2024-05-14 21:10</span>
                 </div>
@@ -547,20 +547,18 @@ onMounted(async() => {
           <div class="mb-[48px] h-[50px] bg-[#E5E5E5] px-[16px] py-[8px] font-size-[24px] text-[#525252] font-200">
             相關商品
           </div>
-          <!-- test -->
           <!-- <div class="grid grid-cols-1 mt-6 gap-x-6 gap-y-10 lg:grid-cols-4 sm:grid-cols-2 xl:gap-x-8"> -->
-          <div class="grid grid-cols-3 mt-6 gap-x-6 gap-y-10">
-
+          <div class="grid grid-cols-1 mt-6 gap-x-6 gap-y-10 sm:grid-cols-3">
             <div
               v-for="(product) in productsData" :key="product._id"
-              class="group product relative border b-rd-2xl pb-4 pl-2 pr-2">
+              class="group product relative border b-rd-2xl pb-4">
               <div
                 v-if="product.product.imageGallery.length > 0"
-                class="aspect-h-1 aspect-w-1 lg:aspect-none relative w-full overflow-hidden rounded-md bg-gray-200 lg:h-80 group-hover:opacity-75">
+                class="aspect-h-1 aspect-w-1 lg:aspect-none relative w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75">
                 <img
                   :src="product.product.imageGallery[0].imgUrl.trim()"
                   :alt="product.product.imageGallery[0].altText"
-                  class="h-full w-full object-cover object-center lg:h-full lg:w-full">
+                  class="h-[300px] h-full w-full object-cover object-center">
                 <div class="absolute right-2 top-2">
                   <!-- <img src="/assets/img/icon/icon-favorite.svg" alt=""> -->
                 </div>
@@ -568,7 +566,7 @@ onMounted(async() => {
                   <div class="border-rd-8px bg-[#525252] pl-8px pr-8px text-white"> {{ product.weight }}g</div>
                 </div>
               </div>
-              <div class="mt-4 flex justify-between">
+              <div class="mt-4 flex justify-between pl-2 pr-2">
                 <div>
                   <h3 class="text-sm text-gray-700">
                     <a href="">

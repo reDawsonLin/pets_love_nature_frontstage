@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useStoreLogin } from "~/stores/storeLogin";
+import Swal from 'sweetalert2'
 
 
 // route middleware -------
@@ -78,7 +79,13 @@ const postFetchData = async (data) => {
       }
     )
     console.log(response);
-    alert("儲存成功");
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "儲存成功",
+      showConfirmButton: false,
+      timer: 1500
+    });
   } catch (e) {
     alert("儲存失敗");
     console.log("err", e);
