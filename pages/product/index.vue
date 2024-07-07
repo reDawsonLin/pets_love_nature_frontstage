@@ -250,10 +250,10 @@ v-for="(product) in productData" :key="product._id"
             class="group product relative border b-rd-2xl pb-4">
             <div
 v-if="product.product.imageGallery.length > 0"
-              class="aspect-h-1 aspect-w-1 lg:aspect-none relative w-full overflow-hidden rounded-md bg-gray-200 lg:h-80 group-hover:opacity-75">
+              class="aspect-h-1 aspect-w-1 lg:aspect-none relative w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75">
               <img
 :src="product.product.imageGallery[0].imgUrl.trim()" :alt="product.product.imageGallery[0].altText"
-                class="h-full w-full object-cover object-center lg:h-full lg:w-full">
+                class="h-[300px] h-full w-full object-cover object-center">
               <div class="absolute right-2 top-2">
                 <!-- <img src="/assets/img/icon/icon-favorite.svg" alt=""> -->
               </div>
