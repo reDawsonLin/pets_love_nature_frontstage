@@ -179,7 +179,7 @@ const goPurchaseOrder = async () => {
 <template>
   <div class="shopping_cart grow">
     <div p="t-3.75rem" class="title mb-7.5 flex items-center justify-center">
-      <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" />
+      <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" >
       <h1 class="text-4xl">購物車</h1>
     </div>
     <div
@@ -236,7 +236,7 @@ const goPurchaseOrder = async () => {
                 class="operate_div ml-auto h-8 w-10 flex cursor-pointer items-center justify-center rounded-sm"
                 @click="deleteProduct(i, eachProduct)"
               >
-                <img src="/assets/img/garbage_can.png" alt="" />
+                <img src="/assets/img/garbage_can.png" alt="" >
               </div>
             </div>
             <div class="product mb-6 flex items-center pl-2 pt-3">
@@ -289,7 +289,7 @@ const goPurchaseOrder = async () => {
                     class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                     @click="productQuantityChange(i, -1)"
                   >
-                    <img class="minus" src="/assets/img/minus.png" alt="" />
+                    <img class="minus" src="/assets/img/minus.png" alt="" >
                   </div>
 
                   <input
@@ -297,12 +297,12 @@ const goPurchaseOrder = async () => {
                     type="number"
                     :value="eachProduct.quantity"
                     @input="productQuantityInput(eachProduct, $event)"
-                  />
+                  >
                   <div
                     class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                     @click="productQuantityChange(i, 1)"
                   >
-                    <img class="plus" src="/assets/img/plus.png" alt="" />
+                    <img class="plus" src="/assets/img/plus.png" alt="" >
                   </div>
                 </div>
               </div>
@@ -372,7 +372,7 @@ const goPurchaseOrder = async () => {
                   class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                   @click="productQuantityChange(i, -1)"
                 >
-                  <img class="minus" src="/assets/img/minus.png" alt="" />
+                  <img class="minus" src="/assets/img/minus.png" alt="" >
                 </div>
 
                 <input
@@ -380,12 +380,12 @@ const goPurchaseOrder = async () => {
                   type="number"
                   :value="eachProduct.quantity"
                   @input="productQuantityInput(eachProduct, $event)"
-                />
+                >
                 <div
                   class="icon_div min-h-6 min-w-6 flex cursor-pointer items-center justify-center"
                   @click="productQuantityChange(i, 1)"
                 >
-                  <img class="plus" src="/assets/img/plus.png" alt="" />
+                  <img class="plus" src="/assets/img/plus.png" alt="" >
                 </div>
               </div>
             </div>
@@ -405,7 +405,7 @@ const goPurchaseOrder = async () => {
                 class="operate_div_pc h-8 w-10 flex cursor-pointer items-center justify-center"
                 @click="deleteProduct(i, eachProduct)"
               >
-                <img src="/assets/img/garbage_can.png" alt="" />
+                <img src="/assets/img/garbage_can.png" alt="" >
               </div>
             </div>
           </div>
@@ -426,7 +426,7 @@ const goPurchaseOrder = async () => {
             class="go_shop mx-auto h-15 w-11/12 flex cursor-pointer items-center justify-center rounded lg:mx-0 lg:mr-4 lg:h-16 lg:w-64"
             @click="goPurchaseOrder"
           >
-            <img class="mr-3" src="/assets/img/card.png" alt="" />
+            <img class="mr-3" src="/assets/img/card.png" alt="" >
             <span class="text-xl color-white">去買單</span>
           </div>
         </div>
