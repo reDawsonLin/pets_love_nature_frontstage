@@ -107,7 +107,7 @@ const { width: window_width } = useWindowSize();
                 class="h-100% object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.coverImg"
                 alt="product image"
-              />
+              >
             </td>
             <td class="td_content">
               <p class="line-clamp-2">
@@ -172,7 +172,7 @@ const { width: window_width } = useWindowSize();
         </button>
 
         <div class="order-1 flex flex-col justify-between gap-1rem lg:(flex-row)">
-          <p class="">喜歡之前購買的商品嗎？<br />給我們一個好評吧！</p>
+          <p class="">喜歡之前購買的商品嗎？<br >給我們一個好評吧！</p>
 
           <NuxtLink
             :to="`/comment/${detail_order._id}`"
@@ -202,7 +202,7 @@ const { width: window_width } = useWindowSize();
                 class="object-cover object-center lg:(h-3.75rem w-3.75rem)"
                 :src="item.productId.imageGallery[0].imgUrl"
                 alt="product image"
-              />
+              >
             </div>
 
             <div class="flex flex-col gap-0.5rem lg:(flex-grow-1 flex-row)">
@@ -216,13 +216,13 @@ const { width: window_width } = useWindowSize();
                     :key="index"
                     src="/assets/img/icon/icon-star.svg"
                     alt="Star"
-                  />
+                  >
                   <img
                     v-for="index in 5 - item.star"
                     :key="index"
                     src="/assets/img/icon/icon-star-hollow.svg"
                     alt=""
-                  />
+                  >
                 </div>
               </div>
               <p class="lg:(w-300%)">{{ item.comment }}</p>
