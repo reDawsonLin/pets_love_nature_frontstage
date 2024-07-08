@@ -18,8 +18,7 @@ watchEffect(() => {});
 
 const { data: data_banner, error: error_banner } = await useApiFetch("/banner");
 const toRoute = (item) => {
-  if (item.hyperlink)
-    return { name: "product", query: { searchType: item.hyperlink } };
+  if (item.hyperlink) return { name: "product", query: { searchType: item.hyperlink } };
   else return { name: "product" };
 };
 
@@ -103,24 +102,21 @@ const data_hotProduct = [
 const data_comment = [
   {
     id: 1,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-1.webp",
   },
   {
     id: 2,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-2.webp",
   },
   {
     id: 3,
-    content:
-      "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
+    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
     createdTime: "2024-01-22 21:10",
     accountName: "p*****6",
     avatarUrl: "/img/home-4-3.webp",
@@ -131,10 +127,7 @@ const data_comment = [
 <template>
   <!-- <button type="button" @click="fetchOrder">fetch order</button> -->
 
-  <section
-    class="banner_list flex-grow-1 bg-second-200"
-    p="x-0.75rem t-1.25rem"
-  >
+  <section class="banner_list flex-grow-1 bg-second-200" p="x-0.75rem t-1.25rem">
     <Swiper
       class="md:(max-w-1760px w-100%)"
       space-between="12"
@@ -174,18 +167,14 @@ const data_comment = [
   <section
     class="brand_info md:([background-repeat:no-repeat,_no-repeat,_repeat] flex justify-center gap-4.875rem bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)])"
   >
-    <header
-      class="mb-1rem flex flex-col items-center md:(gap-4.5rem pt-7.5rem)"
-    >
+    <header class="mb-1rem flex flex-col items-center md:(gap-4.5rem pt-7.5rem)">
       <SvgIcon name="logo_pink" class="w-5rem md:(order-2 w-19.25rem)" />
       <h3 class="md:(order-1 text-3rem)">Brand 特色</h3>
     </header>
 
     <ul class="box_feature grid grid-cols-2 md:(gap-x-1.5rem)">
       <template v-for="feature in data_feature" :key="feature.id">
-        <li
-          class="feature px-0.75rem py0.5rem text-center text-neutral-800 md:(p-3rem)"
-        >
+        <li class="feature px-0.75rem py0.5rem text-center text-neutral-800 md:(p-3rem)">
           <div
             class="wrapper_icon 107,0.3)] shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148, mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem md:(rounded-4.5rem p-5rem)"
           >
@@ -199,9 +188,7 @@ const data_comment = [
   </section>
 
   <section class="product_category" p="x-0.75rem t-2rem b-4rem md:(y-7.5rem)">
-    <ul
-      class="flex flex-col gap-1.5rem md:(flex-row justify-center gap-7.5rem)"
-    >
+    <ul class="flex flex-col gap-1.5rem md:(flex-row justify-center gap-7.5rem)">
       <li
         v-for="category in data_category"
         :key="category.id"
@@ -243,9 +230,7 @@ const data_comment = [
     class="product_suggest relative rounded-2.5rem bg-second-200"
     p="x-0.75rem y-2.5rem md:(y-7.5rem)"
   >
-    <header
-      class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)"
-    >
+    <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
       <h2 class="mb-3rem text-center md:(mb-0)">熱銷商品</h2>
 
       <ClientOnly>
@@ -263,20 +248,18 @@ const data_comment = [
       class="mb-3rem flex flex-col items-center gap-1rem md:(mx-auto mb-unset max-w-1296px flex-row gap-1.5rem)"
     >
       <template v-for="product in data_hotProduct" :key="product.id">
-        <li
-          class="group relative aspect-1/1 w-100% rounded-2rem transition-shadow md:(aspect-416/580)"
-          :class="product.bg_url"
-          bg="center cover"
-          hover:shadow-md
-        >
+        <li class="aspect-1/1 w-100% md:(aspect-416/580)">
           <NuxtLink
             :to="product.routeUrl"
-            class="transition-property-background absolute bottom-3rem left-50% w-fit translate-x--50% whitespace-nowrap rounded-5rem bg-neutral-50 text-2rem transition-duration-100 transition-ease-linear transition-property-(color transform) group-hover:(translate-y--1rem bg-neutral-800 text-neutral-50)"
-            p="x-3rem y-0.75rem"
+            class="product_hot group flex w-100% h-100% relative rounded-2rem bg-center bg-[length:100%] hover:(shadow-md bg-[length:110%])"
+            :class="product.bg_url"
           >
-            <!-- transition-property="color" -->
-            {{ product.product_type }}</NuxtLink
-          >
+            <p
+              class="transition-property-background absolute px-3rem py-0.75rem bottom-3rem left-50% w-fit translate-x--50% whitespace-nowrap rounded-5rem bg-neutral-50 text-2rem transition-duration-100 transition-ease-linear transition-property-(color transform) group-hover:(translate-y--1rem bg-neutral-800 text-neutral-50)"
+            >
+              {{ product.product_type }}
+            </p>
+          </NuxtLink>
         </li>
       </template>
     </ul>
@@ -290,9 +273,7 @@ const data_comment = [
   </section>
 
   <section class="comment_list" p=" y-4rem">
-    <header
-      class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)"
-    >
+    <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
       <h2 class="mb-3rem text-center md:(mb-0)">熱烈好評</h2>
 
       <ButtonMore
@@ -397,6 +378,10 @@ const data_comment = [
 
   /* md:( before:(content-empty flex absolute left-0 bottom-0 bg-[url('@/assets/img/home-2-3.webp')] w-556px h-362px border border-red-7 ) after:(content-empty flex w-1rem h-1rem absolute border-red-700 border) )"
     p="x-0.75rem y-3rem */
+}
+
+.product_hot {
+  transition: background-size 0.3s ease, shadow 0.3s ease;
 }
 
 .comment_list :deep(.swiper-pagination) {
