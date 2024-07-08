@@ -151,7 +151,7 @@ const data_comment = [
             class="aspect-350/512 md:(aspect-1760/662 rounded-5rem)"
             rounded="t-80px b-20px"
             object="cover center"
-          />
+          >
 
           <div
             class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600 md:(bottom-10.25rem max-w-47rem w-100% rounded-1rem bg-second-200/90)"
@@ -176,7 +176,7 @@ const data_comment = [
       <template v-for="feature in data_feature" :key="feature.id">
         <li class="feature px-0.75rem py0.5rem text-center text-neutral-800 md:(p-3rem)">
           <div
-            class="wrapper_icon 107,0.3)] shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148, mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem md:(rounded-4.5rem p-5rem)"
+            class="107,0.3)] wrapper_icon shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148, mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem md:(rounded-4.5rem p-5rem)"
           >
             <SvgIcon :name="feature.iconName" class="w-5rem md:(w-10rem)" />
           </div>
@@ -251,11 +251,11 @@ const data_comment = [
         <li class="aspect-1/1 w-100% md:(aspect-416/580)">
           <NuxtLink
             :to="product.routeUrl"
-            class="product_hot group flex w-100% h-100% relative rounded-2rem bg-center bg-[length:100%] hover:(shadow-md bg-[length:110%])"
+            class="group product_hot relative h-100% w-100% flex rounded-2rem bg-[length:100%] bg-center hover:(bg-[length:110%] shadow-md)"
             :class="product.bg_url"
           >
             <p
-              class="transition-property-background absolute px-3rem py-0.75rem bottom-3rem left-50% w-fit translate-x--50% whitespace-nowrap rounded-5rem bg-neutral-50 text-2rem transition-duration-100 transition-ease-linear transition-property-(color transform) group-hover:(translate-y--1rem bg-neutral-800 text-neutral-50)"
+              class="transition-property-background absolute bottom-3rem left-50% w-fit translate-x--50% whitespace-nowrap rounded-5rem bg-neutral-50 px-3rem py-0.75rem text-2rem transition-duration-100 transition-ease-linear transition-property-(color transform) group-hover:(translate-y--1rem bg-neutral-800 text-neutral-50)"
             >
               {{ product.product_type }}
             </p>
@@ -314,7 +314,7 @@ const data_comment = [
             :src="comment.avatarUrl"
             alt="avatar"
             class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center md:(w-6.25rem)"
-          />
+          >
           <p>{{ comment.accountName }}</p>
         </div>
       </SwiperSlide>

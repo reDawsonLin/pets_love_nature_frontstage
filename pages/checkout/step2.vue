@@ -1,22 +1,18 @@
 <script setup>
 import { useStoreCart } from "~/stores/storeCart";
+import { useStoreCheckout } from "@/stores/storeCheckout";
 
 definePageMeta({ middleware: "need-login" });
 
-const param_post_step1 = useCookie("param_post_step1");
+const storeCart = useStoreCart();
+const { data_checkoutCart } = storeToRefs(storeCart);
 
-const { data: data_3pay } = await useTokenFetch(`/payment`, {
-  method: "POST",
-  body: param_post_step1.value,
-});
-param_post_step1.value = null;
+const store_checkout = useStoreCheckout();
+const { param_post } = storeToRefs(store_checkout);
 
-const {
-  MerchantID,
-  PayGateWay,
-  Version,
-  ResOrder: { Amt, Email, ItemDesc, MerchantOrderNo, TimeStamp, aesEncrypt, shaEncrypt },
-} = data_3pay.value.data;
+const id_customer = useCookie("id_customer");
+const id_order = useCookie("id_order");
+const payGetWay = ref();
 
 const param_post_3pay = ref({
   Amt: "",
@@ -31,42 +27,62 @@ const param_post_3pay = ref({
   TradeSha: "",
   Version: "",
 });
-const id_order = useCookie("id_order");
 
-// "Order validation failed: orderProductList.0.amount: 購買商品清單amount未填寫, orderProductList.1.amount: 購買商品清單amount未填寫"
-// 6670462c99b40923c5ec7b01
+const form_newWeb = ref(null);
 
-dataTrans();
-function dataTrans() {
-  param_post_3pay.value.MerchantID = MerchantID;
-  param_post_3pay.value.Amt = Amt;
-  param_post_3pay.value.Email = Email;
-  param_post_3pay.value.ItemDesc = ItemDesc;
-  param_post_3pay.value.MerchantOrderNo = MerchantOrderNo;
-  // param_post_3pay.value.NotifyUrl = NotifyUrl;
-  // param_post_3pay.value.ReturnUrl = ReturnUrl;
-  param_post_3pay.value.TimeStamp = TimeStamp;
-  param_post_3pay.value.TradeInfo = aesEncrypt;
-  param_post_3pay.value.TradeSha = shaEncrypt;
-  param_post_3pay.value.Version = Version;
+const pending = ref(true);
+onMounted(async () => {
+  const param_post_step1 = JSON.parse(sessionStorage.getItem("param_post_step1"));
+  let param;
+  if (param_post_step1) {
+    param = param_post_step1;
+  } else {
+    param = param_post.value;
+  }
 
-  id_order.value = MerchantOrderNo;
-}
+  const { data } = await useToken$Fetch(`/payment`, {
+    method: "POST",
+    body: param,
+  });
 
-// ------
-// const cart_checkout = useCookie("checkout_cart");
+  const {
+    MerchantID,
+    PayGateWay,
+    Version,
+    ResOrder: {
+      Amt,
+      Email,
+      ItemDesc,
+      MerchantOrderNo,
+      TimeStamp,
+      aesEncrypt,
+      shaEncrypt,
+    },
+  } = data;
 
-const storeCart = useStoreCart();
-const { data_checkoutCart } = storeToRefs(storeCart);
+  dataTrans();
+  function dataTrans() {
+    param_post_3pay.value.MerchantID = MerchantID;
+    param_post_3pay.value.Amt = Amt;
+    param_post_3pay.value.Email = Email;
+    param_post_3pay.value.ItemDesc = ItemDesc;
+    param_post_3pay.value.MerchantOrderNo = MerchantOrderNo;
+    // param_post_3pay.value.NotifyUrl = NotifyUrl;
+    // param_post_3pay.value.ReturnUrl = ReturnUrl;
+    param_post_3pay.value.TimeStamp = TimeStamp;
+    param_post_3pay.value.TradeInfo = aesEncrypt;
+    param_post_3pay.value.TradeSha = shaEncrypt;
+    param_post_3pay.value.Version = Version;
 
-const id_customer = useCookie("id_customer");
+    id_order.value = MerchantOrderNo;
+    payGetWay.value = PayGateWay;
+  }
 
-if (import.meta.client) {
   let shoppingCart;
   if (data_checkoutCart.value?.length) shoppingCart = data_checkoutCart.value;
   else shoppingCart = JSON.parse(sessionStorage.getItem("checkout_cart"));
 
-  await useTokenFetch(`/shopping_cart`, {
+  await useToken$Fetch(`/shopping_cart`, {
     method: "PATCH",
     body: {
       customerId: id_customer.value,
@@ -76,24 +92,26 @@ if (import.meta.client) {
       })),
     },
   });
-}
 
-const form_newWeb = ref(null);
-onMounted(() => {
-  // cart_checkout.value = null;
   sessionStorage.removeItem("checkout_cart");
+  sessionStorage.removeItem("param_post_step1");
   form_newWeb.value.submit();
+});
+
+onUnmounted(() => {
+  pending.value = false;
 });
 </script>
 
 <template>
+  <LoadingPending :show="pending" />
   <div
     class="wrapper_step1 mx-auto max-w-1076px flex flex-col gap-2rem px-0.75rem py-3rem"
   >
     <form
       ref="form_newWeb"
       name="form_newWeb"
-      :action="PayGateWay"
+      :action="payGetWay"
       method="post"
       class="form_step2 flex flex-col"
     >

@@ -53,6 +53,7 @@ const data_cart = ref();
 if (import.meta.client) cartToParamPost();
 
 function cartToParamPost() {
+  intParamPost();
   data_cart.value = JSON.parse(sessionStorage.getItem("checkout_cart"));
 
   let data_source;
@@ -127,21 +128,20 @@ const schema = object({
 });
 
 // --------
-const param_post_step1 = useCookie("param_post_step1");
-param_post_step1.value = null;
+// const param_post_step1 = useCookie("param_post_step1");
+// param_post_step1.value = null;
 
-const formSubmit = () => {
-  param_post_step1.value = param_post.value;
+const formSubmit = async () => {
+  sessionStorage.setItem("param_post_step1", JSON.stringify(param_post.value));
+
+  await nextTick();
+
   navigateTo({ name: "checkout-step2" });
 };
 
 const onInvalidSubmit = (errors) => {
   console.log("errors :>> ", errors);
 };
-
-onUnmounted(() => {
-  intParamPost();
-});
 </script>
 
 <template>
