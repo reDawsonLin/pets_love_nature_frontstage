@@ -233,10 +233,13 @@ const getCommentData = async() =>{
 
     console.log('得到評價' , result);
     if(result.data.length == 0){
-      commentData.value =  [[ 
-      { "customer": "M**g", "comment": "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️", "create": "2024-03-12 11:21:33" }, 
-      { "customer": "J**k", "comment": "良心商家，值得多買", "create": "2024-03-28 19:27:11" } 
-    ]]
+    //   commentData.value =  [[ 
+    //   { "customer": "M**g", "comment": "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️", "create": "2024-03-12 11:21:33" }, 
+    //   { "customer": "J**k", "comment": "良心商家，值得多買", "create": "2024-03-28 19:27:11" } 
+    // ],[ 
+    //   { "customer": "M**g", "comment": "sss超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️", "create": "2024-03-12 11:21:33" }, 
+    //   { "customer": "J**k", "comment": "dd良心商家，值得多買", "create": "2024-03-28 19:27:11" } 
+    // ]]
 
     }
     result.data.forEach(( item,index )=>{
@@ -511,14 +514,14 @@ onMounted(async() => {
         {{ idx }}
 
       </SwiperSlide> -->
-      <!-- <SwiperSlide 
+      <SwiperSlide 
       :key=1
       >
       <div>
          <div class="comment flex items-center">
             <div class="min-w-[100px] w-[30%] sm:w-[15%]">
                 <img class="h-[100px] w-[100px]" src="/assets/img/personPhoto.jpg" alt="">
-                <p class="w-[100px] text-center">ming</p>
+                <p class="w-[100px] text-center">J**k</p>
             </div>
             <div class="w-[70%] flex items-center sm:w-[35%]">
               <div class="triangle"/>
@@ -532,7 +535,7 @@ onMounted(async() => {
               <div class="hidden w-[30%] sm:w-[15%] sm:inline-flex">
                 <div>
                   <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
-                  <p class="w-[100px] text-center">ming</p>
+                  <p class="w-[100px] text-center">M**g</p>
                 </div>
 
               </div>
@@ -547,11 +550,11 @@ onMounted(async() => {
         </div>
       </div>
       
-      </SwiperSlide> -->
+      </SwiperSlide>
 
       <SwiperSlide
-v-for="(comment,index) in  commentData"
-      :key=index
+    v-for="(comment) in  commentData"
+    :key="index"
       >
       <div>
         <div class="comment flex items-center">
@@ -571,21 +574,25 @@ v-for="(comment,index) in  commentData"
               </div>
 
               <div
-v-if="comment[1]"
               class="hidden w-[30%] sm:w-[15%] sm:inline-flex">
                 <div>
                   <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
-                  <p class="w-[100px] text-center">{{ comment[1].customer }}</p>
+                  <p v-if="comment[1]" class="w-[100px] text-center">{{ comment[1].customer }}</p>
+                  <p v-else class="w-[100px] text-center">J**k</p>
+
                 </div>
               </div>
               <div
-v-if="comment[1]"
               class="hidden w-[70%] flex items-center sm:w-[35%] sm:inline-flex">
                 <div class="triangle hidden sm:inline-flex"/>
                 <div class="radius-square hidden flex-col p-[48px] sm:flex sm:inline-flex">
-                  <span>{{comment[1].comment}} </span>
+                  <span  v-if="comment[1]"> {{comment[1].comment}} </span>
+                  <span  v-else> 非常快速的處理和寄送訂單，完整細心的包裝，</span>
+
                   <br >
-                  <span class="text-[#A3A3A3]">{{comment[1].create}}</span>
+                  <span  v-if="comment[1]" class="text-[#A3A3A3]">{{comment[1].create}}</span>
+                  <span  v-else class="text-[#A3A3A3]">2024-06-21 13:10</span>
+
                 </div>
               </div>
         </div>
