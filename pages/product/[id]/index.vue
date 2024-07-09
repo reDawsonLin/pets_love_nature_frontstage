@@ -14,6 +14,8 @@ const { addCart } = storeCart;
 const relatedData = ref([]);
 const relatedCategory = ref("");
 const show_pending = ref(true);
+const commentData = ref([]);
+
 
 
 const productSpecListIndex = ref(0);
@@ -134,7 +136,6 @@ const fetchData = async () => {
         method: "GET",
       }
     )
-
     show_pending.value = false;
     productIDData.value=result.data
     relatedCategory.value=result.data.category[0]
@@ -220,9 +221,78 @@ const changeProductSpecListIndex = (index)=>{
   productSpecListIndex.value = index
 }
 
+const getCommentData = async() =>{
+  try {
+    const result = await use$Fetch(
+      `comment/${productIDData.value.productId}`,
+      {
+        method: "GET",
+      }
+    )
+    const groupedComments = [];
+
+    console.log('得到評價' , result);
+    if(result.data.length == 0){
+      commentData.value =  [[ 
+      { "customer": "M**g", "comment": "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️", "create": "2024-03-12 11:21:33" }, 
+      { "customer": "J**k", "comment": "良心商家，值得多買", "create": "2024-03-28 19:27:11" } 
+    ]]
+
+    }
+    result.data.forEach(( item,index )=>{
+      
+      // commentData.value.push({ 'customer':  anonymizeName(item.customerId.customerName), 'comment': item.comment})
+      const comment = {
+        customer: anonymizeName(item.customerId.customerName),
+        comment: item.comment,
+        create: formatTime(item.updatedAt)
+      };
+
+
+      if (index % 2 === 0) {
+        // If the index is even, create a new group
+        groupedComments.push([comment]);
+      } else {
+        // If the index is odd, add to the last group
+        groupedComments[groupedComments.length - 1].push(comment);
+      }
+
+    })
+    groupedComments.forEach(group => commentData.value.push(group));
+
+
+  }
+  catch(e){
+    alert('系統錯誤')
+    console.log(e);
+  }
+}
+
+const  anonymizeName =  (name) =>{
+  if (name.length <= 2) {
+    return name; // 如果名字长度小于等于2，返回原名字
+  }
+  const firstChar = name[0];
+  const lastChar = name[name.length - 1];
+  const middlePart = '*'.repeat(name.length - 2);
+  return firstChar + middlePart + lastChar;
+}
+const formatTime = (timeString) => {
+    const date = new Date(timeString);
+    date.setUTCHours(date.getUTCHours() + 6); // 加6小時
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const hours = String(date.getUTCHours()).padStart(2, '0');
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
 onMounted(async() => {
   await fetchData();
   getRelatedData();
+  getCommentData();
 });
 
 
@@ -403,7 +473,7 @@ onMounted(async() => {
                 </div>
               </div>
             </div> -->
-            <div>
+            <div >
               <Swiper
                 ref="mySwiper"
                 :height="300"
@@ -411,10 +481,10 @@ onMounted(async() => {
                 pagination
                 :slides-per-view="1"
                 :loop="true"
-                :effect="'creative'"
+                :effect="'fade'"
                 :autoplay="{
                   delay: 3000,
-                  disableOnInteraction: true
+                  disableOnInteraction: true,
                 }"
                 :creative-effect="{
                   prev: {
@@ -441,24 +511,30 @@ onMounted(async() => {
         {{ idx }}
 
       </SwiperSlide> -->
-      <SwiperSlide 
+      <!-- <SwiperSlide 
       :key=1
       >
       <div>
          <div class="comment flex items-center">
             <div class="min-w-[100px] w-[30%] sm:w-[15%]">
                 <img class="h-[100px] w-[100px]" src="/assets/img/personPhoto.jpg" alt="">
-              </div>
-              <div class="w-[70%] flex items-center sm:w-[35%]">
-                <div class="triangle"/>
+                <p class="w-[100px] text-center">ming</p>
+            </div>
+            <div class="w-[70%] flex items-center sm:w-[35%]">
+              <div class="triangle"/>
                 <div class="radius-square p-[48px]">
                   <span>超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️ </span>
                   <br >
                   <span class="text-[#A3A3A3]">2024-04-13 10:10</span>
                 </div>
               </div>
+              
               <div class="hidden w-[30%] sm:w-[15%] sm:inline-flex">
-                <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+                <div>
+                  <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+                  <p class="w-[100px] text-center">ming</p>
+                </div>
+
               </div>
               <div class="hidden w-[70%] flex items-center sm:w-[35%] sm:inline-flex">
                 <div class="triangle hidden sm:inline-flex"/>
@@ -470,51 +546,50 @@ onMounted(async() => {
               </div>
         </div>
       </div>
-        
+      
+      </SwiperSlide> -->
 
-      </SwiperSlide>
       <SwiperSlide
-      :key=2
+v-for="(comment,index) in  commentData"
+      :key=index
       >
       <div>
         <div class="comment flex items-center">
             <div class="min-w-[100px] w-[30%] sm:w-[15%]">
                 <img class="h-[100px] w-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+                <p class="w-[100px] text-center">{{ comment[0].customer }}</p>
+
               </div>
-              <div class="w-[70%] flex items-center sm:w-[35%]">
+              <div class="w-[70%] flex items-center sm:w-[35%]" 
+              >
                 <div class="triangle"/>
                 <div class="radius-square p-[48px]">
-                  <span>出貨速度很快，包裝很完整 </span>
+                  <span>{{comment[0].comment}}  </span>
                   <br >
-                  <span class="text-[#A3A3A3]">2024-05-13 10:10</span>
+                  <span class="text-[#A3A3A3]">{{comment[0].create}} </span>
                 </div>
               </div>
-              <div class="hidden w-[30%] sm:w-[15%] sm:inline-flex">
-                <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+
+              <div
+v-if="comment[1]"
+              class="hidden w-[30%] sm:w-[15%] sm:inline-flex">
+                <div>
+                  <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+                  <p class="w-[100px] text-center">{{ comment[1].customer }}</p>
+                </div>
               </div>
-              <div class="hidden w-[70%] flex items-center sm:w-[35%] sm:inline-flex">
+              <div
+v-if="comment[1]"
+              class="hidden w-[70%] flex items-center sm:w-[35%] sm:inline-flex">
                 <div class="triangle hidden sm:inline-flex"/>
                 <div class="radius-square hidden flex-col p-[48px] sm:flex sm:inline-flex">
-                  <span>乾蝦❤️乾蝦❤️ </span>
+                  <span>{{comment[1].comment}} </span>
                   <br >
-                  <span class="text-[#A3A3A3]">2024-05-14 21:10</span>
+                  <span class="text-[#A3A3A3]">{{comment[1].create}}</span>
                 </div>
               </div>
         </div>
       </div>
-            <!-- <div class="comment flex items-center">
-              <div class="w-[30%]">
-                <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
-              </div>
-              <div class="w-[70%] flex items-center">
-                <div class="triangle"/>
-                <div class="radius-square p-[48px]">
-                  <span>乾蝦❤️ 乾蝦❤️ 乾蝦❤️ 乾蝦❤️ 乾蝦❤️ </span>
-                  <br >
-                  <span class="text-[#A3A3A3]">2024-01-22 21:10</span>
-                </div>
-              </div>
-            </div> -->
 
       </SwiperSlide>
       <!-- <SwiperControls /> -->
@@ -523,24 +598,14 @@ onMounted(async() => {
       <SwiperControls2 direction="next"/>  -->
 
 
-    </Swiper>
+            </Swiper>
+            
               <!-- https://stackblitz.com/github/cpreston321/nuxt-swiper/tree/main/examples/swiper-basic?file=app.vue -->
 
               
             </div>
-            <!-- <div class="comment flex items-center">
-              <div class="w-[30%]">
-                <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
-              </div>
-              <div class="w-[70%] flex items-center">
-                <div class="triangle"/>
-                <div class="radius-square p-[48px]">
-                  <span>超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️ </span>
-                  <br >
-                  <span class="text-[#A3A3A3]">2024-01-22 21:10</span>
-                </div>
-              </div>
-            </div> -->
+     
+         
           </div>
         </div>
         <div>
