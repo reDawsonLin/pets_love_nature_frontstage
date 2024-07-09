@@ -7,7 +7,7 @@ const { getTransformCartArray, addCart, deleteCart, addTestCartNoLogin } = store
 const noImgUrl = ref(
   "https://storage.googleapis.com/petstore-3a2e1.appspot.com/images/ecbb5438-43c3-4a9b-9316-f8e8aecc7d15.jpg?GoogleAccessId=firebase-adminsdk-p5zjq%40petstore-3a2e1.iam.gserviceaccount.com&Expires=16756675200&Signature=sU4UW2CPGkhBDRGf4ncTUXeN%2B5YVxIOdHuVOMxIeDg%2FtxZ6pEIuElGuz1CM14yBtyXO4BvkreykJkUuqS80Bbf%2FUJIyHESkJrNbepEbcVrZBTrX7SLdOZFrQYD86SB%2B7AoXt3JQ43%2BcRTGZki%2FAgdAmd1nqtI2b2F3PipzkWHhitUjdcruJpSsbPSTQwkUfC46B2Pv%2FzxPHrdx6kyFgoICYy21zFhxj7x3DcJq%2Ftj28gUP%2BCeTElNKUMVyWKPyvmBP76XWy8JLWGBs43uJFOuwmjxu4yfk0vc9L8GM%2Bu9PDFLRBrfBlJ30knbCIHHIBeKCDSkpgLb2ZJJhZ888r4GQ%3D%3D"
 );
-
+const pending = ref(true);
 const shoppingDataArr = ref([]);
 // console.log('token11', token.value);
 //   console.log('id_customer11', id_customer.value);
@@ -51,6 +51,11 @@ onMounted(async () => {
   sessionStorage.removeItem("checkout_cart");
 
   shoppingDataArr.value = await getTransformCartArray();
+  pending.value = false;
+});
+
+onUnmounted(() => {
+  pending.value = false;
 });
 
 const isChoosedProductArr = computed(() =>
@@ -178,6 +183,7 @@ const goPurchaseOrder = async () => {
 
 <template>
   <div class="shopping_cart grow">
+  <LoadingPending :show="pending" />
     <div p="t-3.75rem" class="title mb-7.5 flex items-center justify-center">
       <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" >
       <h1 class="text-4xl">購物車</h1>
