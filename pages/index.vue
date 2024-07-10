@@ -152,7 +152,7 @@ const data_hotProduct = [
             class="aspect-350/512 md:(aspect-1760/662 rounded-5rem)"
             rounded="t-80px b-20px"
             object="cover center"
-          >
+          />
 
           <div
             class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600 md:(bottom-10.25rem max-w-47rem w-100% rounded-1rem bg-second-200/90)"
@@ -249,7 +249,20 @@ const data_hotProduct = [
       class="mb-3rem flex flex-col items-center gap-1rem md:(mx-auto mb-unset max-w-1296px flex-row gap-1.5rem)"
     >
       <template v-for="product in data_hotProduct" :key="product.id">
-        <li
+        <li class="aspect-1/1 w-100% md:(aspect-416/580)">
+          <NuxtLink
+            :to="product.routeUrl"
+            class="product_hot group flex w-100% h-100% relative rounded-2rem bg-center bg-[length:100%] hover:(shadow-md bg-[length:110%])"
+            :class="product.bg_url"
+          >
+            <p
+              class="transition-property-background absolute px-3rem py-0.75rem bottom-3rem left-50% w-fit translate-x--50% whitespace-nowrap rounded-5rem bg-neutral-50 text-2rem transition-duration-100 transition-ease-linear transition-property-(color transform) group-hover:(translate-y--1rem bg-neutral-800 text-neutral-50)"
+            >
+              {{ product.product_type }}
+            </p>
+          </NuxtLink>
+        </li>
+        <!-- <li
           class="group relative aspect-1/1 w-100% rounded-2rem transition-shadow md:(aspect-416/580)"
           :class="product.bg_url"
           bg="center cover"
@@ -260,10 +273,10 @@ const data_hotProduct = [
             class="transition-property-background absolute bottom-3rem left-50% w-fit translate-x--50% whitespace-nowrap rounded-5rem bg-neutral-50 text-2rem transition-duration-100 transition-ease-linear transition-property-(color transform) group-hover:(translate-y--1rem bg-neutral-800 text-neutral-50)"
             p="x-3rem y-0.75rem"
           >
-            <!-- transition-property="color" -->
+
             {{ product.product_type }}</NuxtLink
           >
-        </li>
+        </li> -->
       </template>
     </ul>
 
@@ -320,7 +333,7 @@ const data_hotProduct = [
             "
             alt="avatar"
             class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center md:(w-100%)"
-          >
+          />
           <p class="md:() flex items-center justify-center">
             {{ comment.customerId.customerName }}
           </p>
@@ -361,6 +374,10 @@ const data_hotProduct = [
 }
 
 .brand_info {
+}
+
+.product_hot {
+  transition: background-size 0.3s ease, shadow 0.3s ease;
 }
 
 .comment_list {
