@@ -265,7 +265,7 @@ const logout = () => {
 }
 
 .wrapper_icon {
-  @media (min-width: 768px) {
+  @media screen and (min-width: 768px) {
     &:hover {
       .list_content {
         opacity: 1;
@@ -282,7 +282,7 @@ const logout = () => {
 }
 
 .wrapper_search {
-  @media (min-width: 768px) {
+  @media screen and (min-width: 768px) {
     &:hover {
       .search {
         width: 100%;

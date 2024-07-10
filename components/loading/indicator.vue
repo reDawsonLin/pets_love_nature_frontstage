@@ -247,7 +247,7 @@ router.afterEach((_to, _from, failure) => {
     z-index: 11;
     width: 70vw;
 
-    @media (min-width: 768px) {
+    @media screen and (min-width: 768px) {
       width: 37vw;
     }
   }
