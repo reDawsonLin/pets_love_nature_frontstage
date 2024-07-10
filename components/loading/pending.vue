@@ -38,7 +38,7 @@ defineProps({
     width: 77vw;
     max-width: 500px;
 
-    @media (min-width: 768px) {
+    @media screen and (min-width: 768px) {
       width: 50vw;
     }
   }

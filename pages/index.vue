@@ -8,19 +8,44 @@ const comment_swiperCenteredSlide = computed(() => {
   if (window_width.value < 768) return false;
   else return true;
 });
+const comment_autoplay = computed(() => {
+  if (window_width.value < 768) {
+    return {
+      delay: 3000,
+    };
+  } else {
+    return {
+      delay: 0,
+      pauseOnMouseEnter: true,
+    };
+  }
+});
+
+const window_width_md = computed(() => window_width.value < 768);
 
 watchEffect(() => {});
 
-// const { data: data_commentList, error: error_commentList } = await useApiFetch(
-//   "/comment"
-// );
-// console.log("data_commentList.value :>> ", data_commentList.value);
+const { data: data_commentList, error: error_commentList } = await useApiFetch(
+  "/comment"
+);
 
 const { data: data_banner, error: error_banner } = await useApiFetch("/banner");
 const toRoute = (item) => {
   if (item.hyperlink) return { name: "product", query: { searchType: item.hyperlink } };
   else return { name: "product" };
 };
+
+const data_comment = ref([]);
+onMounted(() => {
+  for (let i = 0; i < data_commentList.value.data.length; i++) {
+    const item = data_commentList.value.data[i];
+    if (data_comment.value.length >= 7) break;
+    if (!item.comment) return;
+
+    item.customerId.customerName = hideString(item.customerId.customerName);
+    data_comment.value.push(item);
+  }
+});
 
 // --------------------------------------
 const data_feature = [
@@ -98,30 +123,6 @@ const data_hotProduct = [
     routeUrl: { name: "product", query: { searchType: "fresh" } },
   },
 ];
-
-const data_comment = [
-  {
-    id: 1,
-    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
-    createdTime: "2024-01-22 21:10",
-    accountName: "p*****6",
-    avatarUrl: "/img/home-4-1.webp",
-  },
-  {
-    id: 2,
-    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
-    createdTime: "2024-01-22 21:10",
-    accountName: "p*****6",
-    avatarUrl: "/img/home-4-2.webp",
-  },
-  {
-    id: 3,
-    content: "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️",
-    createdTime: "2024-01-22 21:10",
-    accountName: "p*****6",
-    avatarUrl: "/img/home-4-3.webp",
-  },
-];
 </script>
 
 <template>
@@ -165,7 +166,7 @@ const data_comment = [
   </section>
 
   <section
-    class="brand_info md:([background-repeat:no-repeat,_no-repeat,_repeat] flex justify-center gap-4.875rem bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)])"
+    class="brand_info mt-2rem md:([background-repeat:no-repeat,_no-repeat,_repeat] mt-0 flex justify-center gap-4.875rem bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)])"
   >
     <header class="mb-1rem flex flex-col items-center md:(gap-4.5rem pt-7.5rem)">
       <SvgIcon name="logo_pink" class="w-5rem md:(order-2 w-19.25rem)" />
@@ -248,18 +249,20 @@ const data_comment = [
       class="mb-3rem flex flex-col items-center gap-1rem md:(mx-auto mb-unset max-w-1296px flex-row gap-1.5rem)"
     >
       <template v-for="product in data_hotProduct" :key="product.id">
-        <li class="aspect-1/1 w-100% md:(aspect-416/580)">
+        <li
+          class="group relative aspect-1/1 w-100% rounded-2rem transition-shadow md:(aspect-416/580)"
+          :class="product.bg_url"
+          bg="center cover"
+          hover:shadow-md
+        >
           <NuxtLink
             :to="product.routeUrl"
-            class="group product_hot relative h-100% w-100% flex rounded-2rem bg-[length:100%] bg-center hover:(bg-[length:110%] shadow-md)"
-            :class="product.bg_url"
+            class="transition-property-background absolute bottom-3rem left-50% w-fit translate-x--50% whitespace-nowrap rounded-5rem bg-neutral-50 text-2rem transition-duration-100 transition-ease-linear transition-property-(color transform) group-hover:(translate-y--1rem bg-neutral-800 text-neutral-50)"
+            p="x-3rem y-0.75rem"
           >
-            <p
-              class="transition-property-background absolute bottom-3rem left-50% w-fit translate-x--50% whitespace-nowrap rounded-5rem bg-neutral-50 px-3rem py-0.75rem text-2rem transition-duration-100 transition-ease-linear transition-property-(color transform) group-hover:(translate-y--1rem bg-neutral-800 text-neutral-50)"
-            >
-              {{ product.product_type }}
-            </p>
-          </NuxtLink>
+            <!-- transition-property="color" -->
+            {{ product.product_type }}</NuxtLink
+          >
         </li>
       </template>
     </ul>
@@ -272,7 +275,7 @@ const data_comment = [
     />
   </section>
 
-  <section class="comment_list" p=" y-4rem">
+  <section class="comment_list px-2rem py-4rem">
     <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
       <h2 class="mb-3rem text-center md:(mb-0)">熱烈好評</h2>
 
@@ -287,35 +290,40 @@ const data_comment = [
     <Swiper
       class="mb-1.5rem"
       space-between="24"
-      :modules="[SwiperPagination]"
+      :modules="[SwiperPagination, SwiperAutoplay, SwiperFreeMode]"
       :slides-per-view="comment_swiperPerView"
       :centered-slides="comment_swiperCenteredSlide"
-      :pagination="true"
+      :pagination="{ dynamicBullets: true }"
+      :speed="window_width_md ? 1000 : 7000"
+      :free-mode="{ enabled: !window_width_md }"
+      :loop="true"
+      :autoplay="comment_autoplay"
     >
-      <!-- :slides-per-view="3" -->
       <SwiperSlide
         v-for="comment in data_comment"
-        :key="comment.id"
-        class="flex flex-col px-0.75rem pb-3rem md:(flex-row gap-1.75rem)"
+        :key="comment._id"
+        class="flex flex-col px-1.25rem pb-3rem md:(flex-row gap-3rem)"
       >
-        <div
-          class="relative mb-1rem rounded-1rem bg-second-200 p-1.5rem shadow-[-4px_-4px_8px_rgba(210,148,107,0.3)] after:(absolute right-3rem top-100% h-2rem w-2rem flex border-b-2rem border-l-2rem border-b-transparent border-l-second-200 shadow-[-4px_-4px_8px_rgba(210,148,107,0.3)] content-empty) md:(order-2 mb-0 h-265px w-350px p-3rem)"
-        >
-          <p class="mb-0.75rem text-1.5rem md:(line-clamp-4)">
-            {{ comment.content }}
+        <div class="box_comment">
+          <p class="mb-0.75rem text-1.25rem md:(line-clamp-4 text-1.25rem)">
+            {{ comment.comment }}
           </p>
           <p class="text-0.875rem text-neutral-400">
-            {{ comment.createdTime }}
+            {{ comment.createdAt }}
           </p>
         </div>
 
-        <div class="mx-auto flex gap-0.5rem md:(order-1 flex-col)">
+        <div class="mx-auto flex gap-0.5rem md:(order-1 w-3.75rem shrink-0 flex-col)">
           <img
-            :src="comment.avatarUrl"
+            :src="
+              comment.customerId.image ? comment.customerId.image : '/img/home-4-1.webp'
+            "
             alt="avatar"
-            class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center md:(w-6.25rem)"
+            class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center md:(w-100%)"
           >
-          <p>{{ comment.accountName }}</p>
+          <p class="md:() flex items-center justify-center">
+            {{ comment.customerId.customerName }}
+          </p>
         </div>
       </SwiperSlide>
     </Swiper>
@@ -327,26 +335,6 @@ const data_comment = [
       class="md:(hidden)"
     />
   </section>
-
-  <!-- <ClientOnly>
-    <div
-      class="chat_icon bottom-5rem right-0.75rem z-10 h-3.5rem w-3.5rem flex cursor-pointer items-center justify-center rounded-50% bg-rose-500 opacity-0 transition-opacity md:(right-3vw)"
-      :class="[
-        {
-          'opacity-100': windowScroll > 200,
-          '!bottom-1.5rem': showChat,
-        },
-        showChat ? 'absolute' : 'fixed',
-      ]"
-    >
-      <SvgIcon name="chat" class="h-2rem w-2rem text-white hover:text-blue" />
-
-      <span
-        class="absolute right--0.25rem top--0.25rem h-1.25rem w-1.25rem flex items-center justify-center border border-2px border-white rounded-50% bg-rose-500 text-0.75rem text-white"
-        >{{ chatCount > 9 ? "9+" : chatCount }}
-      </span>
-    </div>
-  </ClientOnly> -->
 </template>
 
 <style scoped>
@@ -373,29 +361,46 @@ const data_comment = [
 }
 
 .brand_info {
-  @apply;
-  /* @apply md:(before:(content-empty)); */
-
-  /* md:( before:(content-empty flex absolute left-0 bottom-0 bg-[url('@/assets/img/home-2-3.webp')] w-556px h-362px border border-red-7 ) after:(content-empty flex w-1rem h-1rem absolute border-red-700 border) )"
-    p="x-0.75rem y-3rem */
 }
 
-.product_hot {
-  transition: background-size 0.3s ease, shadow 0.3s ease;
-}
-
-.comment_list :deep(.swiper-pagination) {
-  @apply md:(hidden);
-}
-
-/* .brand_info {
-  border: 1px solid red;
-
-  @media screen and (min-width: 768px) {
-    background-image: url("@/assets/img/bg-brand.webp"),url("@/assets/img/home-2-3.webp"), url("@/assets/img/home-2-4.webp");
-    background-position: center, left bottom, right center;
-    background-repeat: repeat, no-repeat, no-repeat;
-    background-size: cover, 556px 362px, 432px 526px;
+.comment_list {
+  :deep(.swiper-wrapper) {
+    @media screen and (min-width: 768px) {
+      transition-timing-function: linear !important;
+    }
   }
-} */
+
+  .box_comment {
+    @apply relative mb-2rem rounded-1rem bg-second-200 p-1.5rem shadow-[-4px_-4px_8px_rgba(210,148,107,0.3)];
+    @apply md:(order-2 mb-0 py-1.75rem px-2rem grow-1);
+
+    &::after {
+      content: "";
+      position: absolute;
+      right: 3rem;
+      top: 100%;
+      display: flex;
+      height: 2rem;
+      width: 2rem;
+      border-bottom: 2rem solid transparent;
+      border-left: 2rem solid #f9f0ea;
+      z-index: -1;
+    }
+
+    @media screen and (min-width: 768px) {
+      &::after {
+        top: 2rem;
+        right: 100%;
+        border-left: none;
+        border-top: none;
+        border-right: 2rem solid #f9f0ea;
+        z-index: 1;
+      }
+    }
+  }
+
+  :deep(.swiper-pagination) {
+    @apply md:(hidden);
+  }
+}
 </style>
