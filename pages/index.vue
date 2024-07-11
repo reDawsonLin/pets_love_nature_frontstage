@@ -166,23 +166,27 @@ const data_hotProduct = [
   </section>
 
   <section
-    class="brand_info mt-2rem md:([background-repeat:no-repeat,_no-repeat,_repeat] mt-0 flex justify-center gap-4.875rem bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)])"
+    class="brand_info mt-2rem lg:([background-repeat:no-repeat,_no-repeat,_repeat] mt-0 px-1rem flex justify-center gap-4.875rem bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)])"
   >
-    <header class="mb-1rem flex flex-col items-center md:(gap-4.5rem pt-7.5rem)">
-      <SvgIcon name="logo_pink" class="w-5rem md:(order-2 w-19.25rem)" />
-      <h3 class="md:(order-1 text-3rem)">Brand 特色</h3>
+    <header class="mb-1rem flex flex-col items-center lg:(gap-4.5rem pt-7.5rem)">
+      <SvgIcon name="logo_pink" class="w-5rem lg:(order-2 w-19.25rem bg-neutral-100/[.9])" />
+      <h3 class="lg:(order-1 text-3rem)">Brand 特色</h3>
     </header>
 
-    <ul class="box_feature grid grid-cols-2 md:(gap-x-1.5rem)">
+    <ul
+      class="box_feature grid grid-cols-2 mx-auto max-w-500px lg:(max-w-unset mx-0 gap-x-1.5rem)"
+    >
       <template v-for="feature in data_feature" :key="feature.id">
-        <li class="feature px-0.75rem py0.5rem text-center text-neutral-800 md:(p-3rem)">
+        <li
+          class="feature group px-0.75rem py0.5rem text-center text-neutral-800 lg:(p-3rem)"
+        >
           <div
-            class="107,0.3)] wrapper_icon shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148, mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem md:(rounded-4.5rem p-5rem)"
+            class="wrapper_icon transition-background mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148,107,0.3)] transition-(transform) group-hover:(rotate-5 bg-second-200) lg:(rounded-2rem p-1rem max-w-320px w-16vw)"
           >
-            <SvgIcon :name="feature.iconName" class="w-5rem md:(w-10rem)" />
+            <SvgIcon :name="feature.iconName" class="w-5rem lg:(w-8.3vw max-w-160px)" />
           </div>
-          <p text-1.25rem class="md:(text-2rem)">{{ feature.content1 }}</p>
-          <p text-1.25rem class="md:(text-2rem)">{{ feature.content2 }}</p>
+          <p text-1.25rem class="lg:(text-2rem)">{{ feature.content1 }}</p>
+          <p text-1.25rem class="lg:(text-2rem)">{{ feature.content2 }}</p>
         </li>
       </template>
     </ul>
@@ -252,11 +256,11 @@ const data_hotProduct = [
         <li class="aspect-1/1 w-100% md:(aspect-416/580)">
           <NuxtLink
             :to="product.routeUrl"
-            class="product_hot group flex w-100% h-100% relative rounded-2rem bg-center bg-[length:100%] hover:(shadow-md bg-[length:110%])"
+            class="group product_hot relative h-100% w-100% flex rounded-2rem bg-[length:100%] bg-center hover:(bg-[length:110%] shadow-md)"
             :class="product.bg_url"
           >
             <p
-              class="transition-property-background absolute px-3rem py-0.75rem bottom-3rem left-50% w-fit translate-x--50% whitespace-nowrap rounded-5rem bg-neutral-50 text-2rem transition-duration-100 transition-ease-linear transition-property-(color transform) group-hover:(translate-y--1rem bg-neutral-800 text-neutral-50)"
+              class="transition-property-background absolute bottom-3rem left-50% w-fit translate-x--50% whitespace-nowrap rounded-5rem bg-neutral-50 px-3rem py-0.75rem text-2rem transition-duration-100 transition-ease-linear transition-property-(color transform) group-hover:(translate-y--1rem bg-neutral-800 text-neutral-50)"
             >
               {{ product.product_type }}
             </p>
@@ -315,14 +319,14 @@ const data_hotProduct = [
       <SwiperSlide
         v-for="comment in data_comment"
         :key="comment._id"
-        class="flex flex-col px-1.25rem pb-3rem md:(flex-row gap-3rem)"
+        class="flex-col px-1.25rem pb-3rem !flex md:(flex-row gap-3rem)"
       >
         <div class="box_comment">
           <p class="mb-0.75rem text-1.25rem md:(line-clamp-4 text-1.25rem)">
             {{ comment.comment }}
           </p>
           <p class="text-0.875rem text-neutral-400">
-            {{ comment.createdAt }}
+            {{ $dayjs(comment.createdAt).format("YYYY/MM/DD HH:mm") }}
           </p>
         </div>
 
