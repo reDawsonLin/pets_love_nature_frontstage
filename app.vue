@@ -15,4 +15,12 @@ const id_customer = useCookie("id_customer");
 
 <style>
 @import "@/assets/main.css";
+
+.swal2-confirm {
+  @apply !bg-rose-500 !shadow-none;
+}
+
+.swal2-deny {
+  @apply !bg-neutral-500 !shadow-none;
+}
 </style>
