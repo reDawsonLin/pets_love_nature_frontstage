@@ -152,7 +152,7 @@ const data_hotProduct = [
             class="aspect-350/512 md:(aspect-1760/662 rounded-5rem)"
             rounded="t-80px b-20px"
             object="cover center"
-          />
+          >
 
           <div
             class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600 md:(bottom-10.25rem max-w-47rem w-100% rounded-1rem bg-second-200/90)"
@@ -166,7 +166,7 @@ const data_hotProduct = [
   </section>
 
   <section
-    class="brand_info mt-2rem lg:([background-repeat:no-repeat,_no-repeat,_repeat] mt-0 px-1rem flex justify-center gap-4.875rem bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)])"
+    class="brand_info mt-2rem lg:([background-repeat:no-repeat,_no-repeat,_repeat] mt-0 flex justify-center gap-4.875rem bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)] px-1rem)"
   >
     <header class="mb-1rem flex flex-col items-center lg:(gap-4.5rem pt-7.5rem)">
       <SvgIcon name="logo_pink" class="w-5rem lg:(order-2 w-19.25rem bg-neutral-100/[.9])" />
@@ -174,16 +174,16 @@ const data_hotProduct = [
     </header>
 
     <ul
-      class="box_feature grid grid-cols-2 mx-auto max-w-500px lg:(max-w-unset mx-0 gap-x-1.5rem)"
+      class="box_feature grid grid-cols-2 mx-auto max-w-500px lg:(mx-0 max-w-unset gap-x-1.5rem)"
     >
       <template v-for="feature in data_feature" :key="feature.id">
         <li
           class="feature group px-0.75rem py0.5rem text-center text-neutral-800 lg:(p-3rem)"
         >
           <div
-            class="wrapper_icon transition-background mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148,107,0.3)] transition-(transform) group-hover:(rotate-5 bg-second-200) lg:(rounded-2rem p-1rem max-w-320px w-16vw)"
+            class="wrapper_icon transition-background mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148,107,0.3)] transition-(transform) lg:(max-w-320px w-16vw rounded-2rem p-1rem) group-hover:(rotate-5 bg-second-200)"
           >
-            <SvgIcon :name="feature.iconName" class="w-5rem lg:(w-8.3vw max-w-160px)" />
+            <SvgIcon :name="feature.iconName" class="w-5rem lg:(max-w-160px w-8.3vw)" />
           </div>
           <p text-1.25rem class="lg:(text-2rem)">{{ feature.content1 }}</p>
           <p text-1.25rem class="lg:(text-2rem)">{{ feature.content2 }}</p>
@@ -337,7 +337,7 @@ const data_hotProduct = [
             "
             alt="avatar"
             class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center md:(w-100%)"
-          />
+          >
           <p class="md:() flex items-center justify-center">
             {{ comment.customerId.customerName }}
           </p>
