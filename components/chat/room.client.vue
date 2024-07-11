@@ -1,4 +1,5 @@
 <script setup>
+import dayjs from "#build/dayjs.imports.mjs";
 import { io } from "socket.io-client";
 
 const token = useCookie("token");
@@ -11,11 +12,15 @@ const socket = io("https://pets-love-nature-backend-n.onrender.com/", {
 
 const list_chat = ref(null);
 const list_message = ref([]);
+const list_history = ref([]);
+
 onMounted(async () => {
   socket.emit("join room", { customerId: id_customer.value, role: "client" });
 
   const { data } = await use$Fetch(`chat/getChatHistory/${id_customer.value}`);
-  list_message.value = data[0].messageList;
+  list_history.value = data[0].messageList;
+  console.log("data :>> ", data);
+
   await nextTick();
   chatScrollToBottom();
 });
@@ -23,13 +28,15 @@ onMounted(async () => {
 function chatScrollToBottom() {
   list_chat.value.scrollTop = list_chat.value.scrollHeight;
 }
-const showChatRoom = ref(false);
+
+const showChatRoom = ref(true);
 async function chatRoomToggle(status) {
   if (!status) {
     if (showChatRoom.value) {
       showChatRoom.value = false;
     } else {
       showChatRoom.value = true;
+      socket.emit("read", { customerId: id_customer.value, role: "client" });
       await nextTick();
       chatScrollToBottom();
     }
@@ -65,8 +72,18 @@ socket.on("errorMsg", (data) => {
 });
 
 //已讀監聽
-socket.on("admin read", (data) => {
-  console.log("admin read", data);
+// socket.on("admin read", (data) => {
+//   console.log("admin read", data);
+// });
+
+socket.on("read", (data) => {
+  if (data.status !== "success") return;
+  // console.log("read", data);
+
+  list_message.value = list_message.value.map((item) => {
+    if (item.role === "client") item.read = true;
+    return item;
+  });
 });
 
 // const isConnected = ref(false);
@@ -121,7 +138,7 @@ const sendMessage = async () => {
   list_message.value.push({
     role: "client",
     message: chatMessage.value,
-    createdAt: new Date(),
+    createdAt: dayjs().format("YYYY/MM/DD HH:mm:ss"),
   });
 
   await nextTick();
@@ -170,12 +187,25 @@ const { y: windowScroll } = useWindowScroll();
         ref="list_chat"
         class="list_chat h-300px flex flex-col gap-2rem overflow-y-auto p-0.75rem"
       >
+        <template v-for="(item, index) in list_history" :key="index">
+          <div class="chat w-80%" :class="item.role === 'client' ? 'client' : 'admin'">
+            <p class="message rounded-0.5rem p-0.75rem">
+              {{ item.message }}
+            </p>
+            <p class="time mt-0.25rem px-0.25rem text-0.75rem text-neutral-400">
+              <b class="check_mark" />
+              {{ $dayjs(item.createdAt).format("YYYY/MM/DD HH:mm:ss") }}
+            </p>
+          </div>
+        </template>
+
         <template v-for="(item, index) in list_message" :key="index">
           <div class="chat w-80%" :class="item.role === 'client' ? 'client' : 'admin'">
             <p class="message rounded-0.5rem p-0.75rem">
               {{ item.message }}
             </p>
             <p class="time mt-0.25rem px-0.25rem text-0.75rem text-neutral-400">
+              <b v-show="item.read && item.role === 'client'" class="check_mark" />
               {{ $dayjs(item.createdAt).format("YYYY/MM/DD HH:mm:ss") }}
             </p>
           </div>
@@ -189,7 +219,7 @@ const { y: windowScroll } = useWindowScroll();
           v-model="chatMessage"
           class="w-100% bg-transparent outline-none"
           @keydown="chatKeydown($event)"
-        >
+        />
 
         <SvgIcon
           name="submit"
@@ -239,7 +269,21 @@ const { y: windowScroll } = useWindowScroll();
       }
 
       .time {
-        @apply text-end;
+        @apply flex justify-end gap-0.25rem;
+
+        .check_mark {
+          @apply relative flex justify-center items-center w-1rem h-1rem bg-green-5 rounded-full;
+
+          &::before {
+            content: "";
+            display: flex;
+            border-bottom: 2px solid #fff;
+            border-left: 2px solid #fff;
+            width: 8px;
+            height: 5px;
+            transform: rotate(-45deg) translate(10%, -10%);
+          }
+        }
       }
     }
 
