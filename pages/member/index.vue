@@ -80,7 +80,7 @@ const postFetchData = async (data) => {
     )
     console.log(response);
     Swal.fire({
-      position: "top-end",
+      position: "center",
       icon: "success",
       title: "儲存成功",
       showConfirmButton: false,
