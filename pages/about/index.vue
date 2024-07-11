@@ -47,9 +47,9 @@ const teammate = [
       "https://storage.googleapis.com/petstore-3a2e1.appspot.com/images/535f120c-9c6a-4801-8289-d7b498b3ed83.png?GoogleAccessId=firebase-adminsdk-p5zjq%40petstore-3a2e1.iam.gserviceaccount.com&Expires=16756675200&Signature=VbVlNxBeAMJC9PjOceH9arkjsOYxCqPBcPi2VOOyHmYoRLZS1uVKwpai5tz%2BeS7cLBT7t9p3GgAao94r43AC%2BCBCJnpmEfKZNXzYTB%2B20Ge2CLdUnPZSLIZwSrc1rI8GFBgmmUkSuHElxYtJmbkkdO%2BHQdpvJLmlAw9teOh6D5agwQZZeYPYZAMBhLtVQvsrRhgOdDTQ5qEqjHg86FilNPhf67NYwlm%2Bv1tT73Fjq8NQPkCz%2BCP3tKrnJReJ3VXtS5puDx68aHqFM6A2no6bNb0QoIGCVxGBvFqiLtKwbe6OkqXp4xWmb%2F3%2BB7v%2FLIog7g8Kb8DYeDzuaEGuqA9%2BHQ%3D%3D",
     work_front: {
       stage_front: ["購物車相關", "常見問題"],
-      stage_back: ["訂單管理", "消費者管理", "Banner管理", "聊聊"],
+      stage_back: ["登入", "訂單管理", "消費者管理", "Banner管理", "聊聊"],
     },
-    work_back: ["購物車相關", "Banner", "消費者相關"],
+    work_back: ["購物車相關", "Banner"],
     subtitle: "前端＋後端",
   },
   {
@@ -73,39 +73,38 @@ const teammate = [
     url_avatar:
       "https://storage.googleapis.com/petstore-3a2e1.appspot.com/images/db17b67a-29a7-4ef5-bd85-a05251f4af64.png?GoogleAccessId=firebase-adminsdk-p5zjq%40petstore-3a2e1.iam.gserviceaccount.com&Expires=16756675200&Signature=A7FaqHAg3QIrRKc93H%2BPefBjgSiaYAD3Tx%2FqwHRv%2Bq8HcaR5pIWPdnwiJ14bgTRC54b%2BSIAdB0DNnGNHPgEW9%2FdxZz12Xrqp6sM1VGPAtbxo8Pst87Pgge0jWUYMc%2Bnrb7BN41Wl4XwsIoDjTnpYO4Xa72o9Qrj1RL3p%2B3MvPLJIwytgoTE5q1UrOJmtlLkaQyOmj9jqzu8OvvU4aJlbWrs2v18R5mR2lTbzd2oyPsCRQVzPxj%2BD9z7NDc6%2FxDC%2ByvYLh4CslCIeLcB9CyJq2vJVFKTqfHKFp%2BuyEJqOL4uUGW3c8Y%2BrHtE1ojLWiVSW6HMmtMF8EVUxoD%2BcW4COtw%3D%3D",
     work_front: null,
-    work_back: ["第三方登入", "第三方支付", "訂單相關", "聊聊相關"],
+    work_back: ["第三方登入", "第三方支付", "訂單相關", "聊聊", "消費者相關"],
     subtitle: "後端",
   },
 ];
 </script>
 
 <template>
-  <div class="wrapper flex flex-col items-center px-1rem pt-3rem pb-5rem bg-second-200">
-    <h1 class="title_h1 flex justify-center lg:()">關於我們</h1>
-    <p class="text-1.25rem mb-1.5rem">專案貢獻者</p>
+  <div class="wrapper flex flex-col items-center bg-second-200 px-1rem pb-5rem pt-3rem">
+    <h1 class="title_h1 lg:() flex justify-center">關於我們</h1>
+    <p class="mb-1.5rem text-1.25rem">專案貢獻者</p>
 
     <ul class="wrapper_teammate lg:(max-w-1440px)">
       <template v-for="mate in teammate" :key="mate.id">
         <li
-          class="rounded-1rem py-2rem px-1.75rem bg-second-400/[.3] flex flex-col items-center gap-1.5rem lg:()"
+          class="lg:() flex flex-col items-center gap-1.5rem rounded-1rem bg-second-400/[.3] px-1.75rem py-2rem"
         >
-          <div class="box_img w-55% aspect-square rounded-full overflow-hidden">
+          <div class="box_img aspect-square w-55% overflow-hidden rounded-full">
             <img
-              class="w-100% h-100% object-center object-cover"
+              class="h-100% w-100% object-cover object-center"
               :src="mate.url_avatar"
               alt="avatar"
-            />
+            >
           </div>
 
-          <div class="box_info w-100% flex flex-col grow-1 text-1.125rem">
-            <p class="text-1.5rem mb-0.25rem">
+          <div class="box_info w-100% flex grow-1 flex-col text-1.125rem">
+            <p class="mb-0.25rem text-1.5rem">
               {{ mate.name_tc }} {{ mate.name_en }} /
               {{ mate.subtitle }}
             </p>
 
+            <p class="mb-0.25rem text-1.25rem">專案貢獻：</p>
             <div v-if="mate.work_front" class="">
-              <p class="text-1.25rem mb-0.25rem">專案貢獻：</p>
-
               <div v-if="mate.work_front.stage_front?.length" class="box_list_work">
                 <ul class="list_work">
                   <p class="font-700">前台：</p>
@@ -125,7 +124,7 @@ const teammate = [
               </div>
             </div>
 
-            <div v-if="mate.work_back?.length" class="box_list_work mt-0.5rem">
+            <div v-if="mate.work_back?.length" class="box_list_work">
               <ul class="list_work">
                 <p class="">後端 API：</p>
                 <li v-for="item in mate.work_back" :key="item" class="">
