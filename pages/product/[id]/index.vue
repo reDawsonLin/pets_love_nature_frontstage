@@ -229,39 +229,34 @@ const getCommentData = async() =>{
         method: "GET",
       }
     )
-    const groupedComments = [];
 
     console.log('得到評價' , result);
     if(result.data.length == 0){
-    //   commentData.value =  [[ 
-    //   { "customer": "M**g", "comment": "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️", "create": "2024-03-12 11:21:33" }, 
-    //   { "customer": "J**k", "comment": "良心商家，值得多買", "create": "2024-03-28 19:27:11" } 
-    // ],[ 
-    //   { "customer": "M**g", "comment": "sss超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️", "create": "2024-03-12 11:21:33" }, 
-    //   { "customer": "J**k", "comment": "dd良心商家，值得多買", "create": "2024-03-28 19:27:11" } 
-    // ]]
-
+      commentData.value =  [
+      { "customer": "M**g", "comment": "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️", "create": "2024-03-12 11:21:33" }, 
+      { "customer": "J**k", "comment": "良心商家，值得多買", "create": "2024-03-28 19:27:11" } 
+      ]
     }
-    result.data.forEach(( item,index )=>{
-      
-      // commentData.value.push({ 'customer':  anonymizeName(item.customerId.customerName), 'comment': item.comment})
-      const comment = {
-        customer: anonymizeName(item.customerId.customerName),
-        comment: item.comment,
-        create: formatTime(item.updatedAt)
-      };
-
-
-      if (index % 2 === 0) {
-        // If the index is even, create a new group
-        groupedComments.push([comment]);
-      } else {
-        // If the index is odd, add to the last group
-        groupedComments[groupedComments.length - 1].push(comment);
+    result.data.forEach(( item )=>{
+      console.log(item.comment!=="");
+      if(item.comment!==""){
+        commentData.value.push({ 
+          'customer':  anonymizeName(item.customerId.customerName), 
+          'comment': item.comment,
+          'create': formatTime(item.updatedAt)
+        })
       }
-
     })
-    groupedComments.forEach(group => commentData.value.push(group));
+    if (commentData.value.length % 2 !== 0 &&commentData.value.length > 2) {
+      commentData.value.pop();
+    }
+    console.log(commentData.value.length)
+    if(commentData.value.length == 1){
+      commentData.value.push(
+      { "customer": "J**k", "comment": "出貨迅速，非常棒", "create": "2024-03-28 19:27:11" } 
+      )
+    }
+   
 
 
   }
@@ -461,6 +456,7 @@ onMounted(async() => {
           <div class="mb-[48px] h-[50px] bg-[#E5E5E5] px-[16px] py-[8px] font-size-[24px] text-[#525252] font-200">
             評價
           </div>
+          <br>
           <div class="grid grid-cols-1 mt-6 gap-x-6 gap-y-10 md:grid-cols-1">
 
             <!-- <div class="comment flex items-center">
@@ -476,17 +472,25 @@ onMounted(async() => {
                 </div>
               </div>
             </div> -->
-            <div >
+            <div v-if="commentData.length>0">
               <Swiper
                 ref="mySwiper"
                 :height="300"
                 :modules="[ SwiperAutoplay, SwiperEffectCreative,SwiperPagination ]"
                 pagination
-                :slides-per-view="1"
                 :loop="true"
-                :effect="'fade'"
+                :loop-fill-group-with-blank="true"
+                effect="fade"
+                :breakpoints="{
+                  640: {
+                    slidesPerView: 1
+                  },
+                  1024: {
+                    slidesPerView: 2
+                  }
+                }"
                 :autoplay="{
-                  delay: 3000,
+                  delay: 1000,
                   disableOnInteraction: true,
                 }"
                 :creative-effect="{
@@ -499,111 +503,33 @@ onMounted(async() => {
                     translate: ['100%', 0, 0]
                   }
                 }"
+                
 
               >
-    <!-- <SwiperSlide v-for="i in 3" :key="index">{{ i }}</SwiperSlide> -->
+              <!-- <SwiperSlide v-for="(i,index) in 4" >{{ i }}</SwiperSlide> -->
 
-    <!-- <SwiperSlide>Slide 2</SwiperSlide>
-    <SwiperSlide>Slide 3</SwiperSlide> -->
+        <SwiperSlide v-for="(comment,index) in  (commentData)" :key=index
+        >
+        <div>
+          <div class="comment flex items-center">
+              <div class="min-w-[100px] w-[30%]">
+                  <img class="h-[100px] w-[100px]" src="/assets/img/personPhoto.jpg" alt="">
+                  <p class="w-[100px] text-center">{{ comment.customer }}</p>
 
-      <!-- <SwiperSlide
-        v-for="(slide, idx) in slides"
-        :key="idx"
-        :style="`background-color: ${slide.bg}; color: ${slide.color}`"
-      >
-        {{ idx }}
-
-      </SwiperSlide> -->
-      <SwiperSlide 
-      :key=1
-      >
-      <div>
-         <div class="comment flex items-center">
-            <div class="min-w-[100px] w-[30%] sm:w-[15%]">
-                <img class="h-[100px] w-[100px]" src="/assets/img/personPhoto.jpg" alt="">
-                <p class="w-[100px] text-center">J**k</p>
-            </div>
-            <div class="w-[70%] flex items-center sm:w-[35%]">
-              <div class="triangle"/>
-                <div class="radius-square p-[48px]">
-                  <span>超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️ </span>
-                  <br >
-                  <span class="text-[#A3A3A3]">2024-04-13 10:10</span>
                 </div>
-              </div>
-              
-              <div class="hidden w-[30%] sm:w-[15%] sm:inline-flex">
-                <div>
-                  <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
-                  <p class="w-[100px] text-center">M**g</p>
+                <div class="w-[calc(100%-100px)] flex items-center" 
+                >
+                  <div class="triangle"/>
+                  <div class="radius-square w-[80%] p-[48px]">
+                    <span>{{comment.comment}}  </span>
+                    <br >
+                    <span class="text-[#A3A3A3]">{{comment.create}} </span>
+                  </div>
                 </div>
-
-              </div>
-              <div class="hidden w-[70%] flex items-center sm:w-[35%] sm:inline-flex">
-                <div class="triangle hidden sm:inline-flex"/>
-                <div class="radius-square hidden flex-col p-[48px] sm:flex sm:inline-flex">
-                  <span>良心商家，值得多買 </span>
-                  <br >
-                  <span class="text-[#A3A3A3]">2024-04-14 21:10</span>
-                </div>
-              </div>
+          </div>
         </div>
-      </div>
-      
       </SwiperSlide>
-
-      <SwiperSlide
-    v-for="(comment) in  commentData"
-    :key="index"
-      >
-      <div>
-        <div class="comment flex items-center">
-            <div class="min-w-[100px] w-[30%] sm:w-[15%]">
-                <img class="h-[100px] w-[100px]" src="/assets/img/personPhoto.jpg" alt="">
-                <p class="w-[100px] text-center">{{ comment[0].customer }}</p>
-
-              </div>
-              <div class="w-[70%] flex items-center sm:w-[35%]" 
-              >
-                <div class="triangle"/>
-                <div class="radius-square p-[48px]">
-                  <span>{{comment[0].comment}}  </span>
-                  <br >
-                  <span class="text-[#A3A3A3]">{{comment[0].create}} </span>
-                </div>
-              </div>
-
-              <div
-              class="hidden w-[30%] sm:w-[15%] sm:inline-flex">
-                <div>
-                  <img class="h-[100px]" src="/assets/img/personPhoto.jpg" alt="">
-                  <p v-if="comment[1]" class="w-[100px] text-center">{{ comment[1].customer }}</p>
-                  <p v-else class="w-[100px] text-center">J**k</p>
-
-                </div>
-              </div>
-              <div
-              class="hidden w-[70%] flex items-center sm:w-[35%] sm:inline-flex">
-                <div class="triangle hidden sm:inline-flex"/>
-                <div class="radius-square hidden flex-col p-[48px] sm:flex sm:inline-flex">
-                  <span  v-if="comment[1]"> {{comment[1].comment}} </span>
-                  <span  v-else> 非常快速的處理和寄送訂單，完整細心的包裝，</span>
-
-                  <br >
-                  <span  v-if="comment[1]" class="text-[#A3A3A3]">{{comment[1].create}}</span>
-                  <span  v-else class="text-[#A3A3A3]">2024-06-21 13:10</span>
-
-                </div>
-              </div>
-        </div>
-      </div>
-
-      </SwiperSlide>
-      <!-- <SwiperControls /> -->
-  
-      <!-- <SwiperControls2 direction="prev"/> 
-      <SwiperControls2 direction="next"/>  -->
-
+    
 
             </Swiper>
             
@@ -705,7 +631,7 @@ v-for="index in Math.floor(product.product.star)" :key="index" src="/assets/img/
 }
 
 .radius-square {
-  width: 460px;
+  /* width: 460px; */
   height: 231px;
   background: #F9F0EA;
   border-radius: 36px;
@@ -723,3 +649,4 @@ input{
   filter: brightness(0.8); 
 }
 </style>
+
