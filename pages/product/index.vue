@@ -15,7 +15,7 @@ const searchValue = ref({
   sortBy: "",
   sortOrder: -1,
   page: 1,
-  limit: 10,
+  limit: 12,
   filterCategory: "",
   dbclick: false
 })
@@ -343,9 +343,9 @@ fill-rule="evenodd"
                     </svg>
                   </button>
                   <select id="" v-model="searchValue.limit" class="h-40px w-150px b-rd-1 p-8px text-gray-700" name="" @change="updateFetchData">
-                    <option value="5">5筆/頁</option>
-                    <option value="10">10筆/頁</option>
-                    <option value="50">50筆/頁</option>
+                    <option value="12">12筆/頁</option>
+                    <option value="24">24筆/頁</option>
+                    <option value="36">36筆/頁</option>
                   </select>
                 </nav>
               </div>

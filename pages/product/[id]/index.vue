@@ -251,6 +251,12 @@ const getCommentData = async() =>{
       commentData.value.pop();
     }
     console.log(commentData.value.length)
+    if(commentData.value.length == 0){
+      commentData.value =  [
+      { "customer": "M**g", "comment": "超讚的顏色整體、質感都很滿意，好賣家👍謝謝，有需要會在回購喔，乾蝦❤️", "create": "2024-03-12 11:21:33" }, 
+      { "customer": "J**k", "comment": "良心商家，值得多買", "create": "2024-03-28 19:27:11" } 
+      ]
+    }
     if(commentData.value.length == 1){
       commentData.value.push(
       { "customer": "J**k", "comment": "出貨迅速，非常棒", "create": "2024-03-28 19:27:11" } 
