@@ -20,19 +20,9 @@ const searchValue = ref({
   dbclick: false,
 });
 
-// const productData = ref([]);
 const pageInfo = ref([]);
 
-// if (import.meta.client) {
-//   console.log("client");
-//   if (route.query.searchType) {
-//     searchValue.value.filterCategory = route.query.searchType;
-//   }
-// }
-
-console.log("route.query.searchType :>> ", route.query.searchType);
 if (route.query.searchType) {
-  console.log("route.query.searchType :>> ", route.query.searchType);
   searchValue.value.filterCategory = route.query.searchType;
 }
 
@@ -41,16 +31,8 @@ const { data: productData, error } = await useApiFetch("/product/getFilterProduc
   watch: [searchValue],
 });
 
-// console.log("productData.value", productData.value);
-// productData.value = res.data.content;
-// pageInfo.value = res.data.page;
+pageInfo.value = productData.value.data.page;
 show_pending.value = false;
-
-watchEffect(() => {
-  // console.log("route :>> ", route);
-  console.log("searchValue.value :>> ", searchValue.value);
-  console.log("productData.value", productData.value);
-});
 
 const fetchData = async () => {
   try {
@@ -67,7 +49,7 @@ const fetchData = async () => {
     productData.value = result.data.content;
     pageInfo.value = result.data.page;
 
-    console.log("成功得到產品資訊", result.data);
+    // console.log("成功得到產品資訊", result.data);
   } catch (e) {
     show_pending.value = false;
 
@@ -76,16 +58,31 @@ const fetchData = async () => {
   }
 };
 
-const changeSort = (sortValue) => {
-  if (sortValue == searchValue.value.sortBy) {
-    searchValue.value.dbclick = true;
-    changeOrder();
+const changeSort = (target) => {
+  if (target === searchValue.value.sortBy) {
+    if (target === "price" || target === "updatedAt") {
+      switch (searchValue.value.sortOrder) {
+        case -1:
+          searchValue.value.sortOrder = 1;
+          break;
+        case 1:
+          searchValue.value.sortOrder = -1;
+          break;
+        default:
+          searchValue.value.sortOrder = -1;
+          break;
+      }
+      return;
+    } else {
+      searchValue.value.sortBy = "";
+      searchValue.value.sortOrder = -1;
+    }
+
     return;
-  } else {
-    searchValue.value.dbclick = false;
   }
-  searchValue.value.sortBy = sortValue;
-  fetchData();
+
+  searchValue.value.sortBy = target;
+  searchValue.value.sortOrder = -1;
 };
 
 const changeCategory = async (category) => {
@@ -97,8 +94,10 @@ const changeCategory = async (category) => {
   });
 };
 
-const updateFetchData = () => {
-  fetchData();
+const param_search = ref("");
+const changeSearch = async () => {
+  searchValue.value.searchText = param_search.value;
+  await fetchData();
 };
 
 const addToCart = async (product) => {
@@ -111,19 +110,6 @@ const addToCart = async (product) => {
   await addCart(arr, 0);
 };
 
-const changeOrder = () => {
-  if (searchValue.value.dbclick === true) {
-    if (searchValue.value.sortOrder == -1) {
-      searchValue.value.sortOrder = 1;
-    } else {
-      searchValue.value.sortOrder = -1;
-    }
-
-    fetchData();
-  }
-  console.log("changeOrder", searchValue.value.sortOrder);
-};
-
 const handlePageChange = async (e) => {
   if (e.target.value) {
     searchValue.value.page = e.target.value;
@@ -132,16 +118,7 @@ const handlePageChange = async (e) => {
   } else if (e.target.id === "previousPage") {
     searchValue.value.page = parseInt(searchValue.value.page) - 1;
   }
-  fetchData();
 };
-
-onMounted(async () => {
-  // if (route.query.searchType) {
-  //   console.log("Search type", route.query.searchType);
-  //   await changeCategory(route.query.searchType);
-  // }
-  // fetchData();
-});
 </script>
 
 <template>
@@ -197,21 +174,21 @@ onMounted(async () => {
         <ul class="list_search flex flex-wrap justify-between gap-1rem lg:(flex-nowrap)">
           <li
             class=""
-            :class="{ active: searchValue.sortBy === 'salesVolume' }"
+            :class="{ '!bg-second-400': searchValue.sortBy === 'salesVolume' }"
             @click="changeSort('salesVolume')"
           >
             最熱銷
           </li>
           <li
             class=""
-            :class="{ active: searchValue.sortBy === 'star' }"
+            :class="{ '!bg-second-400': searchValue.sortBy === 'star' }"
             @click="changeSort('star')"
           >
             評價最高
           </li>
           <li
             class=""
-            :class="{ active: searchValue.sortBy === 'price' }"
+            :class="{ '!bg-second-400': searchValue.sortBy === 'price' }"
             @click="changeSort('price')"
           >
             <svg
@@ -240,7 +217,7 @@ onMounted(async () => {
 
           <li
             class=""
-            :class="{ active: searchValue.sortBy === 'updatedAt' }"
+            :class="{ '!bg-second-400': searchValue.sortBy === 'updatedAt' }"
             @click="changeSort('updatedAt')"
           >
             <svg
@@ -270,17 +247,18 @@ onMounted(async () => {
 
         <div class="relative w-[100%] shadow-sm lg:(w-auto ml-auto)">
           <input
-            v-model="searchValue.searchText"
+            v-model="param_search"
             type="text"
             name="price"
             class="w-[100%] flex rounded-0.5rem px-1rem py-0.5rem pr-1.25rem placeholder:text-neutral-400"
             placeholder="搜尋"
-            @keydown.enter="updateFetchData()"
+            @keydown.enter="changeSearch()"
           />
 
           <SvgIcon
             name="search"
-            class="pointer-events-none absolute top-0.675rem right-0.5rem w-1.25rem"
+            class="cursor-pointer absolute top-0.675rem right-0.5rem w-1.25rem transition-[width] hover:(w-1.375rem)"
+            @click="changeSearch()"
           />
         </div>
       </div>
@@ -289,18 +267,17 @@ onMounted(async () => {
       <ul
         class="grid grid-cols-1 gap-x-1.25rem gap-y-1.5rem py-1.5rem lg:grid-cols-3 sm:grid-cols-2"
       >
-        <template v-for="product in productData.data.content" :key="product._id">
+        <template v-for="product in productData?.data?.content" :key="product._id">
           <li
-            class="product group relative flex flex-col overflow-hidden border rounded-0.5rem"
+            class="product relative flex flex-col overflow-hidden border rounded-0.5rem"
           >
             <NuxtLink
               :to="`/product/${product._id}`"
-              class="relative w-full cursor-pointer overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75"
+              class="relative w-full cursor-pointer overflow-hidden rounded-md bg-gray-200"
             >
-              <img
-                :src="product.product.imageGallery[0].imgUrl.trim()"
-                :alt="product.product.imageGallery[0].altText"
-                class="h-[300px] h-full w-full object-cover object-center"
+              <div
+                class="img_product"
+                :style="`background-image:url(${product.product.imageGallery[0].imgUrl.trim()});`"
               />
 
               <div class="absolute bottom-2 left-2 w-50px text-center">
@@ -343,11 +320,15 @@ onMounted(async () => {
             </div>
           </li>
         </template>
+        <li>
+          <p v-show="!productData?.data?.content?.length" class="p-1rem text-neutral-500">
+            查無符合資料
+          </p>
+        </li>
       </ul>
 
       <!-- page section -->
       <div class="bg_orange_primary search_section p-4">
-        <!-- <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"> -->
         <div class="flex items-center justify-between px-4 py-3 sm:px-6">
           <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center">
             <div class="">
@@ -376,13 +357,13 @@ onMounted(async () => {
                 </button>
 
                 <button
-                  v-for="page in pageInfo.totalPages"
+                  v-for="page in pageInfo?.totalPages"
                   :key="page"
                   type="button"
                   aria-current="page"
                   class="relative z-10 mr-2 inline-flex items-center b-rd-1 bg-white px-4 py-2 text-sm text-gray-900 font-semibold focus:z-20 hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 focus-visible:outline"
-                  :disabled="pageInfo.nowPage === page"
-                  :class="{ button_hover_color: pageInfo.nowPage === page }"
+                  :disabled="pageInfo?.nowPage === page"
+                  :class="{ button_hover_color: pageInfo?.nowPage === page }"
                   :value="page"
                   @click.prevent="handlePageChange"
                 >
@@ -393,9 +374,9 @@ onMounted(async () => {
                   id="nextPage"
                   type="button"
                   class="relative mr-10 inline-flex items-center rounded-r-md bg-white px-2 py-2 text-black ring-gray-300 ring-inset focus:z-20 hover:bg-gray-50 focus:outline-offset-0"
-                  :disabled="pageInfo.nowPage === pageInfo.totalPages"
+                  :disabled="pageInfo?.nowPage === pageInfo?.totalPages"
                   :class="{
-                    button_hover_color: pageInfo.nowPage === pageInfo.totalPages,
+                    button_hover_color: pageInfo?.nowPage === pageInfo?.totalPages,
                   }"
                   @click.prevent="handlePageChange"
                 >
@@ -418,7 +399,6 @@ onMounted(async () => {
                   v-model="searchValue.limit"
                   class="h-40px w-150px b-rd-1 p-8px text-gray-700"
                   name=""
-                  @change="updateFetchData"
                 >
                   <option value="12">12筆/頁</option>
                   <option value="24">24筆/頁</option>
@@ -493,11 +473,16 @@ body {
 
 .list_search {
   > li {
-    @apply flex justify-center items-center rounded-0.5rem bg-white px-1rem py-0.5rem text-1rem text-neutral-600 w-[calc(50%-0.5rem)];
+    @apply flex justify-center items-center rounded-0.5rem bg-white px-1rem py-0.5rem text-1rem text-neutral-600 w-[calc(50%-0.5rem)] cursor-pointer transition-shadow;
+    @apply active:(shadow-none);
+    @apply hover:(shadow-lg);
     @apply md:(w-auto flex-grow-1);
   }
 }
 
-.product {
+.img_product {
+  @apply aspect-1/1 bg-center bg-no-repeat bg-[length:100%_100%];
+  @apply hover:(bg-[length:110%_110%] opacity-80);
+  transition: background 0.2s ease, opacity 0.2s ease;
 }
 </style>
