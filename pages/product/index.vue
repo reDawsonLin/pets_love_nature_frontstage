@@ -6,22 +6,54 @@ const route = useRoute();
 
 const storeCart = useStoreCart();
 const { addCart } = storeCart;
+
 const show_pending = ref(true);
 
 const searchValue = ref({
   onlineStatus: true,
   searchText: "",
-  sortBy: "",
+  filterCategory: "",
   sortOrder: -1,
+  sortBy: "",
   page: 1,
   limit: 12,
-  filterCategory: "",
   dbclick: false,
 });
 
-const productData = ref([]);
-
+// const productData = ref([]);
 const pageInfo = ref([]);
+
+// if (import.meta.client) {
+//   console.log("client");
+//   if (route.query.searchType) {
+//     searchValue.value.filterCategory = route.query.searchType;
+//   }
+// }
+
+console.log("route.query.searchType :>> ", route.query.searchType);
+if (route.query.searchType) {
+  console.log("route.query.searchType :>> ", route.query.searchType);
+  searchValue.value.filterCategory = route.query.searchType;
+}
+
+const { data: productData, error } = await useApiFetch(
+  "/product/getFilterProductList",
+  {
+    params: searchValue.value,
+    watch: [searchValue],
+  }
+);
+
+// console.log("productData.value", productData.value);
+// productData.value = res.data.content;
+// pageInfo.value = res.data.page;
+show_pending.value = false;
+
+watchEffect(() => {
+  // console.log("route :>> ", route);
+  console.log("searchValue.value :>> ", searchValue.value);
+  console.log("productData.value", productData.value);
+});
 
 const fetchData = async () => {
   try {
@@ -30,9 +62,12 @@ const fetchData = async () => {
     };
     const queryString = new URLSearchParams(params).toString();
 
-    const result = await use$Fetch(`/product/getFilterProductList?${queryString}`, {
-      method: "GET",
-    });
+    const result = await use$Fetch(
+      `/product/getFilterProductList?${queryString}`,
+      {
+        method: "GET",
+      }
+    );
 
     show_pending.value = false;
     productData.value = result.data.content;
@@ -61,8 +96,9 @@ const changeSort = (sortValue) => {
 
 const changeCategory = (category) => {
   searchValue.value.filterCategory = category;
+  route.query.searchType = category;
 
-  fetchData();
+  // fetchData();
 };
 
 const updateFetchData = () => {
@@ -86,6 +122,7 @@ const changeOrder = () => {
     } else {
       searchValue.value.sortOrder = -1;
     }
+
     fetchData();
   }
   console.log("changeOrder", searchValue.value.sortOrder);
@@ -103,11 +140,11 @@ const handlePageChange = async (e) => {
 };
 
 onMounted(async () => {
-  if (route.query.searchType) {
-    console.log("Search type", route.query.searchType);
-    await changeCategory(route.query.searchType);
-  }
-  fetchData();
+  // if (route.query.searchType) {
+  //   console.log("Search type", route.query.searchType);
+  //   await changeCategory(route.query.searchType);
+  // }
+  // fetchData();
 });
 </script>
 
@@ -125,7 +162,7 @@ onMounted(async () => {
           :class="{ active: searchValue.filterCategory === '' }"
           @click="changeCategory('')"
         >
-          <a href="#">所有商品</a>
+          所有商品
         </li>
         <li
           :class="{ active: searchValue.filterCategory === 'cat' }"
@@ -183,7 +220,8 @@ onMounted(async () => {
             >
               <svg
                 v-if="
-                  (searchValue.sortOrder == -1 && searchValue.sortBy == 'price') ||
+                  (searchValue.sortOrder == -1 &&
+                    searchValue.sortBy == 'price') ||
                   searchValue.sortBy != 'price'
                 "
                 class="down h-5 w-5"
@@ -191,16 +229,26 @@ onMounted(async () => {
                 fill="currentColor"
                 aria-hidden="true"
               >
-                <path fill-rule="evenodd" d="M10 14l-5-5h10l-5 5z" clip-rule="evenodd" />
+                <path
+                  fill-rule="evenodd"
+                  d="M10 14l-5-5h10l-5 5z"
+                  clip-rule="evenodd"
+                />
               </svg>
               <svg
-                v-if="searchValue.sortOrder == 1 && searchValue.sortBy == 'price'"
+                v-if="
+                  searchValue.sortOrder == 1 && searchValue.sortBy == 'price'
+                "
                 class="up h-5 w-5"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 aria-hidden="true"
               >
-                <path fill-rule="evenodd" d="M10 6l5 5H5l5-5z" clip-rule="evenodd" />
+                <path
+                  fill-rule="evenodd"
+                  d="M10 6l5 5H5l5-5z"
+                  clip-rule="evenodd"
+                />
               </svg>
               價格</a
             >
@@ -213,7 +261,8 @@ onMounted(async () => {
             >
               <svg
                 v-if="
-                  (searchValue.sortOrder == -1 && searchValue.sortBy == 'updatedAt') ||
+                  (searchValue.sortOrder == -1 &&
+                    searchValue.sortBy == 'updatedAt') ||
                   searchValue.sortBy != 'updatedAt'
                 "
                 class="down h-5 w-5"
@@ -221,16 +270,27 @@ onMounted(async () => {
                 fill="currentColor"
                 aria-hidden="true"
               >
-                <path fill-rule="evenodd" d="M10 14l-5-5h10l-5 5z" clip-rule="evenodd" />
+                <path
+                  fill-rule="evenodd"
+                  d="M10 14l-5-5h10l-5 5z"
+                  clip-rule="evenodd"
+                />
               </svg>
               <svg
-                v-if="searchValue.sortOrder == 1 && searchValue.sortBy == 'updatedAt'"
+                v-if="
+                  searchValue.sortOrder == 1 &&
+                  searchValue.sortBy == 'updatedAt'
+                "
                 class="up h-5 w-5"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 aria-hidden="true"
               >
-                <path fill-rule="evenodd" d="M10 6l5 5H5l5-5z" clip-rule="evenodd" />
+                <path
+                  fill-rule="evenodd"
+                  d="M10 6l5 5H5l5-5z"
+                  clip-rule="evenodd"
+                />
               </svg>
               時間</a
             >
@@ -241,7 +301,7 @@ onMounted(async () => {
             <div
               class="pointer-events-none absolute inset-y-0 right-2 flex items-center pl-3"
             >
-              <img class="w-20px" src="/assets/img/icon/search.svg" alt="" >
+              <img class="w-20px" src="/assets/img/icon/search.svg" alt="" />
             </div>
             <input
               id="price"
@@ -251,58 +311,75 @@ onMounted(async () => {
               class="w-[100%] inline-flex border-0 rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-gray-300 ring-inset md:w-[226px] sm:text-sm placeholder:text-gray-400 sm:leading-6 focus:ring-2 focus:ring-indigo-600 focus:ring-inset"
               placeholder="搜尋"
               @keydown.enter="updateFetchData()"
-            >
+            />
           </div>
         </div>
 
         <!-- products section -->
         <ul
-          class="grid grid-cols-1 mb-[36px] mt-6 gap-x-6 gap-y-10 lg:grid-cols-4 sm:grid-cols-2 xl:gap-x-8"
+          class="grid grid-cols-1 mb-[36px] mt-6 gap-x-6 gap-y-10 lg:grid-cols-3 sm:grid-cols-2 xl:gap-x-8"
         >
-          <template v-for="product in productData" :key="product._id">
-            <li class="group product relative border border-red b-rd-2xl pb-4">
-              <div
-                v-if="product.product.imageGallery.length > 0"
-                class="aspect-h-1 aspect-w-1 lg:aspect-none relative w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75"
+          <template
+            v-for="product in productData.data.content"
+            :key="product._id"
+          >
+            <li
+              class="group product relative overflow-hidden border rounded-0.5rem pb-4"
+            >
+              <NuxtLink
+                :to="`/product/${product._id}`"
+                class="aspect-h-1 aspect-w-1 lg:aspect-none relative w-full cursor-pointer overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75"
               >
                 <img
                   :src="product.product.imageGallery[0].imgUrl.trim()"
                   :alt="product.product.imageGallery[0].altText"
                   class="h-[300px] h-full w-full object-cover object-center"
-                >
+                />
 
                 <div class="absolute bottom-2 left-2 w-50px text-center">
-                  <div class="border-rd-8px bg-[#525252] pl-8px pr-8px text-white">
+                  <div
+                    class="border-rd-8px bg-[#525252] pl-8px pr-8px text-white"
+                  >
                     {{ product.weight }}g
                   </div>
                 </div>
-              </div>
+              </NuxtLink>
 
               <div class="mt-4 flex justify-between pl-2 pr-2">
                 <div>
                   <h3 class="text-sm text-gray-700">
-                    <a :href="`/product/${product._id}`">
-                      {{ product.product.title }}
-                    </a>
+                    <NuxtLink :to="`/product/${product._id}`"
+                      >{{ product.product.title }}
+                    </NuxtLink>
                   </h3>
-                  <p class="mt-1 text-sm text-gray-500">NT$ {{ product.price }}</p>
+
+                  <p class="mt-1 text-sm text-gray-500">
+                    NT$ {{ product.price }}
+                  </p>
                 </div>
-                <div class="flex flex-col grid-justify-end flex-items-end">
+
+                <div
+                  class="flex shrink-0 flex-col grid-justify-end flex-items-end"
+                >
                   <div v-if="product.product.star > 0" class="flex">
                     <img
                       v-for="index in Math.floor(product.product.star)"
                       :key="index"
                       src="/assets/img/icon/icon-star.svg"
                       alt="Star"
-                    >
+                    />
                     <img
                       v-if="product.product.star % 1 === 0.5"
                       src="/assets/img/icon/icon-star_half.svg"
                       alt=""
-                    >
+                    />
                   </div>
-                  <div class="hover-effect mt-2" @click="addToCart(product)">
-                    <img src="/assets/img/icon/icon-cart.svg" alt="" >
+
+                  <div
+                    class="hover-effect mt-2 cursor-pointer"
+                    @click="addToCart(product)"
+                  >
+                    <img src="/assets/img/icon/icon-cart.svg" alt="" />
                   </div>
                 </div>
               </div>
@@ -314,9 +391,14 @@ onMounted(async () => {
         <div class="bg_orange_primary search_section p-4">
           <!-- <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"> -->
           <div class="flex items-center justify-between px-4 py-3 sm:px-6">
-            <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center">
+            <div
+              class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center"
+            >
               <div class="">
-                <nav class="isolate inline-flex rounded-md" aria-label="Pagination">
+                <nav
+                  class="isolate inline-flex rounded-md"
+                  aria-label="Pagination"
+                >
                   <button
                     id="previousPage"
                     type="button"
@@ -360,7 +442,8 @@ onMounted(async () => {
                     class="relative mr-10 inline-flex items-center rounded-r-md bg-white px-2 py-2 text-black ring-gray-300 ring-inset focus:z-20 hover:bg-gray-50 focus:outline-offset-0"
                     :disabled="pageInfo.nowPage === pageInfo.totalPages"
                     :class="{
-                      button_hover_color: pageInfo.nowPage === pageInfo.totalPages,
+                      button_hover_color:
+                        pageInfo.nowPage === pageInfo.totalPages,
                     }"
                     @click.prevent="handlePageChange"
                   >
