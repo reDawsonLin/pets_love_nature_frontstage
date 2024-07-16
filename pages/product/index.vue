@@ -94,11 +94,13 @@ const changeSort = (sortValue) => {
   fetchData();
 };
 
-const changeCategory = (category) => {
+const changeCategory = async (category) => {
   searchValue.value.filterCategory = category;
-  route.query.searchType = category;
 
-  // fetchData();
+  await navigateTo({
+    path: "/product",
+    query: { searchType: category },
+  });
 };
 
 const updateFetchData = () => {
