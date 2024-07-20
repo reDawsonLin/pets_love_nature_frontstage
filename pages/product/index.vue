@@ -48,8 +48,6 @@ const fetchData = async () => {
     show_pending.value = false;
     productData.value = result.data.content;
     pageInfo.value = result.data.page;
-
-    // console.log("成功得到產品資訊", result.data);
   } catch (e) {
     show_pending.value = false;
 
@@ -122,7 +120,7 @@ const handlePageChange = async (e) => {
 </script>
 
 <template>
-  <LoadingPending :show="show_pending" />
+  <!-- <LoadingPending :show="show_pending" /> -->
 
   <div
     class="flex flex-col gap-1rem px-1.25rem py-1rem md:(mx-auto max-w-1296px w-100% flex-row)"
@@ -245,7 +243,7 @@ const handlePageChange = async (e) => {
           </li>
         </ul>
 
-        <div class="relative w-[100%] shadow-sm lg:(w-auto ml-auto)">
+        <div class="relative w-[100%] shadow-sm lg:(ml-auto w-auto)">
           <input
             v-model="param_search"
             type="text"
@@ -253,11 +251,11 @@ const handlePageChange = async (e) => {
             class="w-[100%] flex rounded-0.5rem px-1rem py-0.5rem pr-1.25rem placeholder:text-neutral-400"
             placeholder="搜尋"
             @keydown.enter="changeSearch()"
-          />
+          >
 
           <SvgIcon
             name="search"
-            class="cursor-pointer absolute top-0.675rem right-0.5rem w-1.25rem transition-[width] hover:(w-1.375rem)"
+            class="transition-[width] absolute right-0.5rem top-0.675rem w-1.25rem cursor-pointer hover:(w-1.375rem)"
             @click="changeSearch()"
           />
         </div>
@@ -287,7 +285,7 @@ const handlePageChange = async (e) => {
               </div>
             </NuxtLink>
 
-            <div class="flex justify-between p-0.75rem flex-grow-1">
+            <div class="flex flex-grow-1 justify-between p-0.75rem">
               <div>
                 <h3 class="text-sm text-gray-700">
                   <NuxtLink :to="`/product/${product._id}`"
@@ -305,16 +303,16 @@ const handlePageChange = async (e) => {
                     :key="index"
                     src="/assets/img/icon/icon-star.svg"
                     alt="Star"
-                  />
+                  >
                   <img
                     v-if="product.product.star % 1 === 0.5"
                     src="/assets/img/icon/icon-star_half.svg"
                     alt=""
-                  />
+                  >
                 </div>
 
                 <div class="hover-effect mt-2 cursor-pointer" @click="addToCart(product)">
-                  <img src="/assets/img/icon/icon-cart.svg" alt="" />
+                  <img src="/assets/img/icon/icon-cart.svg" alt="" >
                 </div>
               </div>
             </div>
