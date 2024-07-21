@@ -41,7 +41,6 @@ export const useStoreCart = defineStore("cart", () => {
     let getCartById;
     let getCartNoLogin;
     if (token.value && id_customer.value) {
-      console.log("有登入");
       getCartById = await use$Fetch(
         `/shopping_cart/login/${id_customer.value}`,
         {
@@ -53,7 +52,6 @@ export const useStoreCart = defineStore("cart", () => {
         }
       );
     } else {
-      console.log("未登入");
       noLoginObj = sessionStorage.getItem("shoppingCartNoLogin");
       if (noLoginObj) {
         getCartNoLogin = await use$Fetch(`/shopping_cart/nologin/`, {
@@ -70,10 +68,8 @@ export const useStoreCart = defineStore("cart", () => {
     // 整理開始
     if (token.value && id_customer.value) {
       tempCartArray = getCartById?.data;
-      console.log("tempCartArray已登入", tempCartArray);
     } else {
       tempCartArray = getCartNoLogin?.data?.shoppingCart;
-      console.log("tempCartArray未登入", tempCartArray);
     }
     transformArray = tempCartArray?.map((eachProduct) => {
       const product = eachProduct.productSpec?.productId;
@@ -99,14 +95,11 @@ export const useStoreCart = defineStore("cart", () => {
   // 新增購物車 通用 addWay = 0 加x至購物車, addWay = 1 購物車數量調整至x
   const addCart = async (cartArr, addWay) => {
     const { token, id_customer } = checkToken();
-    console.log("token.value", token.value);
-    console.log("id_customer", id_customer.value);
+
     if (token.value && id_customer.value) {
       await addCartLogin(cartArr, addWay, token, id_customer);
-      console.log("addcart有登入");
     } else {
       addCartNoLogin(cartArr, addWay);
-      console.log("addcart沒登入");
     }
   };
 
@@ -125,7 +118,7 @@ export const useStoreCart = defineStore("cart", () => {
           Authorization: `Bearer ${token.value}`,
         },
       });
-      console.log("addCartLoginReturn", addCartLoginReturn);
+
       if (addCartLoginReturn?.status) {
         if (addWay === 0) {
           if (addCartLoginReturn?.message === "成功") {
@@ -162,7 +155,7 @@ export const useStoreCart = defineStore("cart", () => {
             },
           ],
         };
-        console.log("noLoginObj", noLoginObj);
+
         sessionStorage.setItem(
           "shoppingCartNoLogin",
           JSON.stringify(noLoginObj)
@@ -192,7 +185,7 @@ export const useStoreCart = defineStore("cart", () => {
           if (addWay === 0)
             focusQuantity = prevData.shoppingCart[index].quantity + quantity;
           else if (addWay === 1) focusQuantity = quantity;
-          console.log("focusQuantity", focusQuantity);
+
           // 未登入add cart
           if (focusQuantity > inStock) {
             if (addWay === 0)
@@ -200,9 +193,6 @@ export const useStoreCart = defineStore("cart", () => {
                 `因庫存只有${inStock}個，購物車品已幫您加該商品數量至${inStock}個`
               );
             prevData.shoppingCart[index].quantity = inStock;
-            console.log(
-              `因庫存只有${inStock}個，購物車品已幫您加該商品數量至${inStock}個`
-            );
           } else {
             prevData.shoppingCart[index].quantity = focusQuantity;
 
@@ -215,7 +205,6 @@ export const useStoreCart = defineStore("cart", () => {
                 timer: 1500,
               });
             }
-            console.log("正常增加");
           }
         } else {
           // 如果購物車內沒有該商品
@@ -250,12 +239,6 @@ export const useStoreCart = defineStore("cart", () => {
         }
         sessionStorage.setItem("shoppingCartNoLogin", JSON.stringify(prevData));
       }
-      // sessionStorage.removeItem("shoppingCartNoLogin");
-      console.log(
-        "sessionStorageRRR1",
-        sessionStorage.getItem("shoppingCartNoLogin")
-      );
-      console.log("getTransformCartArray", getTransformCartArray);
     }
     getTransformCartArray();
   };
@@ -299,10 +282,7 @@ export const useStoreCart = defineStore("cart", () => {
 
   // 刪除購物車 未登入
   const deleteCartNoLogin = (productSpec) => {
-    console.log("deleteCartNoLogin");
-    console.log("productSpec", productSpec);
     let prevData = JSON.parse(sessionStorage.getItem("shoppingCartNoLogin"));
-    console.log("prevData", prevData);
 
     const focusIndex = prevData.shoppingCart.findIndex(
       (eachData) => eachData.productSpec === productSpec
@@ -326,10 +306,8 @@ export const useStoreCart = defineStore("cart", () => {
     }
   };
 
-
   // -------
-  const data_checkoutCart = ref()
-
+  const data_checkoutCart = ref();
 
   return {
     cartArr,

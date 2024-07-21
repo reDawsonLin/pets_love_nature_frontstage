@@ -51,7 +51,6 @@ const fetchData = async () => {
   } catch (e) {
     show_pending.value = false;
 
-    console.log(e.message);
     console.log("err", e);
   }
 };

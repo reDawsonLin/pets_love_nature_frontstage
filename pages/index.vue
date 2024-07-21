@@ -31,9 +31,7 @@ const { data: data_commentList, error: error_commentList } = await useApiFetch(
 
 const { data: data_banner, error: error_banner } = await useApiFetch("/banner");
 const toRoute = (item) => {
-  console.log("item :>> ", item);
-  if (item.hyperlink)
-    return { name: "product", params: { searchType: item.hyperlink } };
+  if (item.hyperlink) return { name: "product", params: { searchType: item.hyperlink } };
   else return { name: "product" };
 };
 
@@ -128,12 +126,7 @@ const data_hotProduct = [
 </script>
 
 <template>
-  <!-- <button type="button" @click="fetchOrder">fetch order</button> -->
-
-  <section
-    class="banner_list flex-grow-1 bg-second-200"
-    p="x-0.75rem t-1.25rem"
-  >
+  <section class="banner_list flex-grow-1 bg-second-200" p="x-0.75rem t-1.25rem">
     <Swiper
       class="md:(max-w-1760px w-100%)"
       space-between="12"
@@ -173,9 +166,7 @@ const data_hotProduct = [
   <section
     class="brand_info mt-2rem lg:([background-repeat:no-repeat,_no-repeat,_repeat] mt-0 flex justify-center gap-4.875rem bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)] px-1rem)"
   >
-    <header
-      class="mb-1rem flex flex-col items-center lg:(gap-4.5rem pt-7.5rem)"
-    >
+    <header class="mb-1rem flex flex-col items-center lg:(gap-4.5rem pt-7.5rem)">
       <SvgIcon
         name="logo_pink"
         class="w-5rem lg:(order-2 w-19.25rem bg-neutral-100/[.9])"
@@ -193,10 +184,7 @@ const data_hotProduct = [
           <div
             class="wrapper_icon transition-background mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148,107,0.3)] transition-(transform) lg:(max-w-320px w-16vw rounded-2rem p-1rem) group-hover:(rotate-5 bg-second-200)"
           >
-            <SvgIcon
-              :name="feature.iconName"
-              class="w-5rem lg:(max-w-160px w-8.3vw)"
-            />
+            <SvgIcon :name="feature.iconName" class="w-5rem lg:(max-w-160px w-8.3vw)" />
           </div>
           <p text-1.25rem class="lg:(text-2rem)">{{ feature.content1 }}</p>
           <p text-1.25rem class="lg:(text-2rem)">{{ feature.content2 }}</p>
@@ -207,12 +195,12 @@ const data_hotProduct = [
 
   <section class="product_category" p="x-0.75rem t-2rem b-4rem md:(y-7.5rem)">
     <ul
-      class="flex flex-col gap-1.5rem md:(flex-row justify-center gap-7.5rem)"
+      class="flex flex-col gap-1.5rem sm:(mx-auto max-w-500px) md:(max-w-1296px flex-row flex-wrap justify-center)"
     >
       <li
         v-for="category in data_category"
         :key="category.id"
-        class="flex gap-1.5rem md:(h-32.5rem gap-3rem)"
+        class="flex gap-1.5rem md:(flex-grow-1)"
       >
         <div
           class="w-3.75rem flex items-center justify-center gap-1rem write-vertical-left md:(justify-start)"
@@ -223,10 +211,9 @@ const data_hotProduct = [
           <p class="text-0.75rem md:(text-1.25rem)">{{ category.subtitle }}</p>
         </div>
 
-        <!-- :to="{ name: 'product', query: { searchType: 'dry' } }" -->
         <NuxtLink
           :to="category.routeUrl"
-          class="group relative aspect-257/358 flex-grow-1 rounded-1.5rem"
+          class="group relative aspect-257/358 flex-grow-1 rounded-1.5rem lg:(aspect-430/520) md:(aspect-unset)"
           :class="[`${category.bgUrl}`]"
           bg="center [length:auto_100%] no-repeat"
         >
@@ -250,9 +237,7 @@ const data_hotProduct = [
     class="product_suggest relative rounded-2.5rem bg-second-200"
     p="x-0.75rem y-2.5rem md:(y-7.5rem)"
   >
-    <header
-      class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)"
-    >
+    <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
       <h2 class="mb-3rem text-center md:(mb-0)">熱銷商品</h2>
 
       <ClientOnly>
@@ -283,21 +268,6 @@ const data_hotProduct = [
             </p>
           </NuxtLink>
         </li>
-        <!-- <li
-          class="group relative aspect-1/1 w-100% rounded-2rem transition-shadow md:(aspect-416/580)"
-          :class="product.bg_url"
-          bg="center cover"
-          hover:shadow-md
-        >
-          <NuxtLink
-            :to="product.routeUrl"
-            class="transition-property-background absolute bottom-3rem left-50% w-fit translate-x--50% whitespace-nowrap rounded-5rem bg-neutral-50 text-2rem transition-duration-100 transition-ease-linear transition-property-(color transform) group-hover:(translate-y--1rem bg-neutral-800 text-neutral-50)"
-            p="x-3rem y-0.75rem"
-          >
-
-            {{ product.product_type }}</NuxtLink
-          >
-        </li> -->
       </template>
     </ul>
 
@@ -310,9 +280,7 @@ const data_hotProduct = [
   </section>
 
   <section class="comment_list px-2rem py-4rem">
-    <header
-      class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)"
-    >
+    <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
       <h2 class="mb-3rem text-center md:(mb-0)">熱烈好評</h2>
 
       <ButtonMore
@@ -349,14 +317,10 @@ const data_hotProduct = [
           </p>
         </div>
 
-        <div
-          class="mx-auto flex gap-0.5rem md:(order-1 w-3.75rem shrink-0 flex-col)"
-        >
+        <div class="mx-auto flex gap-0.5rem md:(order-1 w-3.75rem shrink-0 flex-col)">
           <img
             :src="
-              comment.customerId.image
-                ? comment.customerId.image
-                : '/img/home-4-1.webp'
+              comment.customerId.image ? comment.customerId.image : '/img/home-4-1.webp'
             "
             alt="avatar"
             class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center md:(w-100%)"

@@ -6,102 +6,6 @@ import loading_pet from "@/assets/lottie/loading-pet.json";
 const lottie_container = ref(null);
 const isLoading = ref(false);
 
-// ===
-// const nuxtApp = useNuxtApp();
-// const throttle = 100;
-// const delay_hide = 200;
-
-// let timeout_throttle;
-// let timeout_hide;
-// let timeout_reset;
-
-// // const start = () => {
-// //   clear();
-
-// //   if (throttle) {
-// //     // check api fetch or not ===
-
-// //     timeout_throttle = setTimeout(() => {
-// //       lottie_container.value.play();
-// //       isLoading.value = true;
-// //     }, throttle);
-// //   } else {
-// //     isLoading.value = true;
-// //   }
-// // };
-
-// // const _hide = () => {
-// //   clear();
-// //   // setTimeout(() => {
-// //   //   isLoading.value = false;
-// //   // }, hold);
-
-// //   timeout_hide = setTimeout(() => {
-// //     lottie_container.value.pause();
-// //     isLoading.value = false;
-// //   }, delay_hide);
-// // };
-
-// // const finish = () => {
-// //   clear();
-// //   _clearTimeouts();
-// //   _hide();
-// // };
-
-// // function clear() {
-// //   clearTimeout(timeout_throttle);
-// //   // timeout_throttle.value = null;
-// // }
-
-// // function _clearTimeouts() {
-// //   clearTimeout(timeout_hide);
-// //   clearTimeout(timeout_reset);
-// // }
-
-// // let _cleanup = () => {};
-// // if (import.meta.client) {
-// //   const unsubLoadingStartHook = nuxtApp.hook("page:loading:start", () => {
-// //     console.log("start start");
-// //     start();
-// //     console.log("start end");
-// //   });
-
-// //   const unsubLoadingFinishHook = nuxtApp.hook("page:loading:end", () => {
-// //     console.log("finished start");
-// //     finish();
-// //     console.log("finished end");
-// //   });
-
-// //   const unsubError = nuxtApp.hook("vue:error", () => finish());
-
-// //   _cleanup = () => {
-// //     unsubError();
-// //     unsubLoadingStartHook();
-// //     unsubLoadingFinishHook();
-// //     clear();
-// //   };
-// // }
-
-// // nuxtApp.hook("page:start", () => {
-// nuxtApp.hook("page:loading:start", () => {
-//   console.log("start start");
-//   isLoading.value = true;
-//   lottie_container.value.play();
-//   console.log("start end");
-// });
-
-// // nuxtApp.hook("page:finish", () => {
-// nuxtApp.hook("page:loading:end", () => {
-//   console.log("finish start");
-//   isLoading.value = false;
-//   lottie_container.value.pause();
-//   console.log("finish end");
-// //   // setTimeout(() => {
-// //   //   isLoading.value = false;
-// //   //   lottie_container.value.pause();
-// //   // }, 300);
-// });
-
 // -----------
 const throttle = 200;
 const hold = 1000;
@@ -138,10 +42,6 @@ function hide() {
   }
 }
 
-// globalMiddleware.unshift(show);
-// function unsubRouterBeforeMiddleware() {
-//   globalMiddleware.splice(globalMiddleware.indexOf(show, 1));
-// }
 
 const nuxtApp = useNuxtApp();
 
@@ -214,11 +114,7 @@ router.afterEach((_to, _from, failure) => {
 <template>
   <ClientOnly>
     <div class="loading-indicator" :class="{ show: isLoading }">
-      <Vue3Lottie
-        ref="lottie_container"
-        class="lottie"
-        :animation-data="loading_pet"
-      />
+      <Vue3Lottie ref="lottie_container" class="lottie" :animation-data="loading_pet" />
     </div>
   </ClientOnly>
 </template>

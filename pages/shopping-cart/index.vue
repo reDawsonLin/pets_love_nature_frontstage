@@ -2,48 +2,13 @@
 import Swal from "sweetalert2";
 import { useStoreCart } from "~/stores/storeCart";
 const storeCart = useStoreCart();
-const { getTransformCartArray, addCart, deleteCart, addTestCartNoLogin } = storeCart;
-// const { addCart, deleteCart, addTestCartNoLogin } = await useShoppingCart();
+const { getTransformCartArray, addCart, deleteCart } = storeCart;
+
 const noImgUrl = ref(
   "https://storage.googleapis.com/petstore-3a2e1.appspot.com/images/ecbb5438-43c3-4a9b-9316-f8e8aecc7d15.jpg?GoogleAccessId=firebase-adminsdk-p5zjq%40petstore-3a2e1.iam.gserviceaccount.com&Expires=16756675200&Signature=sU4UW2CPGkhBDRGf4ncTUXeN%2B5YVxIOdHuVOMxIeDg%2FtxZ6pEIuElGuz1CM14yBtyXO4BvkreykJkUuqS80Bbf%2FUJIyHESkJrNbepEbcVrZBTrX7SLdOZFrQYD86SB%2B7AoXt3JQ43%2BcRTGZki%2FAgdAmd1nqtI2b2F3PipzkWHhitUjdcruJpSsbPSTQwkUfC46B2Pv%2FzxPHrdx6kyFgoICYy21zFhxj7x3DcJq%2Ftj28gUP%2BCeTElNKUMVyWKPyvmBP76XWy8JLWGBs43uJFOuwmjxu4yfk0vc9L8GM%2Bu9PDFLRBrfBlJ30knbCIHHIBeKCDSkpgLb2ZJJhZ888r4GQ%3D%3D"
 );
 const pending = ref(true);
 const shoppingDataArr = ref([]);
-// console.log('token11', token.value);
-//   console.log('id_customer11', id_customer.value);
-// const testArr = ref([
-//   {
-//     productId: "A00001",
-//     quantity: 3,
-//     title:
-//       "控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃控味健康肉棒-寵物的健康小吃",
-//     weight: 15,
-//     price: 100,
-//     inStock: 10,
-//     imageGallery: {
-//       id: 0,
-//       imgUrl:
-//         "https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png",
-//       altText: ""
-//     },
-//     isChoosed: false
-//   },
-//   {
-//     productId: "A00001",
-//     quantity: 3,
-//     title: "好吃貓食",
-//     weight: 15,
-//     price: 150,
-//     inStock: 10,
-//     imageGallery: {
-//       id: 0,
-//       imgUrl:
-//         "https://thumbnail7.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/12726835984140-c4068191-7291-456e-b6b4-792140c83051.png",
-//       altText: ""
-//     },
-//     isChoosed: false
-//   }
-// ]);
 
 onMounted(async () => {
   //  initial clear -------
@@ -72,23 +37,11 @@ const allSelected = computed(
     shoppingDataArr.value.length
 );
 
-const checkValue = async () => {
-  // console.log(testArr);
-  // console.log("count", count);
-  // console.log("add", add);
-  // console.log(await getTransformCartArray());
-  // console.log('process.env', process);
-  // console.log("useShoppingCart", useShoppingCart);
-  addTestCartNoLogin();
-};
-
 const selectProduct = (i) => {
   shoppingDataArr.value[i].isChoosed = !shoppingDataArr.value[i].isChoosed;
 };
 
 const deleteProduct = async (i, eachProduct) => {
-  // console.log('shoppingDataArr.value[i]', shoppingDataArr.value[i]);
-  // console.log('eachProduct', eachProduct._id);
   shoppingDataArr.value.splice(i, 1);
   await deleteCart(eachProduct._id);
 };
@@ -120,7 +73,7 @@ const productQuantityInput = async (product, e) => {
   if (targetNum > 0 && targetNum <= product.inStock && !isNaN(targetNum)) {
     product.quantity = targetNum;
   }
-  console.log("product", product);
+
   if (originQuantity !== product.quantity) {
     const obj = {
       productSpec: product._id,
@@ -170,7 +123,7 @@ const goPurchaseOrder = async () => {
 
   if (token.value) {
     const { data } = await useToken$Fetch(`/customer/${id_customer.value}`);
-    // console.log("data.value.accountStatus :>> ", data.value.accountStatus);
+
     if (!data.accountStatus) {
       Swal.fire({ text: "無法進入結帳流程，請聯絡小編", icon: "info" });
       return;
@@ -183,7 +136,7 @@ const goPurchaseOrder = async () => {
 
 <template>
   <div class="shopping_cart grow">
-  <LoadingPending :show="pending" />
+    <LoadingPending :show="pending" />
     <div p="t-3.75rem" class="title mb-7.5 flex items-center justify-center">
       <img class="mr-4" src="/assets/img/shopping_cart.png" alt="" >
       <h1 class="text-4xl">購物車</h1>

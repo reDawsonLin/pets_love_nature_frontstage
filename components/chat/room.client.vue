@@ -47,7 +47,6 @@ async function chatRoomToggle(status) {
 }
 
 socket.on("message", async (message) => {
-  console.log("message :>> ", message);
   list_message.value.push(message);
 
   await nextTick();
@@ -56,7 +55,7 @@ socket.on("message", async (message) => {
 
 //連線監聽
 socket.on("connectStatus", (data) => {
-  console.log("connectStatus", data);
+  // console.log("connectStatus", data);
 });
 
 //錯誤監聽
@@ -66,7 +65,7 @@ socket.on("errorMsg", (data) => {
 
 //已讀監聽
 socket.on("admin read", (data) => {
-  console.log("admin read", data);
+  // console.log("admin read", data);
 });
 
 // const isConnected = ref(false);
@@ -106,11 +105,11 @@ const chatKeydown = (event) => {
 
 const sendMessage = async () => {
   if (!chatMessage.value || !chatMessage.value.trim()) {
-    console.log("empty message");
+    // console.log("empty message");
     return;
   }
 
-  console.log("send message");
+  // console.log("send message");
 
   socket.emit("message", {
     customerId: id_customer.value,
