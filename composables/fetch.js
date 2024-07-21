@@ -1,7 +1,4 @@
-// import { useStoreLogin } from "~/stores/login";
 
-// const store_login = useStoreLogin();
-// const { token } = storeToRefs(store_login);
 
 const baseURL = "https://pets-love-nature-backend-n.onrender.com/api/v1";
 
@@ -83,22 +80,3 @@ export const useTokenFetch = async (url, options) => {
   });
 };
 
-//   onRequest({ request, options }) {
-//     // Set the request headers
-//     options.headers = options.headers || {};
-//     // 暫時把快取關掉
-//     options.initialCache = false;
-//     options.headers.authorization = `Bearer ${token.value}`;
-//   },
-//   onRequestError({ request, options, error }) {
-//     console.log("on request error :>> ", error);
-//   },
-//   onResponse({ request, response, options }) {
-//     // Process the response data
-//     // console.log("on response");
-//     // console.log("response :>> ", response);
-//   },
-//   onResponseError({ request, response, options }) {
-//     console.log("on response error :>> ", response);
-//   },
-// });

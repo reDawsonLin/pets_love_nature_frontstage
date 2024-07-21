@@ -4,7 +4,6 @@ const hoverStarIndex = ref(0);
 const startIndex = ref(0);
 
 const hoverStar = (index) => {
-  console.log(index);
   hoverStarIndex.value = index;
 };
 </script>

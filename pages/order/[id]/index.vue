@@ -10,7 +10,6 @@ const { data: data_order, error: error_order } = await useTokenFetch(
 );
 if (error_order.value) console.log("error_order.value :>> ", error_order.value);
 const detail_order = data_order.value.data[0];
-console.log("detail_order :>> ", detail_order);
 
 const id_customer = useCookie("id_customer");
 const { data: data_member, error: error_member } = await useTokenFetch(
