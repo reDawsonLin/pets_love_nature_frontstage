@@ -31,7 +31,7 @@ const { data: data_commentList, error: error_commentList } = await useApiFetch(
 
 const { data: data_banner, error: error_banner } = await useApiFetch("/banner");
 const toRoute = (item) => {
-  if (item.hyperlink) return { name: "product", params: { searchType: item.hyperlink } };
+  if (item.hyperlink) return { name: "product", query: { searchType: item.hyperlink } };
   else return { name: "product" };
 };
 

@@ -1,4 +1,6 @@
 <script setup>
+definePageMeta({ middleware: "need-login" });
+
 const id_order = useCookie("id_order");
 
 const data_cart = ref();
@@ -64,7 +66,7 @@ const { width: window_width } = useWindowSize();
                 class="h-100% object-cover object-center lg:(h-5rem w-5rem)"
                 :src="item.coverImg"
                 alt="product image"
-              >
+              />
             </td>
             <td class="td_content lg:(text-1.25rem)">
               <p class="line-clamp-2">
