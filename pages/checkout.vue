@@ -1,6 +1,6 @@
 <script setup>
 // route middleware -------
-// definePageMeta({ middleware: "need-login" });
+definePageMeta({ middleware: "need-login" });
 
 const list_step = [
   {
