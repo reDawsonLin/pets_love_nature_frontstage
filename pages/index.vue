@@ -1,4 +1,10 @@
 <script setup>
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+// view ---
 const { width: window_width } = useWindowSize();
 const comment_swiperPerView = computed(() => {
   if (window_width.value < 768) return 1;
@@ -25,26 +31,109 @@ const window_width_md = computed(() => window_width.value < 768);
 
 watchEffect(() => {});
 
+// api ---
 const { data: data_commentList, error: error_commentList } = await useApiFetch(
   "/comment"
 );
 
 const { data: data_banner, error: error_banner } = await useApiFetch("/banner");
 const toRoute = (item) => {
-  if (item.hyperlink) return { name: "product", query: { searchType: item.hyperlink } };
+  if (item.hyperlink)
+    return { name: "product", query: { searchType: item.hyperlink } };
   else return { name: "product" };
 };
 
 const data_comment = ref([]);
+
+// gsap ---
+const banner = ref(null);
+const brand_info = ref(null);
+const product_category = ref(null);
+const product_suggest = ref(null);
+
 onMounted(() => {
+  // gsap -------
+  gsap.context((self) => {
+    const boxes = self.selector(".feature");
+    boxes.forEach((box, index) => {
+      if (index % 2 === 0) {
+        gsap.from(box, {
+          x: -100,
+          opacity: 0,
+          scrollTrigger: {
+            trigger: box,
+            start: "top 70%",
+            end: "top 50%",
+            scrub: true,
+          },
+        });
+      } else {
+        gsap.from(box, {
+          x: 100,
+          opacity: 0,
+          scrollTrigger: {
+            trigger: box,
+            start: "top 70%",
+            end: "top 50%",
+            scrub: true,
+          },
+        });
+      }
+    });
+  }, brand_info.value);
+
+  gsap.context((self) => {
+    const boxes = self.selector(".category");
+    boxes.forEach((box) => {
+      gsap.from(box, {
+        opacity: 0,
+        scrollTrigger: {
+          trigger: box,
+          // start: "bottom bottom",
+          start: "top 70%",
+          end: "bottom 50%",
+          scrub: true,
+        },
+      });
+    });
+  }, product_category.value);
+
+  gsap.context((self) => {
+    const boxes = self.selector(".suggest");
+    boxes.forEach((box) => {
+      gsap.from(box, {
+        y: -50,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: box,
+          start: "top 90%",
+          end: "bottom 50%",
+          scrub: true,
+        },
+      });
+    });
+  }, product_suggest.value);
+
+  // comment sort ---
   for (let i = 0; i < data_commentList.value.data.length; i++) {
     const item = data_commentList.value.data[i];
     if (data_comment.value.length >= 7) break;
     if (!item.comment) return;
-
     item.customerId.customerName = hideString(item.customerId.customerName);
     data_comment.value.push(item);
   }
+});
+
+onUnmounted(() => {});
+
+const nuxtApp = useNuxtApp();
+nuxtApp.hook("page:finish", () => {
+  gsap.from(banner.value, {
+    opacity: 0,
+    y: 100,
+    duration: 1,
+    delay: 0.5,
+  });
 });
 
 // --------------------------------------
@@ -126,7 +215,11 @@ const data_hotProduct = [
 </script>
 
 <template>
-  <section class="banner_list flex-grow-1 bg-second-200" p="x-0.75rem t-1.25rem">
+  <section
+    ref="banner"
+    class="banner_list flex-grow-1 bg-second-200"
+    p="x-0.75rem t-1.25rem"
+  >
     <Swiper
       class="md:(max-w-1760px w-100%)"
       space-between="12"
@@ -166,7 +259,9 @@ const data_hotProduct = [
   <section
     class="brand_info mt-2rem lg:([background-repeat:no-repeat,_no-repeat,_repeat] mt-0 flex justify-center gap-4.875rem bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)] px-1rem)"
   >
-    <header class="mb-1rem flex flex-col items-center lg:(gap-4.5rem pt-7.5rem)">
+    <header
+      class="mb-1rem flex flex-col items-center lg:(gap-4.5rem pt-7.5rem)"
+    >
       <SvgIcon
         name="logo_pink"
         class="w-5rem lg:(order-2 w-19.25rem bg-neutral-100/[.9])"
@@ -175,6 +270,7 @@ const data_hotProduct = [
     </header>
 
     <ul
+      ref="brand_info"
       class="box_feature grid grid-cols-2 mx-auto max-w-500px lg:(mx-0 max-w-unset gap-x-1.5rem)"
     >
       <template v-for="feature in data_feature" :key="feature.id">
@@ -184,7 +280,10 @@ const data_hotProduct = [
           <div
             class="wrapper_icon transition-background mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148,107,0.3)] transition-(transform) lg:(max-w-320px w-16vw rounded-2rem p-1rem) group-hover:(rotate-5 bg-second-200)"
           >
-            <SvgIcon :name="feature.iconName" class="w-5rem lg:(max-w-160px w-8.3vw)" />
+            <SvgIcon
+              :name="feature.iconName"
+              class="w-5rem lg:(max-w-160px w-8.3vw)"
+            />
           </div>
           <p text-1.25rem class="lg:(text-2rem)">{{ feature.content1 }}</p>
           <p text-1.25rem class="lg:(text-2rem)">{{ feature.content2 }}</p>
@@ -193,14 +292,18 @@ const data_hotProduct = [
     </ul>
   </section>
 
-  <section class="product_category" p="x-0.75rem t-2rem b-4rem md:(y-7.5rem)">
+  <section
+    ref="product_category"
+    class="product_category"
+    p="x-0.75rem t-2rem b-4rem md:(y-7.5rem)"
+  >
     <ul
       class="flex flex-col gap-1.5rem sm:(mx-auto max-w-500px) md:(max-w-1296px flex-row flex-wrap justify-center)"
     >
       <li
         v-for="category in data_category"
         :key="category.id"
-        class="flex gap-1.5rem md:(flex-grow-1)"
+        class="category flex gap-1.5rem md:(flex-grow-1)"
       >
         <div
           class="w-3.75rem flex items-center justify-center gap-1rem write-vertical-left md:(justify-start)"
@@ -234,10 +337,13 @@ const data_hotProduct = [
   </section>
 
   <section
+    ref="product_suggest"
     class="product_suggest relative rounded-2.5rem bg-second-200"
     p="x-0.75rem y-2.5rem md:(y-7.5rem)"
   >
-    <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
+    <header
+      class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)"
+    >
       <h2 class="mb-3rem text-center md:(mb-0)">熱銷商品</h2>
 
       <ClientOnly>
@@ -255,7 +361,7 @@ const data_hotProduct = [
       class="mb-3rem flex flex-col items-center gap-1rem md:(mx-auto mb-unset max-w-1296px flex-row gap-1.5rem)"
     >
       <template v-for="product in data_hotProduct" :key="product.id">
-        <li class="aspect-1/1 w-100% md:(aspect-416/580)">
+        <li class="suggest aspect-1/1 w-100% md:(aspect-416/580)">
           <NuxtLink
             :to="product.routeUrl"
             class="group product_hot relative h-100% w-100% flex rounded-2rem bg-[length:100%] bg-center hover:(bg-[length:110%] shadow-md)"
@@ -280,7 +386,9 @@ const data_hotProduct = [
   </section>
 
   <section class="comment_list px-2rem py-4rem">
-    <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
+    <header
+      class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)"
+    >
       <h2 class="mb-3rem text-center md:(mb-0)">熱烈好評</h2>
 
       <ButtonMore
@@ -317,10 +425,14 @@ const data_hotProduct = [
           </p>
         </div>
 
-        <div class="mx-auto flex gap-0.5rem md:(order-1 w-3.75rem shrink-0 flex-col)">
+        <div
+          class="mx-auto flex gap-0.5rem md:(order-1 w-3.75rem shrink-0 flex-col)"
+        >
           <img
             :src="
-              comment.customerId.image ? comment.customerId.image : '/img/home-4-1.webp'
+              comment.customerId.image
+                ? comment.customerId.image
+                : '/img/home-4-1.webp'
             "
             alt="avatar"
             class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center md:(w-100%)"

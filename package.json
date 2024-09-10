@@ -25,6 +25,7 @@
     "@vee-validate/yup": "^4.13.1",
     "@vueuse/core": "^10.9.0",
     "@vueuse/nuxt": "^10.9.0",
+    "gsap": "^3.12.5",
     "jsdoc": "^4.0.3",
     "nuxt": "^3.11.2",
     "nuxt-swiper": "^1.2.2",
