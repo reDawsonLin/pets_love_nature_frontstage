@@ -68,34 +68,6 @@ socket.on("admin read", (data) => {
   // console.log("admin read", data);
 });
 
-// const isConnected = ref(false);
-// const transport = ref("N/A");
-
-// if (socket.connected) {
-//   onConnect();
-// }
-
-// function onConnect() {
-//   isConnected.value = true;
-//   transport.value = socket.io.engine.transport.name;
-
-//   socket.io.engine.on("upgrade", (rawTransport) => {
-//     transport.value = rawTransport.name;
-//   });
-// }
-
-// function onDisconnect() {
-//   isConnected.value = false;
-//   transport.value = "N/A";
-// }
-
-// socket.on("connect", onConnect);
-// socket.on("disconnect", onDisconnect);
-
-// onBeforeUnmount(() => {
-//   socket.off("connect", onConnect);
-//   socket.off("disconnect", onDisconnect);
-// });
 // ----------------------------
 const chatMessage = ref("");
 const chatKeydown = (event) => {
@@ -104,12 +76,7 @@ const chatKeydown = (event) => {
 };
 
 const sendMessage = async () => {
-  if (!chatMessage.value || !chatMessage.value.trim()) {
-    // console.log("empty message");
-    return;
-  }
-
-  // console.log("send message");
+  if (!chatMessage.value || !chatMessage.value.trim()) return;
 
   socket.emit("message", {
     customerId: id_customer.value,
@@ -129,16 +96,7 @@ const sendMessage = async () => {
 };
 
 // ----------------------------
-
-// const chatCount = ref(10);
 const { y: windowScroll } = useWindowScroll();
-// const showChat = computed(() => {
-//   const targetPoint = document?.body.scrollHeight - window?.innerHeight - 300;
-
-//   if (windowScroll.value > targetPoint) return true;
-//   else return false;
-// });
-// const { width: window_width } = useWindowSize();
 </script>
 
 <template>
@@ -170,7 +128,10 @@ const { y: windowScroll } = useWindowScroll();
         class="list_chat h-300px flex flex-col gap-2rem overflow-y-auto p-0.75rem"
       >
         <template v-for="(item, index) in list_message" :key="index">
-          <div class="chat w-80%" :class="item.role === 'client' ? 'client' : 'admin'">
+          <div
+            class="chat w-80%"
+            :class="item.role === 'client' ? 'client' : 'admin'"
+          >
             <p class="message rounded-0.5rem p-0.75rem">
               {{ item.message }}
             </p>
@@ -188,7 +149,7 @@ const { y: windowScroll } = useWindowScroll();
           v-model="chatMessage"
           class="w-100% bg-transparent outline-none"
           @keydown="chatKeydown($event)"
-        >
+        />
 
         <SvgIcon
           name="submit"
@@ -202,29 +163,14 @@ const { y: windowScroll } = useWindowScroll();
       class="chat_icon relative h-3.5rem w-3.5rem flex cursor-pointer items-center justify-center rounded-50% bg-rose-500"
       @click="chatRoomToggle()"
     >
-      <SvgIcon v-if="showChatRoom" name="close" class="h-2rem w-2rem text-white" />
+      <SvgIcon
+        v-if="showChatRoom"
+        name="close"
+        class="h-2rem w-2rem text-white"
+      />
       <SvgIcon v-else name="chat" class="h-2rem w-2rem text-white" />
-
-      <!-- <span
-        v-show="!showChatRoom"
-        class="absolute right--0.25rem top--0.25rem h-1.25rem w-1.25rem flex items-center justify-center border border-2px border-white rounded-50% bg-rose-500 text-0.75rem text-white"
-        >{{ chatCount > 9 ? "9+" : chatCount }}
-      </span> -->
     </div>
   </div>
-
-  <!-- <div
-    class="fixed bottom-2rem right-2rem w-10rem h-10rem bg-neutral-100 border border-red-5"
-  >
-    <p>Status: {{ isConnected ? "connected" : "disconnected" }}</p>
-    <p>Transport: {{ transport }}</p>
-
-    <p>{{ id_customer }}</p>
-
-    <input type="text" v-model="chatMessage" />
-
-    <button type="button" @click="sendMessage()">submit</button>
-  </div> -->
 </template>
 
 <style scoped>
