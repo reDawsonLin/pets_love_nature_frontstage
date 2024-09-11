@@ -1,5 +1,3 @@
-
-
 const baseURL = "https://pets-love-nature-backend-n.onrender.com/api/v1";
 
 // for client side function fetching ----
@@ -20,31 +18,24 @@ export const useToken$Fetch = async (url, options) => {
     onRequest({ options }) {
       // Set the request headers
       options.headers = options.headers || {};
-      // 暫時把快取關掉
-      options.initialCache = false;
+
+      // options.initialCache = false;
       options.headers.authorization = `Bearer ${token.value}`;
     },
     onRequestError({ error }) {
       console.log("on request error :>> ", error);
-      return 
+      return;
     },
-    onResponse() {
-      // Process the response data
-      // console.log("on response");
-      // console.log("response :>> ", response);
-    },
+    onResponse() {},
     onResponseError(error) {
       console.log("on response error :>> ", error);
-      return error
+      return error;
     },
   });
 };
 
 // for pre fetching data -------
 export const useApiFetch = (url, options) => {
-  // console.log("url :>> ", url);
-  // console.log("options :>> ", { options });
-
   return useFetch(url, {
     baseURL,
     ...options,
@@ -70,13 +61,9 @@ export const useTokenFetch = async (url, options) => {
       console.log("on request error :>> ", error);
     },
     onResponse() {
-      // Process the response data
-      // console.log("on response");
-      // console.log("response :>> ", response);
     },
     onResponseError({ response }) {
       console.log("on response error :>> ", response);
     },
   });
 };
-
