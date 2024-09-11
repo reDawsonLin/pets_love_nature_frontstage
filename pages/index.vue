@@ -2,8 +2,6 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
-
 // view ---
 const { width: window_width } = useWindowSize();
 const comment_swiperPerView = computed(() => {
@@ -38,8 +36,7 @@ const { data: data_commentList, error: error_commentList } = await useApiFetch(
 
 const { data: data_banner, error: error_banner } = await useApiFetch("/banner");
 const toRoute = (item) => {
-  if (item.hyperlink)
-    return { name: "product", query: { searchType: item.hyperlink } };
+  if (item.hyperlink) return { name: "product", query: { searchType: item.hyperlink } };
   else return { name: "product" };
 };
 
@@ -52,6 +49,8 @@ const product_category = ref(null);
 const product_suggest = ref(null);
 
 onMounted(() => {
+  gsap.registerPlugin(ScrollTrigger);
+
   // gsap -------
   gsap.context((self) => {
     const boxes = self.selector(".feature");
@@ -243,7 +242,7 @@ const data_hotProduct = [
             class="aspect-350/512 md:(aspect-1760/662 rounded-5rem)"
             rounded="t-80px b-20px"
             object="cover center"
-          >
+          />
 
           <div
             class="absolute bottom-50px left-50% mx-auto w-[calc(100%-2rem)] flex flex-col translate-x--50% items-center gap-0.5rem rounded-t-1rem bg-second-200 p-1rem text-center text-neutral-600 md:(bottom-10.25rem max-w-47rem w-100% rounded-1rem bg-second-200/90)"
@@ -259,9 +258,7 @@ const data_hotProduct = [
   <section
     class="brand_info mt-2rem lg:([background-repeat:no-repeat,_no-repeat,_repeat] mt-0 flex justify-center gap-4.875rem bg-[position:left_bottom,102%_center,center] bg-[size:556px,_370px,_10px] bg-[url(@/assets/img/home-2-3.webp),_url(@/assets/img/home-2-4.webp),_url(@/assets/img/bg-brand.webp)] px-1rem)"
   >
-    <header
-      class="mb-1rem flex flex-col items-center lg:(gap-4.5rem pt-7.5rem)"
-    >
+    <header class="mb-1rem flex flex-col items-center lg:(gap-4.5rem pt-7.5rem)">
       <SvgIcon
         name="logo_pink"
         class="w-5rem lg:(order-2 w-19.25rem bg-neutral-100/[.9])"
@@ -280,10 +277,7 @@ const data_hotProduct = [
           <div
             class="wrapper_icon transition-background mb-0.25rem aspect-1/1 flex items-center justify-center rounded-1.5rem bg-second-400 p-1.75rem shadow-[-0.25rem_0.25rem_0.5rem_rgba(210,148,107,0.3)] transition-(transform) lg:(max-w-320px w-16vw rounded-2rem p-1rem) group-hover:(rotate-5 bg-second-200)"
           >
-            <SvgIcon
-              :name="feature.iconName"
-              class="w-5rem lg:(max-w-160px w-8.3vw)"
-            />
+            <SvgIcon :name="feature.iconName" class="w-5rem lg:(max-w-160px w-8.3vw)" />
           </div>
           <p text-1.25rem class="lg:(text-2rem)">{{ feature.content1 }}</p>
           <p text-1.25rem class="lg:(text-2rem)">{{ feature.content2 }}</p>
@@ -341,9 +335,7 @@ const data_hotProduct = [
     class="product_suggest relative rounded-2.5rem bg-second-200"
     p="x-0.75rem y-2.5rem md:(y-7.5rem)"
   >
-    <header
-      class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)"
-    >
+    <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
       <h2 class="mb-3rem text-center md:(mb-0)">熱銷商品</h2>
 
       <ClientOnly>
@@ -386,9 +378,7 @@ const data_hotProduct = [
   </section>
 
   <section class="comment_list px-2rem py-4rem">
-    <header
-      class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)"
-    >
+    <header class="md:(mx-auto mb-3rem max-w-1296px flex items-center justify-between)">
       <h2 class="mb-3rem text-center md:(mb-0)">熱烈好評</h2>
 
       <ButtonMore
@@ -425,18 +415,14 @@ const data_hotProduct = [
           </p>
         </div>
 
-        <div
-          class="mx-auto flex gap-0.5rem md:(order-1 w-3.75rem shrink-0 flex-col)"
-        >
+        <div class="mx-auto flex gap-0.5rem md:(order-1 w-3.75rem shrink-0 flex-col)">
           <img
             :src="
-              comment.customerId.image
-                ? comment.customerId.image
-                : '/img/home-4-1.webp'
+              comment.customerId.image ? comment.customerId.image : '/img/home-4-1.webp'
             "
             alt="avatar"
             class="aspect-1/1 w-2.5rem rounded-50% object-cover object-center md:(w-100%)"
-          >
+          />
           <p class="md:() flex items-center justify-center">
             {{ comment.customerId.customerName }}
           </p>
