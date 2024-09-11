@@ -69,4 +69,17 @@ const current_step = computed(() => Number(route.fullPath.split("/").at(-1)?.at(
     @apply bg-neutral-600;
   }
 }
+
+.stepper {
+  /* .line {
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 50%;
+      height: 6px;
+      background-color: red;
+    }
+  } */
+}
 </style>

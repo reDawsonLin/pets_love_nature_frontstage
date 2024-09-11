@@ -1,6 +1,7 @@
 <script setup>
 import { Vue3Lottie } from "vue3-lottie";
 import loading_pet from "@/assets/lottie/loading-pet.json";
+// import { globalMiddleware } from "#build/middleware";
 
 const lottie_container = ref(null);
 const isLoading = ref(false);
@@ -69,15 +70,18 @@ const nuxtApp = useNuxtApp();
 // );
 
 const unsubPageStart = nuxtApp.hook("page:start", () => {
+  // console.log("in page:start");
   show();
 });
-
+// const unsubPageStart = nuxtApp.hook("page:loading:start	", show);
 const unsubPageFinish = nuxtApp.hook("page:finish", () => {
+  // console.log("in page:finish");
   hide();
 });
 const unsubError = nuxtApp.hook("vue:error", hide);
 
 onBeforeUnmount(() => {
+  // unsubRouterBeforeMiddleware();
   unsubPageStart();
   unsubPageFinish();
   unsubError();
