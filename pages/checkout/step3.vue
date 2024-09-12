@@ -158,7 +158,7 @@ const { width: window_width } = useWindowSize();
   }
 
   @media screen and (min-width: 1024px) {
-    display: table-row;
+    display: table-row !important;
 
     &::before {
       content: none;

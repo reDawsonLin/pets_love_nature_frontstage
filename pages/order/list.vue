@@ -131,7 +131,7 @@ const { data: data_orderList } = data_orders.value;
   @apply hover:(bg-neutral-200);
   @apply transition-[background];
 
-  @apply lg:(table-row);
+  @apply lg:(!table-row);
 
   > td {
     @apply lg:(py-0.75rem px-0.5rem);
