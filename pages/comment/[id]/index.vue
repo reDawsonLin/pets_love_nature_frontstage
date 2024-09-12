@@ -492,7 +492,7 @@ async function postComment(param_post) {
   }
 
   @media screen and (min-width: 1024px) {
-    display: table-row;
+    display: table-row !important;
 
     &::before {
       content: none;
