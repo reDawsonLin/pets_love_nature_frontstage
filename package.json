@@ -35,7 +35,8 @@
     "sweetalert2": "^11.6.13",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
-    "vue3-lottie": "^3.3.0"
+    "vue3-lottie": "^3.3.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@unocss/eslint-config": "^0.59.4",
